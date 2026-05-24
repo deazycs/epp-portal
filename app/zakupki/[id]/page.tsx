@@ -30,6 +30,13 @@ interface ProcurementExtended extends Procurement {
   nmck?: number;
   economySumTotal?: number;
   economyPct?: number;
+  // Условия поставки
+  deliveryDate?: string;
+  deliveryDays?: number;
+  acceptanceDays?: number;
+  acceptanceDate?: string;
+  deliveryAddress?: string;
+  deliveryConditions?: string;
 }
 
 const TABS = [

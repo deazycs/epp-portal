@@ -27,7 +27,7 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
 
   return (
     <header className="flex items-center h-10 px-3 gap-3 border-b border-blue-900 flex-shrink-0"
-      style={{ background: 'var(--gov-header-bg)' }}>
+      style={{ background: '#003087' }}>
 
       <button onClick={onMenuToggle} className="text-white opacity-70 hover:opacity-100 p-1 rounded">
         {sidebarCollapsed ? <Menu size={16} /> : <X size={16} />}

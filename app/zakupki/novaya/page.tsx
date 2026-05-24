@@ -111,6 +111,11 @@ export default function NovayaZakupkaPage() {
       priority,
       isOverdue: false,
       procedure: procedure,
+      deliveryDate: deliveryDate || undefined,
+      deliveryDays: deliveryDays ? Number(deliveryDays) : undefined,
+      acceptanceDays: acceptanceDays ? Number(acceptanceDays) : undefined,
+      deliveryAddress: deliveryAddress || undefined,
+      deliveryConditions: deliveryConditions || undefined,
       workflowSteps: buildWorkflow(procedure).map((s, i) => ({
         id: `ws-${id}-${i}`,
         procurementId: id,
