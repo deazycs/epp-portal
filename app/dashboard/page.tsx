@@ -14,7 +14,6 @@ import { MOCK_NOTIFICATIONS, MOCK_TASKS, MOCK_RISKS, ANALYTICS_MONTHLY } from '@
 import { MOCK_USERS } from '@/mock/data/users';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { useAppStore } from '@/store/index';
-import { DemoScenario } from '@/components/ui/DemoScenario';
 import { DemoTourButton } from '@/components/ui/DemoTour';
 import { PresentationMode, DefenseMode } from '@/components/ui/PresentationMode';
 import { formatCurrency, formatDate, formatTimeAgo, truncate } from '@/lib/utils';
@@ -30,7 +29,6 @@ const FEED = [
 ];
 
 export default function DashboardPage() {
-  const [demoOpen, setDemoOpen] = useState(false);
   const { procurements, tasks, notifications, reset } = useAppStore();
 
   const today = new Date().toLocaleDateString('ru-RU', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
@@ -72,7 +70,7 @@ export default function DashboardPage() {
             <DefenseMode />
             <PresentationMode />
             <button
-              onClick={() => setDemoOpen(true)}
+              onClick={() => window.dispatchEvent(new Event('epp:demo:start'))}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-green-600 text-white hover:bg-green-700 transition-colors"
             >
               ▶ Демо-сценарий
@@ -347,7 +345,6 @@ export default function DashboardPage() {
         </div>
       </div>
       <DemoTourButton variant="floating" />
-      {demoOpen && <DemoScenario onClose={() => setDemoOpen(false)} />}
     </AppLayout>
   );
 }
