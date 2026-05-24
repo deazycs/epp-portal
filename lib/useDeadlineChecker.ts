@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAppStore } from '@/store/index';
 
-const WARN_DAYS = 5; // предупреждать за N дней
+const WARN_DAYS = 5;
 
 function daysBetween(dateStr: string): number {
   const target = new Date(dateStr);
@@ -14,17 +14,23 @@ function daysBetween(dateStr: string): number {
 }
 
 export function useDeadlineChecker() {
-  const { procurements, tasks, notifications, addNotification } = useAppStore();
+  const ran = useRef(false);
 
   useEffect(() => {
-    const existingIds = new Set(notifications.map(n => n.entityId));
+    // Запускаем СТРОГО ОДИН РАЗ — используем ref чтобы StrictMode не дублировал
+    if (ran.current) return;
+    ran.current = true;
 
+    // Читаем состояние напрямую из store (не через хук) чтобы избежать зависимостей
+    const state = useAppStore.getState();
+    const { procurements, tasks, notifications, addNotification } = state;
+
+    const existingIds = new Set(notifications.map(n => n.entityId));
     const now = new Date().toISOString();
 
     procurements.forEach(p => {
       if (['archive', 'cancelled'].includes(p.status)) return;
 
-      // Проверяем плановый срок окончания
       if (p.plannedEndDate) {
         const days = daysBetween(p.plannedEndDate);
         const notifId = `deadline-${p.id}-end`;
@@ -36,7 +42,7 @@ export function useDeadlineChecker() {
             type: 'error',
             category: 'deadline',
             title: `Просрочка: ${p.registryNumber}`,
-            message: `Плановый срок окончания закупки «${p.title.slice(0, 60)}» истёк ${Math.abs(days)} дн. назад.`,
+            message: `Срок окончания закупки «${p.title.slice(0, 60)}» истёк ${Math.abs(days)} дн. назад.`,
             link: `/zakupki/${p.id}`,
             entityId: p.id + '-overdue',
             entityType: 'procurement',
@@ -50,7 +56,7 @@ export function useDeadlineChecker() {
             type: 'warning',
             category: 'deadline',
             title: `Срок истекает через ${days} дн.: ${p.registryNumber}`,
-            message: `До окончания закупки «${p.title.slice(0, 60)}» осталось ${days} дн. (${p.plannedEndDate}).`,
+            message: `До окончания «${p.title.slice(0, 60)}» осталось ${days} дн.`,
             link: `/zakupki/${p.id}`,
             entityId: notifId,
             entityType: 'procurement',
@@ -60,7 +66,6 @@ export function useDeadlineChecker() {
         }
       }
 
-      // Проверяем срок оплаты
       if (p.status === 'payment' && p.contractEndDate) {
         const days = daysBetween(p.contractEndDate);
         const notifId = `payment-${p.id}`;
@@ -73,7 +78,7 @@ export function useDeadlineChecker() {
             title: days < 0
               ? `Просрочен платёж: ${p.registryNumber}`
               : `Срок оплаты через ${days} дн.: ${p.registryNumber}`,
-            message: `Необходимо инициировать оплату по договору с ${p.supplierName ?? 'поставщиком'}.`,
+            message: `Необходимо инициировать оплату по договору.`,
             link: `/zakupki/${p.id}`,
             entityId: notifId,
             entityType: 'procurement',
@@ -84,7 +89,6 @@ export function useDeadlineChecker() {
       }
     });
 
-    // Проверяем просроченные задачи
     tasks.forEach(t => {
       if (t.status === 'done' || t.status === 'cancelled' || !t.dueDate) return;
       const days = daysBetween(t.dueDate);
@@ -105,6 +109,5 @@ export function useDeadlineChecker() {
         });
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // запускаем только при монтировании
+  }, []); // пустой массив — только при монтировании
 }
