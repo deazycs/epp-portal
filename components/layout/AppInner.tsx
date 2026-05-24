@@ -1,26 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { ToastBridge } from '@/components/ui/ToastBridge';
 import { useDeadlineChecker } from '@/lib/useDeadlineChecker';
 import { DemoScenario } from '@/components/ui/DemoScenario';
+import { demoState } from '@/lib/demoState';
 import { cn } from '@/lib/utils';
 
-// Глобальное состояние демо-сценария — живёт на уровне layout,
-// не исчезает при навигации между страницами
 export function AppInner({ children }: { children: React.ReactNode }) {
   useDeadlineChecker();
+
   const [sidebarCollapsed, setSidebarCollapsed]   = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [demoOpen, setDemoOpen]                   = useState(false);
+  // Читаем текущее состояние из глобального модуля
+  const [demoOpen, setDemoOpen] = useState(() => demoState.open);
 
-  // Передаём функцию открытия сценария через data-атрибут на body
-  // чтобы кнопка на Dashboard могла его запустить
-  if (typeof window !== 'undefined') {
-    (window as any).__openDemoScenario = () => setDemoOpen(true);
-  }
+  // Подписываемся на изменения глобального состояния
+  useEffect(() => {
+    const unsub = demoState.subscribe(open => setDemoOpen(open));
+    return unsub;
+  }, []);
 
   return (
     <>
@@ -60,24 +61,23 @@ export function AppInner({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
           <Header
             onMenuToggle={() => {
-              setSidebarCollapsed(!sidebarCollapsed);
-              setMobileSidebarOpen(!mobileSidebarOpen);
+              setSidebarCollapsed(s => !s);
+              setMobileSidebarOpen(m => !m);
             }}
             sidebarCollapsed={sidebarCollapsed}
           />
-          {/* Отступ снизу когда демо-сценарий активен */}
           <main className={cn(
-            'flex-1 overflow-y-auto bg-gray-100 transition-all',
-            demoOpen ? 'pb-36' : ''
+            'flex-1 overflow-y-auto bg-gray-100',
+            demoOpen ? 'pb-40' : ''
           )}>
             {children}
           </main>
         </div>
       </div>
 
-      {/* Демо-сценарий — живёт здесь, НЕ внутри страниц */}
+      {/* Демо-сценарий — рендерится здесь но управляется глобальным состоянием */}
       {demoOpen && (
-        <DemoScenario onClose={() => setDemoOpen(false)} />
+        <DemoScenario onClose={() => demoState.stop()} />
       )}
     </>
   );

@@ -12,6 +12,7 @@ import { MOCK_NOTIFICATIONS, MOCK_TASKS, MOCK_RISKS, ANALYTICS_MONTHLY } from '@
 import { MOCK_USERS } from '@/mock/data/users';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { useAppStore } from '@/store/index';
+import { demoState } from '@/lib/demoState';
 import { DemoTourButton } from '@/components/ui/DemoTour';
 import { PresentationMode, DefenseMode } from '@/components/ui/PresentationMode';
 import { formatCurrency, formatDate, formatTimeAgo, truncate } from '@/lib/utils';
@@ -68,7 +69,7 @@ export default function DashboardPage() {
             <DefenseMode />
             <PresentationMode />
             <button
-              onClick={() => (window as any).__openDemoScenario?.()}
+              onClick={() => demoState.start()}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-green-600 text-white hover:bg-green-700 transition-colors"
               title="Запустить демонстрационный сценарий"
             >
