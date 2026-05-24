@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { ToastBridge } from '@/components/ui/ToastBridge';
 import { useDeadlineChecker } from '@/lib/useDeadlineChecker';
 import { DemoScenario } from '@/components/ui/DemoScenario';
+import { DemoTour } from '@/components/ui/DemoTour';
 import { cn } from '@/lib/utils';
 
 const SESSION_KEY = 'epp_demo_step';
@@ -15,21 +16,37 @@ export function AppInner({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed]   = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  // Показываем DemoScenario если есть сохранённый шаг в sessionStorage
   const [demoOpen, setDemoOpen] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
 
   useEffect(() => {
-    // После монтирования проверяем - был ли активен сценарий
+    // Восстанавливаем демо-сценарий
     const savedStep = sessionStorage.getItem(SESSION_KEY);
     if (savedStep !== null) {
       setDemoOpen(true);
     }
 
-    // Слушаем кастомное событие для запуска сценария
-    const handler = () => setDemoOpen(true);
-    window.addEventListener('epp:demo:start', handler);
-    return () => window.removeEventListener('epp:demo:start', handler);
+    // Восстанавливаем демо-тур
+    const savedTourStep = sessionStorage.getItem('epp_tour_step');
+    if (savedTourStep !== null) {
+      setTourOpen(true);
+    }
+
+    // Слушаем события запуска
+    const demoHandler = () => setDemoOpen(true);
+    const tourHandler = () => setTourOpen(true);
+    window.addEventListener('epp:demo:start', demoHandler);
+    window.addEventListener('epp:tour:start', tourHandler);
+    return () => {
+      window.removeEventListener('epp:demo:start', demoHandler);
+      window.removeEventListener('epp:tour:start', tourHandler);
+    };
   }, []);
+
+  const handleCloseTour = () => {
+    sessionStorage.removeItem('epp_tour_step');
+    setTourOpen(false);
+  };
 
   const handleClose = () => {
     sessionStorage.removeItem(SESSION_KEY);
@@ -78,8 +95,8 @@ export function AppInner({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      {/* DemoScenario живёт здесь — на уровне layout, не внутри страниц */}
       {demoOpen && <DemoScenario onClose={handleClose} />}
+      {tourOpen && <DemoTour onClose={handleCloseTour} />}
     </>
   );
 }

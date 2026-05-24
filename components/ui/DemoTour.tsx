@@ -173,11 +173,23 @@ const BADGE_COLORS: Record<string,string> = {
    ОСНОВНОЙ КОМПОНЕНТ
 ───────────────────────────────────────────────────────── */
 export function DemoTour({ onClose }: { onClose: () => void }) {
+  const handleClose = () => {
+    sessionStorage.removeItem('epp_tour_step');
+    onClose();
+  };
   const router   = useRouter();
   const pathname = usePathname();
-  const [step, setStep]       = useState(0);
+  const [step, setStep] = useState(() => {
+    if (typeof window === 'undefined') return 0;
+    return Number(sessionStorage.getItem('epp_tour_step') ?? 0);
+  });
   const [busy, setBusy]       = useState(false);
   const [visible, setVisible] = useState(false);
+
+  // Сохраняем шаг тура в sessionStorage чтобы выжить при навигации
+  useEffect(() => {
+    sessionStorage.setItem('epp_tour_step', String(step));
+  }, [step]);
   const [showToc, setShowToc] = useState(false);
 
   const cur    = STEPS[step];
@@ -200,7 +212,7 @@ export function DemoTour({ onClose }: { onClose: () => void }) {
     setBusy(false);
   }, [busy, pathname, router]);
 
-  const handleNext = () => isLast ? onClose() : go(step + 1);
+  const handleNext = () => isLast ? handleClose() : go(step + 1);
   const handlePrev = () => { if (!isFirst) go(step - 1); };
 
   useEffect(() => {
@@ -367,7 +379,7 @@ export function DemoTour({ onClose }: { onClose: () => void }) {
                     📋 Содержание
                   </button>
                   <span className="text-gray-200">|</span>
-                  <button onClick={onClose}
+                  <button onClick={handleClose}
                     className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
                     Закрыть тур
                   </button>
@@ -398,33 +410,27 @@ export function DemoTourButton({
   variant?: 'primary' | 'ghost' | 'floating';
   label?: string;
 }) {
-  const [open, setOpen] = useState(false);
+  const startTour = () => window.dispatchEvent(new Event('epp:tour:start'));
 
   if (variant === 'floating') {
     return (
-      <>
-        <button onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-[9960] flex items-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-full shadow-xl hover:bg-blue-700 transition-all duration-200 hover:scale-105 active:scale-95"
-          title="Запустить демо-тур по системе">
-          <Play size={15}/>
-          <span className="text-sm font-bold">{label}</span>
-        </button>
-        {open && <DemoTour onClose={() => setOpen(false)}/>}
-      </>
+      <button onClick={startTour}
+        className="fixed bottom-6 right-6 z-[9960] flex items-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-full shadow-xl hover:bg-blue-700 transition-all duration-200 hover:scale-105 active:scale-95"
+        title="Запустить демо-тур по системе">
+        <Play size={15}/>
+        <span className="text-sm font-bold">{label}</span>
+      </button>
     );
   }
 
   return (
-    <>
-      <button onClick={() => setOpen(true)}
-        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded transition-colors ${
-          variant === 'primary'
-            ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-        }`}>
-        <Play size={11}/> {label}
-      </button>
-      {open && <DemoTour onClose={() => setOpen(false)}/>}
-    </>
+    <button onClick={startTour}
+      className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded transition-colors ${
+        variant === 'primary'
+          ? 'bg-blue-600 text-white hover:bg-blue-700'
+          : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+      }`}>
+      <Play size={11}/> {label}
+    </button>
   );
 }
