@@ -5,7 +5,7 @@ import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { ToastBridge } from '@/components/ui/ToastBridge';
 import { useDeadlineChecker } from '@/lib/useDeadlineChecker';
-import { DemoRunner } from '@/components/ui/DemoRunner';
+import { DemoRunner, DemoButton } from '@/components/ui/DemoRunner';
 import { cn } from '@/lib/utils';
 
 const SESS_KEY = 'epp_tour2_step';
@@ -70,6 +70,7 @@ export function AppInner({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       {demoOpen && <DemoRunner onClose={handleClose} />}
+      {!demoOpen && <DemoButton variant="floating" />}
     </>
   );
 }

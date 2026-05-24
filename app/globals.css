@@ -2,519 +2,396 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════
+   ЦВЕТОВАЯ СХЕМА — СОВРЕМЕННЫЙ ГОСПОРТАЛ
+═══════════════════════════════════════════════ */
 :root {
-  --gov-blue: #003087;
-  --gov-blue-dark: #001f5c;
-  --gov-blue-light: #0050b3;
-  --gov-blue-hover: #1a4a9e;
-  --gov-sidebar-bg: #002070;
-  --gov-sidebar-hover: #1a3d8f;
-  --gov-sidebar-active: #0050b3;
-  --gov-header-bg: #003087;
-  --gov-gray: #f5f5f5;
-  --gov-gray-dark: #e8e8e8;
-  --gov-border: #d9d9d9;
-  --gov-text: #262626;
-  --gov-text-secondary: #595959;
-  --gov-text-light: #8c8c8c;
-  --gov-success-bg: #f6ffed;
-  --gov-success-border: #b7eb8f;
-  --gov-success-text: #135200;
-  --gov-warning-bg: #fffbe6;
-  --gov-warning-border: #ffe58f;
-  --gov-warning-text: #7c4a00;
-  --gov-danger-bg: #fff2f0;
-  --gov-danger-border: #ffccc7;
-  --gov-danger-text: #820014;
-  --gov-info-bg: #e6f4ff;
-  --gov-info-border: #91caff;
-  --gov-info-text: #00335c;
+  --gov-blue:        #003087;
+  --gov-blue-dark:   #001e5e;
+  --gov-blue-light:  #e8f0fb;
+  --gov-accent:      #0050b3;
+  --gov-red:         #d32f2f;
+  --gov-green:       #1b5e20;
+  --gov-gray:        #f4f6f9;
+  --gov-border:      #dde3ed;
+  --gov-text:        #1a2332;
+  --gov-text-muted:  #5a6a7e;
+  --sidebar-width:   224px;
+  --header-height:   52px;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* ═══════════════════════════════════════════════
+   БАЗОВЫЕ СТИЛИ
+═══════════════════════════════════════════════ */
+* { box-sizing: border-box; }
 
-html {
-  font-size: 13px;
-}
+html { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
 
 body {
-  font-family: 'PT Sans', Arial, sans-serif;
-  color: var(--gov-text);
   background: var(--gov-gray);
-}
-
-/* ============================
-   SCROLLBARS
-   ============================ */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--gov-gray);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--gov-border);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #bfbfbf;
-}
-
-/* ============================
-   TABLES
-   ============================ */
-.gov-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-}
-
-.gov-table th {
-  background: #f0f0f0;
-  border: 1px solid var(--gov-border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: 700;
   color: var(--gov-text);
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.gov-table td {
+/* ═══════════════════════════════════════════════
+   КАРТОЧКИ — современный вид с тонкой тенью
+═══════════════════════════════════════════════ */
+.gov-card {
+  @apply bg-white rounded-lg;
   border: 1px solid var(--gov-border);
-  padding: 5px 10px;
-  vertical-align: middle;
-  color: var(--gov-text);
+  box-shadow: 0 1px 4px rgba(0, 48, 135, 0.06), 0 1px 2px rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s ease;
+}
+.gov-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 48, 135, 0.10), 0 1px 3px rgba(0,0,0,0.06);
 }
 
-.gov-table tr:hover td {
-  background: #f0f7ff;
+/* ═══════════════════════════════════════════════
+   СЕКЦИЯ ЗАГОЛОВКОВ
+═══════════════════════════════════════════════ */
+.gov-section-title {
+  @apply text-xs font-bold uppercase tracking-wide px-4 py-2.5 border-b flex items-center gap-2;
+  color: var(--gov-blue);
+  background: linear-gradient(to right, #f0f5ff, #f8faff);
+  border-color: #d4e3ff;
+  letter-spacing: 0.06em;
 }
 
-.gov-table tr.selected td {
-  background: #e6f4ff;
-}
-
-/* ============================
-   FORMS
-   ============================ */
-.gov-input {
-  width: 100%;
-  border: 1px solid var(--gov-border);
-  padding: 5px 8px;
-  font-size: 12px;
-  font-family: 'PT Sans', Arial, sans-serif;
-  color: var(--gov-text);
-  background: #fff;
-  border-radius: 2px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.gov-input:focus {
-  border-color: var(--gov-blue-light);
-  box-shadow: 0 0 0 2px rgba(0, 80, 179, 0.15);
-}
-
-.gov-select {
-  width: 100%;
-  border: 1px solid var(--gov-border);
-  padding: 5px 8px;
-  font-size: 12px;
-  font-family: 'PT Sans', Arial, sans-serif;
-  color: var(--gov-text);
-  background: #fff;
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-}
-
-.gov-select:focus {
-  border-color: var(--gov-blue-light);
-}
-
-.gov-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--gov-text-secondary);
-  display: block;
-  margin-bottom: 3px;
-}
-
-/* ============================
-   BUTTONS
-   ============================ */
+/* ═══════════════════════════════════════════════
+   КНОПКИ — чистые и современные
+═══════════════════════════════════════════════ */
 .gov-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 14px;
+  @apply inline-flex items-center gap-1.5 font-bold rounded-lg transition-all duration-150 select-none;
   font-size: 12px;
-  font-family: 'PT Sans', Arial, sans-serif;
-  font-weight: 700;
-  border-radius: 2px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: all 0.15s;
-  white-space: nowrap;
-  text-decoration: none;
+  padding: 6px 12px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
 }
+.gov-btn:active { transform: scale(0.98); }
 
 .gov-btn-primary {
   background: var(--gov-blue);
   color: white;
-  border-color: var(--gov-blue);
+  box-shadow: 0 1px 3px rgba(0,48,135,0.25);
 }
-
 .gov-btn-primary:hover {
-  background: var(--gov-blue-hover);
-  border-color: var(--gov-blue-hover);
+  background: var(--gov-accent);
+  box-shadow: 0 2px 6px rgba(0,48,135,0.35);
 }
 
 .gov-btn-secondary {
-  background: white;
+  @apply bg-white;
   color: var(--gov-blue);
-  border-color: var(--gov-blue);
+  border: 1.5px solid var(--gov-blue);
 }
-
 .gov-btn-secondary:hover {
-  background: var(--gov-info-bg);
+  background: var(--gov-blue-light);
 }
 
 .gov-btn-ghost {
-  background: transparent;
-  color: var(--gov-text-secondary);
-  border-color: var(--gov-border);
+  @apply bg-transparent;
+  color: var(--gov-text-muted);
+  border: 1px solid var(--gov-border);
 }
-
 .gov-btn-ghost:hover {
   background: var(--gov-gray);
   color: var(--gov-text);
+  border-color: #b8c8e0;
 }
 
 .gov-btn-danger {
-  background: white;
-  color: var(--gov-danger-text);
-  border-color: var(--gov-danger-border);
+  @apply bg-red-600 text-white;
+  box-shadow: 0 1px 3px rgba(211,47,47,0.25);
 }
-
-.gov-btn-danger:hover {
-  background: var(--gov-danger-bg);
-}
+.gov-btn-danger:hover { @apply bg-red-700; }
 
 .gov-btn-success {
-  background: #389e0d;
-  color: white;
-  border-color: #389e0d;
+  @apply bg-green-700 text-white;
+  box-shadow: 0 1px 3px rgba(27,94,32,0.25);
 }
-
-.gov-btn-success:hover {
-  background: #237804;
-}
+.gov-btn-success:hover { @apply bg-green-800; }
 
 .gov-btn-sm {
-  padding: 3px 10px;
   font-size: 11px;
+  padding: 4px 10px;
 }
-
-.gov-btn-lg {
-  padding: 8px 20px;
-  font-size: 13px;
+.gov-btn-xs {
+  font-size: 10px;
+  padding: 2px 8px;
 }
+.gov-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
 
-.gov-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ============================
-   BADGES / STATUS
-   ============================ */
+/* ═══════════════════════════════════════════════
+   БЕЙДЖИ — компактные и читаемые
+═══════════════════════════════════════════════ */
 .gov-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 1px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 2px;
-  border: 1px solid;
-  white-space: nowrap;
+  @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold border;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
-/* ============================
-   CARDS / PANELS
-   ============================ */
-.gov-card {
-  background: white;
-  border: 1px solid var(--gov-border);
-  border-radius: 2px;
-}
-
-.gov-panel {
-  background: white;
-  border: 1px solid var(--gov-border);
-}
-
-.gov-section-title {
+/* ═══════════════════════════════════════════════
+   ТАБЛИЦЫ — строгие, профессиональные
+═══════════════════════════════════════════════ */
+.gov-table {
+  @apply w-full text-left border-collapse;
   font-size: 12px;
-  font-weight: 700;
-  color: var(--gov-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--gov-border);
-  background: #fafafa;
 }
-
-/* ============================
-   SIDEBAR
-   ============================ */
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: all 0.15s;
-  border-left: 3px solid transparent;
-  text-decoration: none;
+.gov-table thead tr {
+  background: linear-gradient(to right, #f0f5ff, #f8faff);
+  border-bottom: 2px solid #d4e3ff;
 }
-
-.sidebar-link:hover {
-  background: var(--gov-sidebar-hover);
-  color: white;
-}
-
-.sidebar-link.active {
-  background: var(--gov-sidebar-active);
-  color: white;
-  border-left-color: #4fc3f7;
-}
-
-.sidebar-section {
-  padding: 4px 14px;
-  font-size: 10px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.45);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 8px;
-}
-
-/* ============================
-   STATUS INDICATOR
-   ============================ */
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.status-dot-green { background: #52c41a; }
-.status-dot-yellow { background: #faad14; }
-.status-dot-red { background: #ff4d4f; }
-.status-dot-gray { background: #d9d9d9; }
-.status-dot-blue { background: #1890ff; }
-
-/* ============================
-   TIMELINE
-   ============================ */
-.timeline-item {
-  display: flex;
-  gap: 12px;
-  padding-bottom: 16px;
-  position: relative;
-}
-
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: 15px;
-  top: 30px;
-  bottom: 0;
-  width: 1px;
-  background: var(--gov-border);
-}
-
-.timeline-item:last-child::before {
-  display: none;
-}
-
-.timeline-dot {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-/* ============================
-   WORKFLOW STEPS
-   ============================ */
-.workflow-step {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-}
-
-.workflow-step-dot {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 10px;
-  font-weight: 700;
-  border: 2px solid;
-}
-
-.workflow-step-dot.completed {
-  background: #52c41a;
-  border-color: #52c41a;
-  color: white;
-}
-
-.workflow-step-dot.active {
-  background: var(--gov-blue);
-  border-color: var(--gov-blue);
-  color: white;
-}
-
-.workflow-step-dot.pending {
-  background: white;
-  border-color: #d9d9d9;
-  color: #8c8c8c;
-}
-
-/* ============================
-   TABS
-   ============================ */
-.gov-tabs {
-  display: flex;
-  border-bottom: 2px solid var(--gov-border);
-  background: white;
-}
-
-.gov-tab {
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--gov-text-secondary);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  white-space: nowrap;
-  transition: all 0.15s;
-}
-
-.gov-tab:hover {
+.gov-table th {
+  @apply font-bold px-3 py-2.5 whitespace-nowrap;
   color: var(--gov-blue);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.gov-table td {
+  @apply px-3 py-2.5 border-b;
+  border-color: #edf2fb;
+  vertical-align: middle;
+}
+.gov-table tbody tr {
+  transition: background 0.1s;
+}
+.gov-table tbody tr:hover {
+  background: #f8fbff;
+}
+.gov-table tbody tr.selected {
+  background: #eff5ff;
+}
+.gov-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.gov-tab.active {
-  color: var(--gov-blue);
-  border-bottom-color: var(--gov-blue);
+/* ═══════════════════════════════════════════════
+   ПОЛЯ ВВОДА — четкие и удобные
+═══════════════════════════════════════════════ */
+.gov-input {
+  @apply w-full px-3 py-2 text-sm rounded-lg transition-all;
+  border: 1.5px solid var(--gov-border);
+  background: white;
+  color: var(--gov-text);
+  outline: none;
+  line-height: 1.5;
+}
+.gov-input:focus {
+  border-color: var(--gov-accent);
+  box-shadow: 0 0 0 3px rgba(0, 80, 179, 0.10);
+}
+.gov-input::placeholder {
+  color: var(--gov-text-muted);
+  opacity: 0.6;
+}
+.gov-input:disabled {
+  background: var(--gov-gray);
+  opacity: 0.7;
 }
 
-/* ============================
-   ALERTS / NOTIFICATIONS
-   ============================ */
+.gov-select {
+  @apply gov-input appearance-none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a6a7e' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+.gov-label {
+  @apply block text-xs font-bold mb-1;
+  color: var(--gov-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════
+   АЛЕРТЫ
+═══════════════════════════════════════════════ */
 .gov-alert {
-  padding: 8px 12px;
-  border: 1px solid;
-  border-radius: 2px;
-  font-size: 12px;
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  @apply flex items-start gap-2.5 px-4 py-3 rounded-lg text-sm border;
 }
-
-.gov-alert-warning {
-  background: var(--gov-warning-bg);
-  border-color: var(--gov-warning-border);
-  color: var(--gov-warning-text);
-}
-
-.gov-alert-danger {
-  background: var(--gov-danger-bg);
-  border-color: var(--gov-danger-border);
-  color: var(--gov-danger-text);
-}
-
-.gov-alert-success {
-  background: var(--gov-success-bg);
-  border-color: var(--gov-success-border);
-  color: var(--gov-success-text);
-}
-
 .gov-alert-info {
-  background: var(--gov-info-bg);
-  border-color: var(--gov-info-border);
-  color: var(--gov-info-text);
+  background: #eff5ff;
+  border-color: #b8d0ff;
+  color: #1a3a7e;
+}
+.gov-alert-success {
+  background: #f0faf0;
+  border-color: #86d986;
+  color: #1b5e20;
+}
+.gov-alert-warning {
+  background: #fffbf0;
+  border-color: #ffd666;
+  color: #7a5200;
+}
+.gov-alert-danger {
+  background: #fff5f5;
+  border-color: #ffb3b3;
+  color: #7a1515;
 }
 
-/* ============================
-   PROGRESS
-   ============================ */
+/* ═══════════════════════════════════════════════
+   ПРОГРЕСС-БАР
+═══════════════════════════════════════════════ */
 .gov-progress {
-  height: 6px;
-  background: var(--gov-gray-dark);
-  border-radius: 3px;
+  @apply h-1.5 w-full rounded-full;
+  background: #e4ecf7;
+}
+.gov-progress-bar {
+  @apply h-1.5 rounded-full transition-all duration-500;
+  background: var(--gov-blue);
+}
+
+/* ═══════════════════════════════════════════════
+   ХЛЕБНЫЕ КРОШКИ
+═══════════════════════════════════════════════ */
+.gov-breadcrumbs {
+  @apply flex items-center gap-1.5 text-xs mb-4 flex-wrap;
+  color: var(--gov-text-muted);
+}
+.gov-breadcrumbs a {
+  color: var(--gov-accent);
+  transition: color 0.1s;
+}
+.gov-breadcrumbs a:hover { color: var(--gov-blue); }
+.gov-breadcrumbs-sep { opacity: 0.4; }
+
+/* ═══════════════════════════════════════════════
+   САЙДБАР — современный, с акцентом
+═══════════════════════════════════════════════ */
+.gov-sidebar {
+  background: var(--gov-blue-dark);
+  width: var(--sidebar-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.gov-progress-bar {
-  height: 100%;
+.gov-sidebar-logo {
+  @apply flex items-center gap-2.5 px-4 py-3.5 border-b;
+  border-color: rgba(255,255,255,0.08);
+  min-height: var(--header-height);
+}
+
+.gov-sidebar-section {
+  @apply px-3 pt-4 pb-1;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
+.gov-sidebar-link {
+  @apply flex items-center gap-2.5 px-3 py-2 mx-1.5 rounded-lg text-xs font-medium transition-all duration-150 relative;
+  color: rgba(255,255,255,0.65);
+}
+.gov-sidebar-link:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.90);
+}
+.gov-sidebar-link.active {
+  background: rgba(255,255,255,0.13);
+  color: white;
+  font-weight: 700;
+}
+.gov-sidebar-link.active::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: #4d9fff;
+  border-radius: 0 2px 2px 0;
+}
+
+.gov-sidebar-badge {
+  @apply ml-auto text-xs font-bold px-1.5 py-0.5 rounded-md;
+  background: rgba(255, 100, 100, 0.85);
+  color: white;
+  font-size: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════
+   ШАПКА
+═══════════════════════════════════════════════ */
+.gov-header {
+  height: var(--header-height);
+  background: var(--gov-blue);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* ═══════════════════════════════════════════════
+   KPI ПЛИТКИ
+═══════════════════════════════════════════════ */
+.gov-kpi {
+  @apply gov-card p-3 flex flex-col justify-between;
+  min-height: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.gov-kpi::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gov-blue);
+  opacity: 0.5;
+}
+.gov-kpi-value {
+  @apply text-2xl font-bold leading-tight;
+  color: var(--gov-blue);
+}
+.gov-kpi-label {
+  @apply text-xs;
+  color: var(--gov-text-muted);
+}
+
+/* ═══════════════════════════════════════════════
+   АНИМАЦИИ
+═══════════════════════════════════════════════ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn { animation: fadeIn 0.2s ease forwards; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slideUp { animation: slideUp 0.3s ease forwards; }
+
+/* ═══════════════════════════════════════════════
+   СКРОЛЛБАР — тонкий
+═══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #c5d5e8;
   border-radius: 3px;
-  transition: width 0.3s;
 }
+::-webkit-scrollbar-thumb:hover { background: #a0b8d0; }
 
-/* ============================
-   MOBILE
-   ============================ */
-@media (max-width: 768px) {
-  .gov-table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .sidebar-mobile-hidden {
-    display: none;
-  }
-}
-
-/* ============================
-   PRINT
-   ============================ */
+/* ═══════════════════════════════════════════════
+   ПЕЧАТЬ
+═══════════════════════════════════════════════ */
 @media print {
-  .no-print {
-    display: none !important;
-  }
-}
-
-/* ============================
-   ANIMATIONS
-   ============================ */
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.animate-pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
+  .gov-sidebar, .gov-header, nav, button, .gov-btn { display: none !important; }
+  .gov-card { box-shadow: none !important; border: 1px solid #ddd !important; }
+  body { background: white !important; }
 }

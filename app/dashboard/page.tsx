@@ -14,7 +14,6 @@ import { MOCK_NOTIFICATIONS, MOCK_TASKS, MOCK_RISKS, ANALYTICS_MONTHLY } from '@
 import { MOCK_USERS } from '@/mock/data/users';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { useAppStore } from '@/store/index';
-import { DemoButton } from '@/components/ui/DemoRunner';
 import { PresentationMode } from '@/components/ui/PresentationMode';
 import { formatCurrency, formatDate, formatTimeAgo, truncate } from '@/lib/utils';
 
@@ -68,7 +67,6 @@ export default function DashboardPage() {
           </div>
           <div className="flex gap-2 flex-wrap">
             <PresentationMode />
-            <DemoButton />
             <button onClick={reset} title="Сбросить к демо-данным"
               className="gov-btn gov-btn-ghost gov-btn-sm text-gray-400">
               <RefreshCw size={12} /> Демо-сброс
@@ -338,7 +336,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <DemoButton variant="floating" />
     </AppLayout>
   );
 }
