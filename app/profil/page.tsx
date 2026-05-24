@@ -3,14 +3,16 @@
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs, InfoRow, OnlineDot } from '@/components/ui/index';
 import { CURRENT_USER } from '@/mock/data/users';
-import { MOCK_PROCUREMENTS } from '@/mock/data/procurements';
+import { useAppStore } from '@/store/index';
 import { MOCK_TASKS } from '@/mock/data/other';
 import { formatDateTime, formatCurrency, ROLE_LABELS } from '@/lib/utils';
 import { Mail, Phone, Building2, Shield } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ProfilPage() {
-  const myProc = MOCK_PROCUREMENTS.filter(p=>p.responsibleId==='u1');
+  const { procurements, tasks } = useAppStore();
+  const myProcs = procurements.filter(p => p.responsibleId === 'u1');
+    const myProc = myProcs.filter(p=>p.responsibleId==='u1');
   const myTasks = MOCK_TASKS.filter(t=>t.assigneeId==='u1');
   const totalSum = myProc.reduce((s,p)=>s+p.plannedSum,0);
   return (

@@ -1,4 +1,6 @@
 'use client';
+
+import { useAppStore } from '@/store/index';
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -41,6 +43,7 @@ const ACTION_CLR: Record<string,string> = {
 };
 
 export default function IstoriyaPage() {
+  const { history } = useAppStore();
   const [search, setSearch] = useState('');
   const [actionF, setActionF] = useState('all');
 

@@ -1,5 +1,6 @@
 'use client';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { useAppStore } from '@/store/index';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
 import { ANALYTICS_MONTHLY } from '@/mock/data/other';
@@ -18,6 +19,18 @@ const ST_CLR: Record<string,string>={good:'text-green-700 bg-green-50',warning:'
 const BAR_CLR: Record<string,string>={good:'bg-green-500',warning:'bg-yellow-400',bad:'bg-red-500'};
 
 export default function KpiPage() {
+  const { procurements, tasks } = useAppStore();
+  // KPI рассчитываются из реального store
+  const total = procurements.length;
+  const archived = procurements.filter(p => p.status === 'archive').length;
+  const overdue = procurements.filter(p => p.isOverdue).length;
+  const inTimePct = total > 0 ? Math.round(((total - overdue) / total) * 100) : 100;
+  const totalPlanned = procurements.reduce((s,p) => s + p.plannedSum, 0);
+  const totalContract = procurements.reduce((s,p) => s + (p.contractSum ?? 0), 0);
+  const economy = totalPlanned - totalContract;
+  const economyPct = totalPlanned > 0 ? ((economy / totalPlanned) * 100) : 0;
+  const tasksDone = tasks.filter(t => t.status === 'done').length;
+  const tasksTotal = tasks.length;
   return (
     <AppLayout>
       <div className="p-4">

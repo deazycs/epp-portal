@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CheckCircle, XCircle, Clock, Eye } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs, StatusBadge } from '@/components/ui/index';
-import { MOCK_PROCUREMENTS } from '@/mock/data/procurements';
+import { useAppStore } from '@/store/index';
 import { formatDate, formatCurrency, truncate } from '@/lib/utils';
 
 interface ApprovalItem {
@@ -49,6 +49,11 @@ const COMPLETED_APPROVALS: ApprovalItem[] = [
 ];
 
 export default function SoglasovaniyaPage() {
+  const { procurements } = useAppStore();
+  // Закупки требующие согласования — из реального store
+  const pendingApproval = procurements.filter(p =>
+    ['sz_approval','winner_approval','contract_expertise','deputy_signing'].includes(p.status)
+  );
   const [tab, setTab] = useState<'pending'|'completed'|'mine'>('pending');
 
   const displayed = tab === 'pending' ? PENDING_APPROVALS : tab === 'completed' ? COMPLETED_APPROVALS : PENDING_APPROVALS.slice(0, 1);

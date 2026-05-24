@@ -5,7 +5,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
 import { useAppStore } from '@/store/index';
 import { formatCurrency } from '@/lib/utils';
-import { Star, Shield, AlertTriangle, TrendingUp, Package } from 'lucide-react';
+import { Star, Shield, AlertTriangle, TrendingUp, Package, CheckCircle as CheckIcon } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +23,7 @@ export default function PostavshchikiPage() {
       totalSum: number; totalContract: number; totalPaid: number;
       wonCount: number; completedCount: number; overdueCount: number;
     }>();
+
 
     procurements.forEach(p => {
       if (!p.supplierInn || !p.supplierName) return;
@@ -45,15 +46,33 @@ export default function PostavshchikiPage() {
     });
 
     return Array.from(map.values()).map(s => {
-      // Рейтинг: база 5, +1 за каждые 2 завершённых, -1 за просрочку, +0.5 за экономию
       const economy = s.totalSum > 0 ? (s.totalSum - s.totalContract) / s.totalSum : 0;
+      
+      // Недобросовестный если: просрочки > 30% контрактов ИЛИ просрочек >= 2
+      const overdueRate = s.wonCount > 0 ? s.overdueCount / s.wonCount : 0;
+      const isUnreliable = s.overdueCount >= 2 || overdueRate > 0.3;
+      
+      // Добросовестный: нет просрочек И выполнил все контракты
+      const isReliable = s.overdueCount === 0 && s.completedCount === s.wonCount && s.wonCount >= 1;
+      
+      // Новый: только появился в системе
+      const isNew = s.wonCount === 1 && s.completedCount === 0;
+      
+      let status: 'reliable'|'unreliable'|'new'|'neutral' = 'neutral';
+      if (isUnreliable) status = 'unreliable';
+      else if (isNew) status = 'new';
+      else if (isReliable) status = 'reliable';
+      
+      // Рейтинг 1-5
       let rating = 3.0
-        + (s.completedCount * 0.5)
-        - (s.overdueCount * 0.7)
-        + (economy > 0.02 ? 0.5 : 0)
-        + (s.wonCount >= 3 ? 0.3 : 0);
+        + (s.completedCount * 0.4)
+        - (s.overdueCount * 1.0)
+        + (economy > 0.02 ? 0.3 : 0)
+        + (s.wonCount >= 3 ? 0.3 : 0)
+        + (isReliable ? 0.5 : 0);
       rating = Math.max(1, Math.min(5, rating));
-      return { ...s, rating: Math.round(rating * 10) / 10, economy };
+      
+      return { ...s, rating: Math.round(rating * 10) / 10, economy, status, isUnreliable, isReliable, isNew };
     });
   }, [procurements]);
 
@@ -149,11 +168,21 @@ export default function PostavshchikiPage() {
                   className={`gov-card p-3 cursor-pointer hover:shadow transition-all ${selected===s.inn?'border-blue-400 border-2':''}`}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className="text-xs font-bold text-gray-800">{s.name}</span>
-                        {s.overdueCount > 0 && (
-                          <span className="gov-badge bg-red-50 text-red-600 border-red-200 flex items-center gap-1">
-                            <AlertTriangle size={9}/> {s.overdueCount} просрочки
+                        {s.status === 'reliable' && (
+                          <span className="gov-badge bg-green-50 text-green-700 border-green-300 flex items-center gap-1">
+                            <Shield size={9}/> Добросовестный
+                          </span>
+                        )}
+                        {s.status === 'unreliable' && (
+                          <span className="gov-badge bg-red-50 text-red-700 border-red-300 flex items-center gap-1">
+                            <AlertTriangle size={9}/> Риск просрочек
+                          </span>
+                        )}
+                        {s.status === 'new' && (
+                          <span className="gov-badge bg-blue-50 text-blue-600 border-blue-200">
+                            Новый
                           </span>
                         )}
                       </div>

@@ -95,18 +95,36 @@ export const useAppStore = create<AppStore>((set, get) => ({
   hydrated: true,
   addProcurement: (p) => {
     set(s => {
+      const now = new Date().toISOString();
+      // Автозадача — начать согласование СЗ
+      const autoTask = {
+        id: `task-sz-${Date.now()}`,
+        title: `Согласовать СЗ и начать размещение: ${p.title.slice(0, 55)}`,
+        assigneeId: p.responsibleId,
+        assigneeName: p.responsibleName,
+        creatorId: 'system',
+        creatorName: 'Система',
+        status: 'new' as const,
+        priority: p.priority === 'urgent' ? 'urgent' as const : 'normal' as const,
+        dueDate: new Date(Date.now() + 3*86400000).toISOString().split('T')[0],
+        procurementId: p.id,
+        createdAt: now,
+        updatedAt: now,
+      };
       const next = {
         procurements: [p, ...s.procurements],
+        tasks: [...s.tasks, autoTask],
         history: [
-          makeHEntry(p.id,'u1','Петров А.В.','CREATE',`Создана закупка ${p.registryNumber}`),
+          makeHEntry(p.id, p.responsibleId ?? 'u1', p.responsibleName, 'CREATE',
+            `Создана закупка ${p.registryNumber}: ${p.title.slice(0, 80)}`),
           ...s.history,
         ],
         notifications: [{
-          id:`n-${Date.now()}`, userId:'u1', type:'success' as const,
-          category:'system' as const, title:'Закупка создана',
-          message:`${p.registryNumber} добавлена в реестр.`,
-          link:`/zakupki/${p.id}`, entityId:p.id, entityType:'procurement',
-          isRead:false, createdAt: new Date().toISOString(),
+          id: `n-new-${Date.now()}`, userId: 'u1', type: 'success' as const,
+          category: 'system' as const, title: `Создана: ${p.registryNumber}`,
+          message: `«${p.title.slice(0, 70)}» добавлена в реестр. Задача на согласование СЗ создана.`,
+          link: `/zakupki/${p.id}`, entityId: p.id, entityType: 'procurement',
+          isRead: false, createdAt: now,
         }, ...s.notifications],
       };
       save({ ...s, ...next });

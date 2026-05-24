@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
-import { MOCK_PROCUREMENTS } from '@/mock/data/procurements';
+import { useAppStore } from '@/store/index';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -17,18 +17,6 @@ function getFirstDow(year: number, month: number) {
   return d === 0 ? 6 : d - 1;
 }
 
-const EVENTS = [
-  ...MOCK_PROCUREMENTS
-    .filter(p => p.contractEndDate)
-    .map(p => ({ date: p.contractEndDate!, label: `Срок дог.: ${p.registryNumber}`, type: 'deadline', href: `/zakupki/${p.id}` })),
-  ...MOCK_PROCUREMENTS
-    .filter(p => p.contractDate)
-    .map(p => ({ date: p.contractDate!, label: `Договор: ${p.registryNumber}`, type: 'contract', href: `/zakupki/${p.id}` })),
-  { date: '2026-05-22', label: 'Срок оплаты: бумага А4', type: 'payment', href: '/platezhi' },
-  { date: '2026-05-28', label: 'Срок ТЗ: СМЭВ-адаптер', type: 'task', href: '/zadachi' },
-  { date: '2026-06-01', label: 'Согласование: уборка', type: 'approval', href: '/soglasovaniya' },
-  { date: '2026-06-13', label: 'Подписание дог.: мебель', type: 'contract', href: '/zakupki/p008' },
-];
 
 const TYPE_COLORS: Record<string,string> = {
   deadline: 'bg-red-100 text-red-700',
@@ -39,6 +27,19 @@ const TYPE_COLORS: Record<string,string> = {
 };
 
 export default function KalendarPage() {
+  const { procurements, tasks } = useAppStore();
+const EVENTS = [
+    ...procurements
+    .filter(p => p.contractEndDate)
+    .map(p => ({ date: p.contractEndDate!, label: `Срок дог.: ${p.registryNumber}`, type: 'deadline', href: `/zakupki/${p.id}` })),
+    ...procurements
+    .filter(p => p.contractDate)
+    .map(p => ({ date: p.contractDate!, label: `Договор: ${p.registryNumber}`, type: 'contract', href: `/zakupki/${p.id}` })),
+  { date: '2026-05-22', label: 'Срок оплаты: бумага А4', type: 'payment', href: '/platezhi' },
+  { date: '2026-05-28', label: 'Срок ТЗ: СМЭВ-адаптер', type: 'task', href: '/zadachi' },
+  { date: '2026-06-01', label: 'Согласование: уборка', type: 'approval', href: '/soglasovaniya' },
+  { date: '2026-06-13', label: 'Подписание дог.: мебель', type: 'contract', href: '/zakupki/p008' },
+];
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());

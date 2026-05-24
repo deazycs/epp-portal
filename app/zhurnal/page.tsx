@@ -4,12 +4,11 @@ import { useState } from 'react';
 import { Search, Filter } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
+import { useAppStore } from '@/store/index';
 import { MOCK_AUDIT_LOGS } from '@/mock/data/other';
 import { MOCK_HISTORY } from '@/mock/data/other';
 import { formatDateTime } from '@/lib/utils';
 
-// Расширенные логи для демонстрации
-const EXTENDED_LOGS = MOCK_AUDIT_LOGS;
 
 const ACTION_COLORS: Record<string, string> = {
   LOGIN: 'bg-blue-50 text-blue-700',
@@ -24,6 +23,24 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 export default function ZhurnalPage() {
+  const { history } = useAppStore();
+  // Расширенные логи для демонстрации
+  const EXTENDED_LOGS = [
+      ...MOCK_AUDIT_LOGS,
+      // История из store — реальные действия пользователя
+      ...history.map(h => ({
+        id: h.id,
+        userId: h.userId,
+        userName: h.userName,
+        userRole: 'specialist_mto',
+        action: h.action,
+        entityType: h.entityType,
+        entityId: h.entityId,
+        description: h.description,
+        ipAddress: h.ipAddress ?? '10.10.1.45',
+        createdAt: h.createdAt,
+      })),
+    ].sort((a,b) => b.createdAt.localeCompare(a.createdAt));
   const [search, setSearch] = useState('');
   const [moduleFilter, setModuleFilter] = useState('all');
 

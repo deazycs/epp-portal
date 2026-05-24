@@ -26,11 +26,10 @@ const SUPPLIER_DATA = [
 
 export default function AnalitikaPage() {
   const { procurements } = useAppStore();
-  const MOCK_PROCUREMENTS = procurements;
-  const total = MOCK_PROCUREMENTS.reduce((s,p) => s+p.plannedSum, 0);
-  const contracted = MOCK_PROCUREMENTS.reduce((s,p) => s+(p.contractSum??0), 0);
-  const paid = MOCK_PROCUREMENTS.reduce((s,p) => s+(p.paidSum??0), 0);
-  const completed = MOCK_PROCUREMENTS.filter(p => p.status === 'archive').length;
+  const total = procurements.reduce((s,p) => s+p.plannedSum, 0);
+  const contracted = procurements.reduce((s,p) => s+(p.contractSum??0), 0);
+  const paid = procurements.reduce((s,p) => s+(p.paidSum??0), 0);
+  const completed = procurements.filter(p => p.status === 'archive').length;
 
   return (
     <AppLayout>
@@ -57,7 +56,7 @@ export default function AnalitikaPage() {
           <KPICard title="Плановый бюджет" value={formatCurrency(total)} icon={<BarChart3 size={14} />} colorClass="text-gray-700" bgClass="bg-gray-100" />
           <KPICard title="Заключено договоров" value={formatCurrency(contracted)} change={`Экономия ${Math.round((1-contracted/total)*100)}%`} changeType="up" icon={<TrendingUp size={14} />} colorClass="text-blue-700" bgClass="bg-blue-50" />
           <KPICard title="Оплачено" value={formatCurrency(paid)} icon={<TrendingUp size={14} />} colorClass="text-green-700" bgClass="bg-green-50" />
-          <KPICard title="Завершено закупок" value={`${completed} из ${MOCK_PROCUREMENTS.length}`} icon={<PieIcon size={14} />} colorClass="text-purple-700" bgClass="bg-purple-50" />
+          <KPICard title="Завершено закупок" value={`${completed} из ${procurements.length}`} icon={<PieIcon size={14} />} colorClass="text-purple-700" bgClass="bg-purple-50" />
         </div>
 
         {/* Графики row 1 */}

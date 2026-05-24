@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import { Search, Upload, Download, Eye, FileText } from 'lucide-react';
+import { useAppStore } from '@/store/index';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
 import { formatDate, truncate } from '@/lib/utils';
@@ -25,6 +26,22 @@ const EXT_ICO: Record<string,string> = { pdf:'📕', docx:'📘', xlsx:'📗' };
 function fIcon(f:string){ return EXT_ICO[f.split('.').pop()??'']??'📄'; }
 
 export default function DokumentyPage() {
+  const { procurements } = useAppStore();
+  // Документы = сводный список из всех закупок (requiredDocuments по этапам)
+  const docsFromProcurements = procurements.flatMap(p =>
+    (p.workflowSteps ?? [])
+      .filter(s => s.isCompleted && s.requiredDocuments)
+      .flatMap(s => (s.requiredDocuments ?? []).map(doc => ({
+        id: `doc-${p.id}-${s.status}-${doc.slice(0,10)}`,
+        name: doc,
+        procurement: p.registryNumber,
+        procId: p.id,
+        status: 'approved',
+        date: s.completedAt ?? p.updatedAt,
+        author: s.completedByName ?? p.responsibleName,
+        category: 'contract',
+      })))
+  ).slice(0, 30); // показываем не более 30
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadedDocs, setUploadedDocs] = useState<{id:string;name:string;cat:string;status:string;date:string;size:string;author:string}[]>([]);
 
