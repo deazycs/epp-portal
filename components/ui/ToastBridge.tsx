@@ -1,21 +1,31 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useToast } from '@/components/ui/Toast';
-import { useAppStore } from '@/store/index';
+
+// Module-level callback — не вызывает ре-рендеры
+let globalToastCallback: ((type: string, title: string, msg?: string) => void) | null = null;
+
+export function getToastCallback() {
+  return globalToastCallback;
+}
 
 export function ToastBridge() {
   const toast = useToast();
-  const registerToast = useAppStore(s => s.registerToast);
+  const toastRef = useRef(toast);
+  toastRef.current = toast;
 
   useEffect(() => {
-    registerToast((type, title, msg) => {
-      if (type === 'success') toast.success(title, msg);
-      else if (type === 'error') toast.error(title, msg);
-      else if (type === 'warning') toast.warning(title, msg);
-      else toast.info(title, msg);
-    });
-  }, [registerToast, toast]);
+    // Регистрируем callback на уровне модуля — без изменения Zustand state
+    globalToastCallback = (type, title, msg) => {
+      if (type === 'success') toastRef.current.success(title, msg);
+      else if (type === 'error') toastRef.current.error(title, msg);
+      else if (type === 'warning') toastRef.current.warning(title, msg);
+      else toastRef.current.info(title, msg);
+    };
+
+    return () => { globalToastCallback = null; };
+  }, []);
 
   return null;
 }

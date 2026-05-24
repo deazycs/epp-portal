@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import type { Procurement, Task, Notification, HistoryEntry, ProcurementStatus } from '@/types';
+import { getToastCallback } from '@/components/ui/ToastBridge';
 import { WORKFLOW_STATUS_ORDER, WORKFLOW_STATUS_LABELS } from '@/lib/constants';
 import { MOCK_PROCUREMENTS } from '@/mock/data/procurements';
 import { MOCK_TASKS, MOCK_NOTIFICATIONS, MOCK_HISTORY } from '@/mock/data/other';
@@ -23,11 +24,6 @@ interface AppStore {
   history: HistoryEntry[];
   comments: Comment[];
   hydrated: boolean;
-  _toastCallback: ((type: string, title: string, msg?: string) => void) | null;
-
-  // Тосты
-  registerToast: (cb: (type: string, title: string, msg?: string) => void) => void;
-
   // Закупки
   addProcurement: (p: Procurement) => void;
   updateProcurement: (id: string, changes: Partial<Procurement>) => void;
@@ -97,10 +93,6 @@ export const useAppStore = create<AppStore>((set, get) => ({
   history:      saved?.history      ?? MOCK_HISTORY,
   comments:     saved?.comments     ?? [],
   hydrated: true,
-  _toastCallback: null,
-
-  registerToast: (cb) => set({ _toastCallback: cb }),
-
   addProcurement: (p) => {
     set(s => {
       const next = {
@@ -118,7 +110,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
         }, ...s.notifications],
       };
       save({ ...s, ...next });
-      s._toastCallback?.('success', 'Закупка создана', p.registryNumber);
+      getToastCallback()?.('success', 'Закупка создана', p.registryNumber);
       return next;
     });
   },
@@ -131,7 +123,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
         ),
       };
       save({ ...s, ...next });
-      s._toastCallback?.('success', 'Изменения сохранены');
+      getToastCallback()?.('success', 'Изменения сохранены');
       return next;
     });
   },
@@ -171,7 +163,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
         }, ...s.notifications],
       };
       save({ ...s, ...next });
-      s._toastCallback?.('info', 'Статус изменён', `${STATUS_LABELS[oldStatus]} → ${STATUS_LABELS[newStatus]}`);
+      getToastCallback()?.('info', 'Статус изменён', `${STATUS_LABELS[oldStatus]} → ${STATUS_LABELS[newStatus]}`);
       return next;
     });
   },
@@ -189,7 +181,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     set(s => {
       const next = { tasks: [t, ...s.tasks] };
       save({ ...s, ...next });
-      s._toastCallback?.('success', 'Задача создана', t.title);
+      getToastCallback()?.('success', 'Задача создана', t.title);
       return next;
     });
   },
@@ -203,7 +195,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
         ),
       };
       save({ ...s, ...next });
-      s._toastCallback?.('success', 'Задача выполнена', task?.title);
+      getToastCallback()?.('success', 'Задача выполнена', task?.title);
       return next;
     });
   },
@@ -236,7 +228,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
         ),
       };
       save({ ...s, ...next });
-      s._toastCallback?.('success', 'Все уведомления прочитаны');
+      getToastCallback()?.('success', 'Все уведомления прочитаны');
       return next;
     });
   },
@@ -258,7 +250,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     set(s => {
       const next = { comments: [...s.comments, comment] };
       save({ ...s, ...next });
-      s._toastCallback?.('success', 'Комментарий добавлен');
+      getToastCallback()?.('success', 'Комментарий добавлен');
       return next;
     });
   },
@@ -278,6 +270,6 @@ export const useAppStore = create<AppStore>((set, get) => ({
       history: MOCK_HISTORY,
       comments: [],
     });
-    get()._toastCallback?.('info', 'Данные сброшены', 'Восстановлены исходные демо-данные');
+    getToastCallback()?.('info', 'Данные сброшены', 'Восстановлены исходные демо-данные');
   },
 }));
