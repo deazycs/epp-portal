@@ -139,7 +139,7 @@ export default function KontraktyPage() {
                   <tr key={c.id} className={c.isOverdue ? 'bg-red-50' : ''}>
                     <td>
                       <div className="text-xs font-bold text-blue-600">{c.number}</div>
-                      <div className="text-xs text-gray-400">{c.procurementTitle?.slice(0, 30)}…</div>
+                      <div className="text-xs text-gray-400">{c.subject?.slice(0, 30)}…</div>
                     </td>
                     <td className="text-xs">{truncate(c.subject, 40)}</td>
                     <td>

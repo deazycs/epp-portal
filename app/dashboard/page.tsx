@@ -292,7 +292,7 @@ export default function DashboardPage() {
                       <div className="text-xs text-gray-800 leading-tight flex-1 min-w-0">{truncate(r.title,45)}</div>
                       <RiskBadge level={r.level}/>
                     </div>
-                    <div className="text-xs text-gray-400 mt-0.5">{r.responsibleName}</div>
+                    <div className="text-xs text-gray-400 mt-0.5">{r.owner}</div>
                   </div>
                 ))}
               </div>

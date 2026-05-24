@@ -591,7 +591,7 @@ export default function ZakupkaDetailPage() {
                       <div className="flex-1">
                         <div className="text-xs font-bold text-gray-800">{r.title}</div>
                         <div className="text-xs text-gray-500 mt-0.5">{r.description}</div>
-                        {r.mitigationPlan && <div className="text-xs text-blue-700 mt-1 p-2 bg-blue-50 border border-blue-200 rounded"><strong>План:</strong> {r.mitigationPlan}</div>}
+                        {r.mitigation && <div className="text-xs text-blue-700 mt-1 p-2 bg-blue-50 border border-blue-200 rounded"><strong>План:</strong> {r.mitigation}</div>}
                       </div>
                       <RiskBadge level={r.level}/>
                     </div>

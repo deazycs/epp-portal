@@ -121,20 +121,16 @@ export default function RiskiPage() {
                     <span className="text-sm font-bold text-gray-800">{r.title}</span>
                   </div>
                   <p className="text-xs text-gray-600 mb-2">{r.description}</p>
-                  {r.mitigationPlan && (
+                  {r.mitigation && (
                     <div className="text-xs p-2 bg-blue-50 border border-blue-200 rounded">
                       <strong className="text-blue-800">📋 План действий:</strong>{' '}
-                      <span className="text-blue-700">{r.mitigationPlan}</span>
+                      <span className="text-blue-700">{r.mitigation}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
-                    <span>Ответственный: <strong className="text-gray-700">{r.responsibleName}</strong></span>
-                    <span>Зафиксирован: {formatDate(r.identifiedAt)}</span>
-                    {r.dueDate && (
-                      <span className={new Date(r.dueDate) < new Date() ? 'text-red-600 font-bold' : ''}>
-                        Срок: {formatDate(r.dueDate)}
-                      </span>
-                    )}
+                    <span>Ответственный: <strong className="text-gray-700">{r.owner}</strong></span>
+                    <span>Зафиксирован: {formatDate(r.detectedAt)}</span>
+
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2 flex-shrink-0">

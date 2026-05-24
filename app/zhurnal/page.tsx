@@ -9,15 +9,7 @@ import { MOCK_HISTORY } from '@/mock/data/other';
 import { formatDateTime } from '@/lib/utils';
 
 // Расширенные логи для демонстрации
-const EXTENDED_LOGS = [
-  ...MOCK_AUDIT_LOGS,
-  { id: 'al4', userId: 'u1', userName: 'Петров А.В.', userRole: 'specialist_mto' as const, action: 'СОЗДАНИЕ', module: 'Закупки', entityId: 'p007', entityType: 'procurement', description: 'Создана закупка РЗ-МО-2025-00219', ipAddress: '10.10.1.45', userAgent: 'Mozilla/5.0', timestamp: '2025-06-09T11:00:00', result: 'success' as const },
-  { id: 'al5', userId: 'u2', userName: 'Смирнова Н.С.', userRole: 'head_department' as const, action: 'СОГЛАСОВАНИЕ', module: 'Согласования', entityId: 'p001', entityType: 'procurement', description: 'Согласована закупка РЗ-МО-2025-00142', ipAddress: '10.10.1.33', userAgent: 'Mozilla/5.0', timestamp: '2025-06-08T09:15:00', result: 'success' as const },
-  { id: 'al6', userId: 'u3', userName: 'Козлов Д.М.', userRole: 'contract_manager' as const, action: 'ЗАГРУЗКА', module: 'Документы', entityId: 'doc3', entityType: 'document', description: 'Загружен документ: Договор № 125/25-МТО.pdf', ipAddress: '10.10.1.12', userAgent: 'Mozilla/5.0', timestamp: '2025-06-07T14:00:00', result: 'success' as const },
-  { id: 'al7', userId: 'u4', userName: 'Волкова Е.И.', userRole: 'accountant' as const, action: 'ОПЛАТА', module: 'Платежи', entityId: 'c2', entityType: 'dogovor', description: 'Проведён платёж 875 600 руб. по договору 098/25-ИТ', ipAddress: '10.10.1.22', userAgent: 'Mozilla/5.0', timestamp: '2025-06-07T13:00:00', result: 'success' as const },
-  { id: 'al8', userId: 'u1', userName: 'Петров А.В.', userRole: 'specialist_mto' as const, action: 'ЭКСПОРТ', module: 'Реестр закупок', description: 'Экспорт реестра закупок в Excel', ipAddress: '10.10.1.45', userAgent: 'Mozilla/5.0', timestamp: '2025-06-06T16:00:00', result: 'success' as const },
-  { id: 'al9', userId: 'u8', userName: 'Системный администратор', userRole: 'admin' as const, action: 'НАСТРОЙКА', module: 'Настройки', description: 'Изменены настройки уведомлений', ipAddress: '10.10.1.1', userAgent: 'Mozilla/5.0', timestamp: '2025-06-05T09:00:00', result: 'success' as const },
-];
+const EXTENDED_LOGS = MOCK_AUDIT_LOGS;
 
 const ACTION_COLORS: Record<string, string> = {
   LOGIN: 'bg-blue-50 text-blue-700',
@@ -35,15 +27,15 @@ export default function ZhurnalPage() {
   const [search, setSearch] = useState('');
   const [moduleFilter, setModuleFilter] = useState('all');
 
-  const modules = ['all', ...Array.from(new Set(EXTENDED_LOGS.map(l => l.module)))];
+  const modules = ['all', ...Array.from(new Set(EXTENDED_LOGS.map(l => l.entityType)))];
 
   const filtered = EXTENDED_LOGS
     .filter(l => {
       const okSearch = !search || l.description.toLowerCase().includes(search.toLowerCase()) || l.userName.toLowerCase().includes(search.toLowerCase());
-      const okModule = moduleFilter === 'all' || l.module === moduleFilter;
+      const okModule = moduleFilter === 'all' || l.entityType === moduleFilter;
       return okSearch && okModule;
     })
-    .sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   return (
     <AppLayout>
@@ -84,7 +76,7 @@ export default function ZhurnalPage() {
               <tbody>
                 {filtered.map(log => (
                   <tr key={log.id}>
-                    <td className="text-xs font-mono whitespace-nowrap">{formatDateTime(log.timestamp)}</td>
+                    <td className="text-xs font-mono whitespace-nowrap">{formatDateTime(log.createdAt)}</td>
                     <td>
                       <div className="text-xs font-bold">{log.userName}</div>
                       <div className="text-xs text-gray-400 font-mono">{log.userId}</div>
@@ -94,13 +86,11 @@ export default function ZhurnalPage() {
                         {log.action}
                       </span>
                     </td>
-                    <td className="text-xs text-gray-600 font-bold">{log.module}</td>
+                    <td className="text-xs text-gray-600 font-bold">{log.entityType}</td>
                     <td className="text-xs">{log.description}</td>
                     <td className="text-xs font-mono text-gray-400">{log.ipAddress}</td>
                     <td>
-                      <span className={`gov-badge ${log.result === 'success' ? 'bg-green-50 text-green-700 border-green-300' : 'bg-red-50 text-red-700 border-red-300'}`}>
-                        {log.result === 'success' ? '✓ OK' : '✗ Ошибка'}
-                      </span>
+                      <span className="gov-badge bg-green-50 text-green-700 border-green-300">✓ OK</span>
                     </td>
                   </tr>
                 ))}

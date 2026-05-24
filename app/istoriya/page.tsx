@@ -17,10 +17,10 @@ const ALL_HISTORY = [
     ip: h.ipAddress,
   })),
   ...MOCK_AUDIT_LOGS.map(l => ({
-    id: l.id, time: l.timestamp, user: l.userName,
+    id: l.id, time: l.createdAt, user: l.userName,
     action: l.action, desc: l.description,
     old: undefined, newVal: undefined,
-    entity: l.entityType ?? l.module, entityId: l.entityId,
+    entity: l.entityType ?? l.entityType, entityId: l.entityId,
     ip: l.ipAddress,
   })),
 ].sort((a,b) => b.time.localeCompare(a.time));

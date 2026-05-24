@@ -331,7 +331,7 @@ export interface Task {
   completedAt?: string;
   createdAt: string;
   updatedAt: string;
-  tags: string[];
+  tags?: string[];
   // Реквизиты закупки
   szInitiatorDept?: string;
   szDate?: string;

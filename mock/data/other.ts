@@ -1,81 +1,131 @@
-import type { Notification, Task, HistoryEntry, Document, AuditLog, Contract, Risk } from '@/types';
+import type { Notification, HistoryEntry, Task } from '@/types';
 
+// ─── УВЕДОМЛЕНИЯ ─────────────────────────────────────────────────
 export const MOCK_NOTIFICATIONS: Notification[] = [
-  { id: 'n1', userId: 'u1', type: 'warning', category: 'deadline', title: 'Просрочка платежа по договору', message: 'По закупке РЗ-2026-00056 «Поставка бумаги» срок оплаты истёк 4 дня назад. Необходимо инициировать платёжное поручение.', link: '/zakupki/p004', entityId: 'p004', entityType: 'procurement', isRead: false, createdAt: '2026-05-15T10:00:00' },
-  { id: 'n2', userId: 'u1', type: 'info', category: 'approval', title: 'Направлено на согласование', message: 'Закупка РЗ-2026-00178 «Услуги уборки» направлена на согласование начальником АХО.', link: '/soglasovaniya', entityId: 'p003', entityType: 'procurement', isRead: false, createdAt: '2026-05-18T14:30:00' },
-  { id: 'n3', userId: 'u1', type: 'success', category: 'approval', title: 'Закупка согласована', message: 'Закупка РЗ-2026-00134 «Офисная мебель» согласована. Можно переходить к следующему этапу.', link: '/zakupki/p008', entityId: 'p008', entityType: 'procurement', isRead: true, createdAt: '2026-05-14T09:15:00', readAt: '2026-05-14T10:00:00' },
-  { id: 'n4', userId: 'u1', type: 'warning', category: 'deadline', title: 'Срок размещения в ЕИС истекает', message: 'По закупке РЗ-2026-00098 «Microsoft 365» необходимо разместить отчёт об исполнении в ЕИС до 23.05.2026.', link: '/zakupki/p009', entityId: 'p009', entityType: 'procurement', isRead: false, createdAt: '2026-05-19T08:00:00' },
-  { id: 'n5', userId: 'u1', type: 'info', category: 'task', title: 'Новая задача назначена', message: 'Смирнова Н.С. назначила задачу: «Проверить комплектность документов по договору с ООО ТехноОфис»', link: '/zadachi', isRead: false, createdAt: '2026-05-17T16:45:00' },
-  { id: 'n6', userId: 'u1', type: 'error', category: 'document', title: 'Отсутствует ТЗ', message: 'По закупке РЗ-2026-00203 «СМЭВ-адаптер» не загружено техническое задание. Без него невозможно разместить извещение в ЕИС.', link: '/zakupki/p005', entityId: 'p005', entityType: 'procurement', isRead: false, createdAt: '2026-05-19T07:30:00' },
-  { id: 'n7', userId: 'u1', type: 'success', category: 'payment', title: 'Оплата проведена', message: 'По договору с ООО «МоскваСофт» (Microsoft 365) проведена оплата 378 000,00 руб.', link: '/zakupki/p009', entityId: 'p009', entityType: 'procurement', isRead: true, createdAt: '2026-05-01T13:00:00', readAt: '2026-05-01T14:00:00' },
-  { id: 'n8', userId: 'u1', type: 'info', category: 'system', title: 'Плановое обновление системы', message: 'В субботу 23.05.2026 с 22:00 до 02:00 проводится плановое ТО системы. Сохраните незавершённую работу.', isRead: false, createdAt: '2026-05-19T09:00:00' },
+  { id:'n001', userId:'u1', type:'error', category:'deadline', title:'Просрочка оплаты: РЗ-2026-00056', message:'Срок оплаты по договору с ЗАО «КанцЛайф» истёк 4 дня назад. Необходимо инициировать платёжное поручение.', link:'/zakupki/p004', entityId:'p004-overdue', entityType:'procurement', isRead:false, createdAt:'2026-05-20T09:00:00' },
+  { id:'n002', userId:'u1', type:'warning', category:'deadline', title:'Срок исполнения через 3 дня: РЗ-2026-00142', message:'До окончания поставки картриджей по договору с ООО «ТехноОфис» осталось 3 дня (30.05.2026).', link:'/zakupki/p001', entityId:'p001-warn', entityType:'procurement', isRead:false, createdAt:'2026-05-22T08:30:00' },
+  { id:'n003', userId:'u1', type:'info', category:'approval', title:'Требуется согласование: СЗ-АХО-2026-091', message:'Орлова Т.В. направила служебную записку на согласование услуг уборки на III квартал 2026 года.', link:'/soglasovaniya', entityId:'sz2', entityType:'note', isRead:false, createdAt:'2026-05-21T14:15:00' },
+  { id:'n004', userId:'u1', type:'success', category:'system', title:'Договор подписан: РЗ-2026-00142', message:'Договор с ООО «ТехноОфис» на поставку картриджей подписан ЭЦП и внесён в реестр ЕАТ «Берёзка».', link:'/zakupki/p001', entityId:'p001-signed', entityType:'procurement', isRead:true, createdAt:'2026-04-22T16:40:00', readAt:'2026-04-22T17:00:00' },
+  { id:'n005', userId:'u1', type:'warning', category:'deadline', title:'Срок размещения в ЕИС: РЗ-2026-00167', message:'Необходимо разместить извещение о закупке ТО лифтов в ЕИС до 30.05.2026. Осталось 6 дней.', link:'/zakupki/p010', entityId:'p010-eis', entityType:'procurement', isRead:false, createdAt:'2026-05-22T09:00:00' },
+  { id:'n006', userId:'u1', type:'info', category:'task', title:'Новая задача: подготовить ТЗ', message:'Козлов Д.М. назначил вам задачу: подготовить техническое задание для закупки серверного оборудования.', link:'/zadachi', entityId:'t003', entityType:'task', isRead:true, createdAt:'2026-05-15T11:00:00', readAt:'2026-05-15T12:30:00' },
+  { id:'n007', userId:'u1', type:'info', category:'approval', title:'Согласование завершено: РЗ-2026-00089', message:'Фёдоров С.В. завизировал договор с ООО «СитиКомп». Договор передан на подписание.', link:'/zakupki/p002', entityId:'p002-approved', entityType:'procurement', isRead:true, createdAt:'2026-05-18T15:20:00', readAt:'2026-05-19T09:00:00' },
+  { id:'n008', userId:'u1', type:'error', category:'deadline', title:'Просрочка: РЗ-2026-00098 — отчётность ЕИС', message:'Срок размещения отчёта об исполнении договора с ООО «МоскваСофт» в ЕИС истёк. Необходимо срочно разместить.', link:'/zakupki/p009', entityId:'p009-report', entityType:'procurement', isRead:false, createdAt:'2026-05-21T10:00:00' },
+  { id:'n009', userId:'u1', type:'success', category:'system', title:'Экономия бюджета: 145 300 руб.', message:'По итогам торгов в мае 2026 года экономия составила 145 300 руб. (1,7% от НМЦК).', link:'/analitika', entityId:'economy-may', entityType:'system', isRead:false, createdAt:'2026-05-20T17:00:00' },
+  { id:'n010', userId:'u1', type:'warning', category:'payment', title:'Ожидается оплата: РЗ-2026-00056', message:'Документы на оплату от ЗАО «КанцЛайф» (счёт №КЛ-2026-0089) переданы в бухгалтерию 4 дня назад. Уточните статус платежа.', link:'/platezhi', entityId:'pay-p004', entityType:'procurement', isRead:false, createdAt:'2026-05-20T08:00:00' },
 ];
 
-export const MOCK_TASKS: Task[] = [
-  { id: 't1', title: 'Проверить комплектность документов по картриджам', description: 'Сверить документы согласно чек-листу: договор, ТЗ, акт приёмки, счёт-фактура, товарная накладная', status: 'new', priority: 'high', assigneeId: 'u1', assigneeName: 'Петров А.В.', creatorId: 'u2', creatorName: 'Смирнова Н.С.', procurementId: 'p001', dueDate: '2026-05-23', createdAt: '2026-05-17T16:45:00', updatedAt: '2026-05-17T16:45:00', tags: ['документы', 'приоритетная'], subtasks: [{ id: 'st1', parentId: 't1', title: 'Проверить договор', done: true }, { id: 'st2', parentId: 't1', title: 'Проверить акт приёмки', done: false }, { id: 'st3', parentId: 't1', title: 'Проверить счёт-фактуру', done: false }] },
-  { id: 't2', title: 'Разработать ТЗ на СМЭВ-адаптер', description: 'Согласовать требования с ИТ-отделом и ЦАОЗ, оформить ТЗ по ГОСТ 34.602-2020', status: 'in_progress', priority: 'high', assigneeId: 'u6', assigneeName: 'Никитин П.А.', creatorId: 'u1', creatorName: 'Петров А.В.', procurementId: 'p005', dueDate: '2026-05-28', createdAt: '2026-05-10T10:00:00', updatedAt: '2026-05-18T11:00:00', tags: ['ТЗ', 'ИТ'] },
-  { id: 't3', title: 'Запросить КП от клининговых компаний', status: 'done', priority: 'normal', assigneeId: 'u7', assigneeName: 'Орлова Т.В.', creatorId: 'u1', creatorName: 'Петров А.В.', procurementId: 'p003', dueDate: '2026-05-16', completedAt: '2026-05-15T15:00:00', createdAt: '2026-05-10T09:00:00', updatedAt: '2026-05-15T15:00:00', tags: ['КП'] },
-  { id: 't4', title: 'Инициировать оплату по бумаге А4', description: 'Подготовить пакет документов для бухгалтерии: счёт, акт, договор, заявка на оплату', status: 'overdue', priority: 'urgent', assigneeId: 'u1', assigneeName: 'Петров А.В.', creatorId: 'u2', creatorName: 'Смирнова Н.С.', procurementId: 'p004', dueDate: '2026-05-15', createdAt: '2026-05-12T09:00:00', updatedAt: '2026-05-12T09:00:00', tags: ['оплата', 'просрочено'] },
-  { id: 't5', title: 'Опубликовать извещение о закупке мебели в ЕАТ', status: 'in_progress', priority: 'normal', assigneeId: 'u1', assigneeName: 'Петров А.В.', creatorId: 'u7', creatorName: 'Орлова Т.В.', procurementId: 'p008', dueDate: '2026-05-22', createdAt: '2026-05-14T10:00:00', updatedAt: '2026-05-18T09:00:00', tags: ['ЕАТ', 'публикация'] },
-];
-
+// ─── ИСТОРИЯ ДЕЙСТВИЙ ────────────────────────────────────────────
 export const MOCK_HISTORY: HistoryEntry[] = [
-  { id: 'h1', entityId: 'p001', entityType: 'procurement', userId: 'u1', userName: 'Петров А.В.', action: 'status_change', fieldName: 'status', oldValue: 'awaiting_supplier', newValue: 'contract_signing', description: 'Статус изменён: «Ожидание поставщика» → «Заключение договора»', createdAt: '2026-04-14T11:30:00', ipAddress: '10.10.1.45' },
-  { id: 'h2', entityId: 'p001', entityType: 'procurement', userId: 'u3', userName: 'Козлов Д.М.', action: 'document_upload', description: 'Загружен документ: «Договор РЗ-2026-00142 с ООО ТехноОфис.pdf»', createdAt: '2026-04-18T14:00:00', ipAddress: '10.10.1.12' },
-  { id: 'h3', entityId: 'p001', entityType: 'procurement', userId: 'u1', userName: 'Петров А.В.', action: 'status_change', fieldName: 'status', oldValue: 'contract_signing', newValue: 'execution', description: 'Статус изменён: «Заключение договора» → «Исполнение»', createdAt: '2026-04-18T15:00:00', ipAddress: '10.10.1.45' },
-  { id: 'h4', entityId: 'p001', entityType: 'procurement', userId: 'u1', userName: 'Петров А.В.', action: 'field_update', fieldName: 'contractSum', oldValue: '162000', newValue: '156400', description: 'Обновлена сумма договора: 162 000 → 156 400 руб.', createdAt: '2026-04-18T15:05:00', ipAddress: '10.10.1.45' },
-  { id: 'h5', entityId: 'p004', entityType: 'procurement', userId: 'u4', userName: 'Волкова Е.И.', action: 'payment_issue', description: 'Зафиксирована просрочка платежа. Срок оплаты 15.05.2026 истёк.', createdAt: '2026-05-16T09:00:00', ipAddress: '10.10.1.22' },
+  { id:'h001', entityId:'p001', entityType:'procurement', userId:'u1', userName:'Петров А.В.', action:'status_change', description:'Статус изменён: «Договор подписан» → «Исполнение»', oldValue:'contract_signed', newValue:'execution', createdAt:'2026-05-10T14:30:00', ipAddress:'10.10.1.45' },
+  { id:'h002', entityId:'p002', entityType:'procurement', userId:'u3', userName:'Козлов Д.М.', action:'status_change', description:'Статус изменён: «Согласование победителя» → «Экспертиза договора»', oldValue:'winner_approval', newValue:'contract_expertise', createdAt:'2026-05-18T11:15:00', ipAddress:'10.10.1.47' },
+  { id:'h003', entityId:'p003', entityType:'procurement', userId:'u1', userName:'Петров А.В.', action:'CREATE', description:'Создана закупка РЗ-2026-00178: услуги комплексной уборки', createdAt:'2026-05-15T09:00:00', ipAddress:'10.10.1.45' },
+  { id:'h004', entityId:'p009', entityType:'procurement', userId:'u6', userName:'Никитин П.А.', action:'status_change', description:'Статус изменён: «Исполнение» → «Отчётность в ЕИС»', oldValue:'execution', newValue:'eis_reporting', createdAt:'2026-05-05T16:00:00', ipAddress:'10.10.1.52' },
+  { id:'h005', entityId:'p004', entityType:'procurement', userId:'u1', userName:'Петров А.В.', action:'status_change', description:'Статус изменён: «Исполнение» → «Оплата»', oldValue:'execution', newValue:'payment', createdAt:'2026-04-20T10:30:00', ipAddress:'10.10.1.45' },
+  { id:'h006', entityId:'p001', entityType:'procurement', userId:'u2', userName:'Смирнова Н.С.', action:'APPROVE', description:'Победитель согласован: ООО «ТехноОфис» (ИНН 7701234567)', createdAt:'2026-04-18T14:00:00', ipAddress:'10.10.1.46' },
+  { id:'h007', entityId:'p005', entityType:'procurement', userId:'u6', userName:'Никитин П.А.', action:'status_change', description:'Статус изменён: «Финансирование» → «Подготовка к закупке»', oldValue:'financing', newValue:'preparation', createdAt:'2026-05-16T10:30:00', ipAddress:'10.10.1.52' },
+  { id:'h008', entityId:'p008', entityType:'procurement', userId:'u1', userName:'Петров А.В.', action:'status_change', description:'Статус изменён: «Размещение» → «Торги»', oldValue:'placement', newValue:'bidding', createdAt:'2026-05-14T09:00:00', ipAddress:'10.10.1.45' },
+  { id:'h009', entityId:'p002', entityType:'procurement', userId:'u5', userName:'Фёдоров С.В.', action:'APPROVE', description:'СЗ согласована: ИТ-отдел — серверное оборудование для ЦОД', createdAt:'2026-02-12T11:30:00', ipAddress:'10.10.1.50' },
+  { id:'h010', entityId:'p010', entityType:'procurement', userId:'u1', userName:'Петров А.В.', action:'status_change', description:'Статус изменён: «Подготовка» → «Размещение в ЕАТ»', oldValue:'preparation', newValue:'placement', createdAt:'2026-05-15T15:00:00', ipAddress:'10.10.1.45' },
 ];
+
+// ─── ЗАДАЧИ ──────────────────────────────────────────────────────
+export const MOCK_TASKS: Task[] = [
+  { id:'t001', title:'Разместить котировочную сессию на ЕАТ «Берёзка» — ТО лифтов', assigneeId:'u1', assigneeName:'Петров А.В.', creatorId:'u2', creatorName:'Смирнова Н.С.', status:'new', priority:'urgent', dueDate:'2026-05-30', procurementId:'p010', createdAt:'2026-05-22T09:00:00', updatedAt:'2026-05-22T09:00:00' },
+  { id:'t002', title:'Подготовить обоснование НМЦК для закупки СМЭВ-адаптера (запрос 3 КП)', assigneeId:'u6', assigneeName:'Никитин П.А.', creatorId:'u1', creatorName:'Петров А.В.', status:'in_progress', priority:'high', dueDate:'2026-05-28', procurementId:'p005', createdAt:'2026-05-20T10:00:00', updatedAt:'2026-05-22T14:00:00' },
+  { id:'t003', title:'Разместить отчёт об исполнении договора с ООО МоскваСофт в ЕИС', assigneeId:'u6', assigneeName:'Никитин П.А.', creatorId:'u2', creatorName:'Смирнова Н.С.', status:'overdue', priority:'urgent', dueDate:'2026-05-15', procurementId:'p009', createdAt:'2026-05-10T09:00:00', updatedAt:'2026-05-10T09:00:00' },
+  { id:'t004', title:'Передать пакет документов в ФЭО для финансовой экспертизы договора по серверам', assigneeId:'u3', assigneeName:'Козлов Д.М.', creatorId:'u1', creatorName:'Петров А.В.', status:'in_progress', priority:'high', dueDate:'2026-05-27', procurementId:'p002', createdAt:'2026-05-18T16:00:00', updatedAt:'2026-05-22T10:00:00' },
+  { id:'t005', title:'Получить платёжное поручение по оплате бумаги — ЗАО КанцЛайф', assigneeId:'u4', assigneeName:'Волкова Е.И.', creatorId:'u1', creatorName:'Петров А.В.', status:'overdue', priority:'urgent', dueDate:'2026-05-18', procurementId:'p004', createdAt:'2026-05-15T09:00:00', updatedAt:'2026-05-15T09:00:00' },
+  { id:'t006', title:'Согласовать служебную записку АХО на уборку помещений у Фёдорова С.В.', assigneeId:'u1', assigneeName:'Петров А.В.', creatorId:'u7', creatorName:'Орлова Т.В.', status:'new', priority:'normal', dueDate:'2026-05-30', procurementId:'p003', createdAt:'2026-05-21T11:00:00', updatedAt:'2026-05-21T11:00:00' },
+  { id:'t007', title:'Запросить коммерческие предложения на страхование транспорта (КАСКО+ОСАГО)', assigneeId:'u1', assigneeName:'Петров А.В.', creatorId:'u2', creatorName:'Смирнова Н.С.', status:'new', priority:'normal', dueDate:'2026-06-05', procurementId:'p007', createdAt:'2026-05-20T09:00:00', updatedAt:'2026-05-20T09:00:00' },
+  { id:'t008', title:'Проверить правомерность закупки мебели — акт приёмки подписан?', assigneeId:'u3', assigneeName:'Козлов Д.М.', creatorId:'u2', creatorName:'Смирнова Н.С.', status:'in_progress', priority:'normal', dueDate:'2026-06-01', procurementId:'p008', createdAt:'2026-05-19T14:00:00', updatedAt:'2026-05-22T09:00:00' },
+  { id:'t009', title:'Подготовить проект договора на поставку картриджей к визированию Фёдоровым', assigneeId:'u3', assigneeName:'Козлов Д.М.', creatorId:'u1', creatorName:'Петров А.В.', status:'done', priority:'high', dueDate:'2026-04-20', procurementId:'p001', completedAt:'2026-04-19T17:00:00', createdAt:'2026-04-15T09:00:00', updatedAt:'2026-04-19T17:00:00' },
+  { id:'t010', title:'Разместить сведения об исполнении договора Microsoft 365 в ЕАТ', assigneeId:'u6', assigneeName:'Никитин П.А.', creatorId:'u2', creatorName:'Смирнова Н.С.', status:'done', priority:'normal', dueDate:'2026-05-08', procurementId:'p009', completedAt:'2026-05-06T11:00:00', createdAt:'2026-05-03T09:00:00', updatedAt:'2026-05-06T11:00:00' },
+];
+
+// ─── ДОГОВОРЫ ────────────────────────────────────────────────────
+export interface Contract {
+  id: string; number: string; procurementId: string;
+  subject: string; supplierName: string; supplierInn: string;
+  totalSum: number; paidSum: number;
+  signDate: string; endDate: string; actualEndDate?: string;
+  status: string; departmentName: string; responsibleName: string;
+  isOverdue: boolean;
+}
 
 export const MOCK_CONTRACTS: Contract[] = [
-  { id: 'c1', number: 'РЗ-2026-00142/Д', procurementId: 'p001', procurementTitle: 'Поставка картриджей', supplierId: 's1', supplierName: 'ООО «ТехноОфис»', supplierInn: '7701234567', status: 'active', subject: 'Поставка расходных материалов для оргтехники', totalSum: 156400, paidSum: 0, signDate: '2026-04-18', startDate: '2026-04-18', endDate: '2026-06-30', departmentId: 'd1', departmentName: 'Отдел МТО', responsibleId: 'u1', responsibleName: 'Петров А.В.', documentIds: ['doc1', 'doc2'], isOverdue: false, payments: [], executions: [] },
-  { id: 'c2', number: 'РЗ-2026-00089/Д', procurementId: 'p002', procurementTitle: 'Серверное оборудование', supplierId: 's3', supplierName: 'ООО «СитиКомп»', supplierInn: '7743012345', status: 'draft', subject: 'Поставка серверов и СХД', totalSum: 4720000, paidSum: 0, signDate: '2026-06-01', startDate: '2026-06-01', endDate: '2026-09-30', departmentId: 'd4', departmentName: 'ИТ-отдел', responsibleId: 'u3', responsibleName: 'Козлов Д.М.', documentIds: ['doc4'], isOverdue: false, payments: [], executions: [] },
-  { id: 'c3', number: 'РЗ-2026-00056/Д', procurementId: 'p004', procurementTitle: 'Поставка бумаги А4', supplierId: 's2', supplierName: 'ЗАО «КанцЛайф»', supplierInn: '5010034782', status: 'executed', subject: 'Поставка офисной бумаги А4 и А3', totalSum: 91800, paidSum: 0, signDate: '2026-01-28', startDate: '2026-01-28', endDate: '2026-05-31', actualEndDate: '2026-04-15', departmentId: 'd1', departmentName: 'Отдел МТО', responsibleId: 'u1', responsibleName: 'Петров А.В.', documentIds: ['doc9'], isOverdue: true, payments: [], executions: [] },
-  { id: 'c4', number: 'РЗ-2026-00098/Д', procurementId: 'p009', procurementTitle: 'Лицензии Microsoft 365', supplierId: 's5', supplierName: 'ООО «МоскваСофт»', supplierInn: '7725678901', status: 'executed', subject: 'Поставка лицензий Microsoft 365 Business Premium', totalSum: 378000, paidSum: 378000, signDate: '2026-02-10', startDate: '2026-02-10', endDate: '2026-05-10', actualEndDate: '2026-04-28', departmentId: 'd4', departmentName: 'ИТ-отдел', responsibleId: 'u6', responsibleName: 'Никитин П.А.', documentIds: ['doc16', 'doc17'], isOverdue: false, payments: [], executions: [] },
+  { id:'c001', number:'РЗ-2026-00142/Д-01', procurementId:'p001', subject:'Поставка картриджей для принтеров и МФУ (II кв. 2026)', supplierName:'ООО «ТехноОфис»', supplierInn:'7701234567', totalSum:156400, paidSum:0, signDate:'2026-04-22', endDate:'2026-06-30', status:'execution', departmentName:'Отдел МТО', responsibleName:'Петров А.В.', isOverdue:false },
+  { id:'c002', number:'РЗ-2026-00056/Д-01', procurementId:'p004', subject:'Поставка бумаги офисной А4 и А3 (I полугодие 2026)', supplierName:'ЗАО «КанцЛайф»', supplierInn:'5010034782', totalSum:91800, paidSum:0, signDate:'2026-01-28', endDate:'2026-05-31', actualEndDate:'2026-04-15', status:'payment', departmentName:'Отдел МТО', responsibleName:'Петров А.В.', isOverdue:true },
+  { id:'c003', number:'РЗ-2026-00098/Д-01', procurementId:'p009', subject:'Лицензии Microsoft 365 Business Premium (50 рабочих мест)', supplierName:'ООО «МоскваСофт»', supplierInn:'7725678901', totalSum:378000, paidSum:378000, signDate:'2026-02-10', endDate:'2026-05-10', actualEndDate:'2026-04-28', status:'eis_reporting', departmentName:'ИТ-отдел', responsibleName:'Никитин П.А.', isOverdue:false },
+  { id:'c004', number:'РЗ-2025-00342/Д-01', procurementId:'p006', subject:'Канцелярские товары (IV квартал 2025)', supplierName:'ЗАО «КанцЛайф»', supplierInn:'5010034782', totalSum:54600, paidSum:54600, signDate:'2025-10-22', endDate:'2025-12-31', actualEndDate:'2025-12-20', status:'archive', departmentName:'Отдел МТО', responsibleName:'Орлова Т.В.', isOverdue:false },
+  { id:'c005', number:'РЗ-2026-00089/Д-01', procurementId:'p002', subject:'Поставка серверного оборудования для ЦОД (Dell PowerEdge R750, NetApp AFF A250)', supplierName:'ООО «СитиКомп»', supplierInn:'7743012345', totalSum:4720000, paidSum:0, signDate:'2026-05-10', endDate:'2026-07-31', status:'contract_expertise', departmentName:'ИТ-отдел', responsibleName:'Козлов Д.М.', isOverdue:false },
 ];
+
+// ─── РИСКИ ───────────────────────────────────────────────────────
+export interface Risk {
+  id: string; procurementId: string; procNum: string;
+  title: string; level: 'low'|'medium'|'high'|'critical';
+  category: string; description: string;
+  mitigation: string; owner: string;
+  status: 'open'|'mitigated'|'closed';
+  detectedAt: string;
+}
 
 export const MOCK_RISKS: Risk[] = [
-  { id: 'r1', procurementId: 'p004', title: 'Просрочка платежа — ЗАО КанцЛайф ожидает оплату', description: 'Срок оплаты по договору РЗ-2026-00056/Д истёк 15.05.2026. Просрочка 4 дня. Риск штрафных санкций.', level: 'high', category: 'deadline', status: 'open', responsibleId: 'u1', responsibleName: 'Петров А.В.', identifiedAt: '2026-05-16T08:00:00', dueDate: '2026-05-22', mitigationPlan: 'Срочно передать пакет документов в бухгалтерию для оформления платёжного поручения' },
-  { id: 'r2', procurementId: 'p005', title: 'Отсутствует ТЗ — невозможно опубликовать в ЕИС', description: 'Разработка ТЗ на СМЭВ-адаптер затягивается. Без утверждённого ТЗ нельзя разместить извещение в ЕИС.', level: 'high', category: 'document', status: 'open', responsibleId: 'u6', responsibleName: 'Никитин П.А.', identifiedAt: '2026-05-15T09:00:00', dueDate: '2026-05-28', mitigationPlan: 'Никитин П.А. завершает ТЗ к 28.05.2026, согласование с ИТ-отделом параллельно' },
-  { id: 'r3', procurementId: 'p002', title: 'Высокая стоимость — риск недобросовестного поставщика', description: 'Закупка серверного оборудования на 4,72 млн руб. Необходима тщательная проверка победителя торгов.', level: 'medium', category: 'supplier', status: 'open', responsibleId: 'u3', responsibleName: 'Козлов Д.М.', identifiedAt: '2026-05-10T14:00:00', dueDate: '2026-06-10', mitigationPlan: 'Провести проверку по реестру недобросовестных поставщиков перед подписанием договора' },
-  { id: 'r4', procurementId: 'p003', title: 'Длительное согласование — срыв старта услуг с 01.07.2026', description: 'Закупка на согласовании 4 дня. При задержке не успеем заключить договор до 01.07.2026.', level: 'medium', category: 'compliance', status: 'open', responsibleId: 'u7', responsibleName: 'Орлова Т.В.', identifiedAt: '2026-05-18T10:00:00', dueDate: '2026-06-01', mitigationPlan: 'Ускорить согласование через руководителя отдела, параллельно начать сбор КП' },
+  { id:'r001', procurementId:'p004', procNum:'РЗ-2026-00056', title:'Просрочка оплаты по договору', level:'high', category:'Финансовый', description:'Срок оплаты по договору с ЗАО «КанцЛайф» истёк. Товар поставлен 15.04.2026, оплата не произведена.', mitigation:'Направить в бухгалтерию служебную записку с требованием ускорить оформление платёжного поручения.', owner:'Волкова Е.И.', status:'open', detectedAt:'2026-05-20T09:00:00' },
+  { id:'r002', procurementId:'p002', procNum:'РЗ-2026-00089', title:'Задержка экспертизы договора', level:'medium', category:'Операционный', description:'Договор на серверное оборудование находится на экспертизе в ФЭО более 5 рабочих дней. Плановый срок исполнения — 31.07.2026 под угрозой.', mitigation:'Ускорить рассмотрение в ФЭО, при необходимости эскалировать руководству.', owner:'Козлов Д.М.', status:'open', detectedAt:'2026-05-18T14:00:00' },
+  { id:'r003', procurementId:'p009', procNum:'РЗ-2026-00098', title:'Нарушение срока отчётности в ЕИС', level:'high', category:'Нормативный', description:'Отчёт об исполнении договора с ООО «МоскваСофт» не размещён в ЕИС в установленный срок. Риск штрафных санкций по КоАП.', mitigation:'Немедленно разместить отчёт в ЕИС. Провести внутренний разбор причин нарушения.', owner:'Никитин П.А.', status:'open', detectedAt:'2026-05-21T10:00:00' },
+  { id:'r004', procurementId:'p001', procNum:'РЗ-2026-00142', title:'Риск непоставки в срок', level:'low', category:'Операционный', description:'ООО «ТехноОфис» сообщил о возможной задержке части позиций (картриджи HP LaserJet CF217A) на 3–5 дней.', mitigation:'Запросить у поставщика официальное письмо с гарантией поставки до 30.06.2026.', owner:'Петров А.В.', status:'mitigated', detectedAt:'2026-05-22T11:00:00' },
+  { id:'r005', procurementId:'p008', procNum:'РЗ-2026-00134', title:'Неопределённость победителя торгов', level:'medium', category:'Процедурный', description:'Котировочная сессия по офисной мебели завершается 25.05.2026. Поступило только 2 ценовых предложения из ожидаемых 4.', mitigation:'Проверить корректность публикации. При необходимости продлить сессию или объявить повторную.', owner:'Петров А.В.', status:'open', detectedAt:'2026-05-22T09:00:00' },
 ];
 
-export const MOCK_AUDIT_LOGS: AuditLog[] = [
-  { id: 'al1', userId: 'u1', userName: 'Петров А.В.', userRole: 'specialist_mto', action: 'ВХОД', module: 'Авторизация', description: 'Вход в систему', ipAddress: '10.10.1.45', userAgent: 'Mozilla/5.0 (Windows NT 10.0)', timestamp: '2026-05-20T08:15:00', result: 'success' },
-  { id: 'al2', userId: 'u1', userName: 'Петров А.В.', userRole: 'specialist_mto', action: 'ПРОСМОТР', module: 'Реестр закупок', entityId: 'p001', entityType: 'procurement', description: 'Просмотр карточки закупки РЗ-2026-00142', ipAddress: '10.10.1.45', userAgent: 'Mozilla/5.0', timestamp: '2026-05-20T08:22:00', result: 'success' },
-  { id: 'al3', userId: 'u2', userName: 'Смирнова Н.С.', userRole: 'head_department', action: 'СОГЛАСОВАНИЕ', module: 'Согласования', entityId: 'p008', entityType: 'procurement', description: 'Согласована закупка РЗ-2026-00134 «Офисная мебель»', ipAddress: '10.10.1.33', userAgent: 'Mozilla/5.0', timestamp: '2026-05-14T09:15:00', result: 'success' },
-  { id: 'al4', userId: 'u1', userName: 'Петров А.В.', userRole: 'specialist_mto', action: 'СОЗДАНИЕ', module: 'Закупки', entityId: 'p007', entityType: 'procurement', description: 'Создана закупка РЗ-2026-00219 «Страхование имущества»', ipAddress: '10.10.1.45', userAgent: 'Mozilla/5.0', timestamp: '2026-05-19T11:00:00', result: 'success' },
-  { id: 'al5', userId: 'u3', userName: 'Козлов Д.М.', userRole: 'contract_manager', action: 'ЗАГРУЗКА', module: 'Документы', entityId: 'doc2', entityType: 'document', description: 'Загружен документ: Договор РЗ-2026-00142/Д.pdf', ipAddress: '10.10.1.12', userAgent: 'Mozilla/5.0', timestamp: '2026-04-18T14:00:00', result: 'success' },
-  { id: 'al6', userId: 'u4', userName: 'Волкова Е.И.', userRole: 'accountant', action: 'ОПЛАТА', module: 'Платежи', entityId: 'c4', entityType: 'dogovor', description: 'Проведён платёж 378 000 руб. — Microsoft 365', ipAddress: '10.10.1.22', userAgent: 'Mozilla/5.0', timestamp: '2026-05-01T13:00:00', result: 'success' },
-  { id: 'al7', userId: 'u5', userName: 'Фёдоров С.В.', userRole: 'management', action: 'ПРОСМОТР', module: 'Панель руководителя', description: 'Просмотр аналитики за апрель 2026', ipAddress: '10.10.1.5', userAgent: 'Mozilla/5.0', timestamp: '2026-05-05T10:00:00', result: 'success' },
-  { id: 'al8', userId: 'u8', userName: 'Сис. Администратор', userRole: 'admin', action: 'НАСТРОЙКА', module: 'Настройки', description: 'Обновлены настройки уведомлений о сроках', ipAddress: '10.10.1.1', userAgent: 'Mozilla/5.0', timestamp: '2026-05-12T09:00:00', result: 'success' },
-];
-
+// ─── АНАЛИТИКА ───────────────────────────────────────────────────
 export const ANALYTICS_MONTHLY = [
-  { month: 'Янв', count: 6, sum: 520000, completed: 5 },
-  { month: 'Фев', count: 8, sum: 1140000, completed: 7 },
-  { month: 'Мар', count: 10, sum: 980000, completed: 8 },
-  { month: 'Апр', count: 14, sum: 5870000, completed: 9 },
-  { month: 'Май', count: 9, sum: 760000, completed: 3 },
-  { month: 'Июн', count: 3, sum: 375000, completed: 0 },
+  { month:'Янв', count:2, sum:472500, economy:8400 },
+  { month:'Фев', count:1, sum:4850000, economy:0 },
+  { month:'Мар', count:0, sum:0, economy:0 },
+  { month:'Апр', count:3, sum:693700, economy:11000 },
+  { month:'Май', count:4, sum:2555000, economy:125900 },
+  { month:'Июн', count:1, sum:162000, economy:5600 },
 ];
+
+export const KPI_DATA = {
+  inTimePct: 87,
+  economyTotal: 145300,
+  economyPct: 1.7,
+  avgApprovalDays: 3.2,
+  overdueCount: 2,
+  totalCompleted: 3,
+};
 
 export const ANALYTICS_BY_STATUS = [
-  { name: 'Черновик', value: 1 },
-  { name: 'На согласовании', value: 1 },
-  { name: 'Подготовка ТЗ', value: 1 },
-  { name: 'В ЕАТ/ЕИС', value: 2 },
-  { name: 'Исполнение', value: 2 },
-  { name: 'Оплата/Закрытие', value: 2 },
-  { name: 'Архив', value: 1 },
+  { name:'СЗ в МТО',           value:2,  color:'#94a3b8' },
+  { name:'Согласование',        value:1,  color:'#fbbf24' },
+  { name:'Подготовка',          value:1,  color:'#60a5fa' },
+  { name:'Торги',               value:1,  color:'#a78bfa' },
+  { name:'Экспертиза договора', value:1,  color:'#22d3ee' },
+  { name:'Исполнение',          value:1,  color:'#34d399' },
+  { name:'Оплата',              value:1,  color:'#86efac' },
+  { name:'Отчётность ЕИС',      value:1,  color:'#7dd3fc' },
+  { name:'Архив',               value:1,  color:'#cbd5e1' },
 ];
 
 export const ANALYTICS_BY_DEPARTMENT = [
-  { name: 'Отдел МТО', count: 16, sum: 1280000 },
-  { name: 'ИТ-отдел', count: 14, sum: 7005000 },
-  { name: 'АХО', count: 12, sum: 755000 },
-  { name: 'Бухгалтерия', count: 4, sum: 135000 },
-  { name: 'Юротдел', count: 3, sum: 98000 },
-  { name: 'ОК', count: 2, sum: 57000 },
+  { dept:'Отдел МТО',   count:6, sum:1024300 },
+  { dept:'ИТ-отдел',    count:3, sum:7085000 },
+  { dept:'АХО',         count:3, sum:1050000 },
+  { dept:'Бухгалтерия', count:0, sum:0 },
+];
+
+// ─── ЖУРНАЛ АУДИТА ────────────────────────────────────────────────
+export const MOCK_AUDIT_LOGS = [
+  { id:'al001', userId:'u1', userName:'Петров А.В.', userRole:'specialist_mto', action:'status_change', entityType:'procurement', entityId:'p001', description:'Статус закупки РЗ-2026-00142 изменён: Договор подписан → Исполнение', ipAddress:'10.10.1.45', createdAt:'2026-05-10T14:30:00' },
+  { id:'al002', userId:'u3', userName:'Козлов Д.М.', userRole:'contract_manager', action:'status_change', entityType:'procurement', entityId:'p002', description:'Статус закупки РЗ-2026-00089 изменён: Согласование победителя → Экспертиза договора', ipAddress:'10.10.1.47', createdAt:'2026-05-18T11:15:00' },
+  { id:'al003', userId:'u1', userName:'Петров А.В.', userRole:'specialist_mto', action:'CREATE', entityType:'procurement', entityId:'p003', description:'Создана новая закупка РЗ-2026-00178: Уборка помещений', ipAddress:'10.10.1.45', createdAt:'2026-05-15T09:00:00' },
+  { id:'al004', userId:'u6', userName:'Никитин П.А.', userRole:'specialist_mto', action:'UPLOAD', entityType:'document', entityId:'doc-p005-tz', description:'Загружено ТЗ для закупки СМЭВ-адаптера (ТЗ_СМЭВ_v2.pdf, 245 КБ)', ipAddress:'10.10.1.52', createdAt:'2026-05-16T10:30:00' },
+  { id:'al005', userId:'u2', userName:'Смирнова Н.С.', userRole:'head_department', action:'APPROVE', entityType:'procurement', entityId:'p001', description:'Согласован победитель торгов: ООО «ТехноОфис» (156 400 руб.)', ipAddress:'10.10.1.46', createdAt:'2026-04-18T14:00:00' },
+  { id:'al006', userId:'u5', userName:'Фёдоров С.В.', userRole:'management', action:'APPROVE', entityType:'note', entityId:'sz2', description:'Согласована служебная записка АХО на уборку помещений', ipAddress:'10.10.1.50', createdAt:'2026-05-20T11:30:00' },
+  { id:'al007', userId:'u4', userName:'Волкова Е.И.', userRole:'accountant', action:'PAYMENT', entityType:'contract', entityId:'c003', description:'Оформлено платёжное поручение №ПП-2026-0892 на сумму 378 000 руб. (Microsoft 365)', ipAddress:'10.10.1.48', createdAt:'2026-05-06T16:00:00' },
+  { id:'al008', userId:'u1', userName:'Петров А.В.', userRole:'specialist_mto', action:'EXPORT', entityType:'report', entityId:'rep-registry', description:'Выгружен реестр закупок в CSV (10 записей, 28 КБ)', ipAddress:'10.10.1.45', createdAt:'2026-05-22T09:15:00' },
+  { id:'al009', userId:'u6', userName:'Никитин П.А.', userRole:'specialist_mto', action:'status_change', entityType:'procurement', entityId:'p009', description:'Статус изменён: Исполнение → Отчётность в ЕИС', ipAddress:'10.10.1.52', createdAt:'2026-05-05T16:00:00' },
+  { id:'al010', userId:'u1', userName:'Петров А.В.', userRole:'specialist_mto', action:'VIEW', entityType:'procurement', entityId:'p002', description:'Просмотр карточки закупки РЗ-2026-00089 (серверное оборудование)', ipAddress:'10.10.1.45', createdAt:'2026-05-22T10:45:00' },
 ];
