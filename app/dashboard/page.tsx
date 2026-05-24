@@ -15,7 +15,7 @@ import { MOCK_USERS } from '@/mock/data/users';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { useAppStore } from '@/store/index';
 import { DemoButton } from '@/components/ui/DemoRunner';
-import { PresentationMode, DefenseMode } from '@/components/ui/PresentationMode';
+import { PresentationMode } from '@/components/ui/PresentationMode';
 import { formatCurrency, formatDate, formatTimeAgo, truncate } from '@/lib/utils';
 
 const PIE_COLORS = ['#94a3b8','#f59e0b','#3b82f6','#8b5cf6','#06b6d4','#22c55e','#64748b'];
@@ -67,7 +67,6 @@ export default function DashboardPage() {
             <p className="text-xs text-gray-400 mt-0.5 capitalize">{today}</p>
           </div>
           <div className="flex gap-2 flex-wrap">
-            <DefenseMode />
             <PresentationMode />
             <DemoButton />
             <button onClick={reset} title="Сбросить к демо-данным"

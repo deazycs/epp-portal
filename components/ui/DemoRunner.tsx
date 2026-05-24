@@ -232,10 +232,6 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      {/* Затемнение */}
-      <div className="fixed inset-0 z-[9970] pointer-events-none"
-        style={{ background: 'rgba(0,0,20,0.25)' }} />
-
       {/* Оглавление */}
       {showToc && (
         <div className="fixed inset-0 z-[9985]" onClick={() => setShowToc(false)}>
@@ -266,15 +262,15 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
         </div>
       )}
 
-      {/* Панель снизу */}
-      <div className="fixed inset-x-0 bottom-0 z-[9990]">
+      {/* Панель снизу — компактная, не перекрывает контент */}
+      <div className="fixed inset-x-0 bottom-0 z-[9990]" style={{boxShadow:'0 -4px 24px rgba(0,0,0,0.12)'}}>
         <div className="h-1 bg-gray-200">
           <div className="h-1 bg-blue-600 transition-all duration-500"
             style={{ width: `${pct}%` }} />
         </div>
 
-        <div className="bg-white border-t-2 border-blue-600 shadow-2xl">
-          <div className="max-w-5xl mx-auto px-4 py-3">
+        <div className="bg-white border-t-2 border-blue-600">
+          <div className="max-w-5xl mx-auto px-4 py-2">
             {done ? (
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -309,20 +305,15 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
                     {playing && <span className="text-xs text-orange-500 animate-pulse">⏱ авто</span>}
                   </div>
 
-                  <div className="text-sm font-bold text-gray-900 mb-1">{cur.title}</div>
-                  <div className="text-xs text-gray-600 leading-relaxed">
+                  <div className="text-xs font-bold text-gray-900 mb-0.5">{cur.title}</div>
+                  <div className="text-xs text-gray-600 leading-snug">
                     <span className="font-semibold text-gray-700">Что: </span>{cur.what}
                   </div>
-                  <div className="text-xs text-blue-700 leading-relaxed mt-0.5">
+                  <div className="text-xs text-blue-700 leading-snug mt-0.5">
                     <span className="font-semibold">Зачем: </span>{cur.why}
                   </div>
-                  {cur.action && (
-                    <div className="text-xs text-green-700 mt-0.5 font-medium">
-                      ⚡ {cur.action}
-                    </div>
-                  )}
                   {cur.tip && (
-                    <div className="text-xs text-amber-700 mt-0.5">
+                    <div className="text-xs text-amber-700 mt-0.5 italic">
                       💡 {cur.tip}
                     </div>
                   )}
@@ -376,13 +367,7 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
               </div>
             )}
 
-            {!done && (
-              <div className="mt-1.5 text-center">
-                <span className="text-xs text-gray-300">
-                  ← → стрелки · Enter — далее · 📋 оглавление · Esc — закрыть
-                </span>
-              </div>
-            )}
+
           </div>
         </div>
       </div>
