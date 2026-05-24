@@ -13,7 +13,6 @@ import { MOCK_USERS } from '@/mock/data/users';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { useAppStore } from '@/store/index';
 import { DemoTourButton } from '@/components/ui/DemoTour';
-import { DemoScenarioButton } from '@/components/ui/DemoScenario';
 import { PresentationMode, DefenseMode } from '@/components/ui/PresentationMode';
 import { formatCurrency, formatDate, formatTimeAgo, truncate } from '@/lib/utils';
 
@@ -68,7 +67,13 @@ export default function DashboardPage() {
           <div className="flex gap-2 flex-wrap">
             <DefenseMode />
             <PresentationMode />
-            <DemoScenarioButton />
+            <button
+              onClick={() => (window as any).__openDemoScenario?.()}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-green-600 text-white hover:bg-green-700 transition-colors"
+              title="Запустить демонстрационный сценарий"
+            >
+              ▶ Демо-сценарий
+            </button>
             <button onClick={reset} title="Сбросить к демо-данным"
               className="gov-btn gov-btn-ghost gov-btn-sm text-gray-400">
               <RefreshCw size={12} /> Демо-сброс
