@@ -1,105 +1,178 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-import { useState } from 'react';
-import { Search, AlertTriangle } from 'lucide-react';
-import { useAppStore } from '@/store/index';
+import { useState, useMemo } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
+import { useAppStore } from '@/store/index';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import { CreditCard, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 
-const PAYMENTS = [
-  { id:'py1', contract:'РЗ-2026-00098/Д', proc:'p009', desc:'Оплата Microsoft 365 (50 лицензий)', supplier:'ООО МоскваСофт', amount:378000, planned:'2026-05-10', actual:'2026-05-01', status:'completed', order:'ПП-002145' },
-  { id:'py2', contract:'РЗ-2026-00056/Д', proc:'p004', desc:'Оплата поставки бумаги А4/А3', supplier:'ЗАО КанцЛайф', amount:91800, planned:'2026-05-15', actual:null, status:'overdue', order:null },
-  { id:'py3', contract:'РЗ-2026-00142/Д', proc:'p001', desc:'Оплата картриджей II кв. 2026', supplier:'ООО ТехноОфис', amount:156400, planned:'2026-06-30', actual:null, status:'planned', order:null },
-  { id:'py4', contract:'РЗ-2026-00089/Д', proc:'p002', desc:'Авансовый платёж — серверы (30%)', supplier:'ООО СитиКомп', amount:1416000, planned:'2026-07-15', actual:null, status:'planned', order:null },
-  { id:'py5', contract:'РЗ-2025-00342/Д', proc:'p006', desc:'Оплата канцтоваров IV кв. 2025', supplier:'ЗАО КанцЛайф', amount:54600, planned:'2025-12-25', actual:'2025-12-24', status:'completed', order:'ПП-001876' },
-];
+export const dynamic = 'force-dynamic';
 
-const ST: Record<string,{label:string,cls:string}> = {
-  planned:   {label:'Запланирован',  cls:'bg-blue-50 text-blue-700 border-blue-300'},
-  completed: {label:'Оплачен',       cls:'bg-green-50 text-green-700 border-green-300'},
-  overdue:   {label:'Просрочен',     cls:'bg-red-50 text-red-700 border-red-300'},
-  cancelled: {label:'Отменён',       cls:'bg-gray-100 text-gray-500 border-gray-300'},
-};
+// В разделе платежей — закупки на этапе оплаты и исполнения с суммами
+const PAYMENT_STATUSES = ['payment','execution','eis_reporting','archive'];
 
 export default function PlatezhiPage() {
   const { procurements } = useAppStore();
-  const totalPaid = procurements.reduce((s,p) => s+(p.paidSum??0), 0);
+  const [sf, setSf] = useState('all');
 
-  const [sf,setSf]=useState('all');
-  const filtered = PAYMENTS.filter(p=>sf==='all'||p.status===sf);
-  const paid=PAYMENTS.filter(p=>p.status==='completed').reduce((s,p)=>s+p.amount,0);
-  const pending=PAYMENTS.filter(p=>p.status==='planned').reduce((s,p)=>s+p.amount,0);
-  const overdue=PAYMENTS.filter(p=>p.status==='overdue').reduce((s,p)=>s+p.amount,0);
+  const payments = useMemo(() =>
+    procurements.filter(p => PAYMENT_STATUSES.includes(p.status) && p.contractSum)
+      .sort((a,b) => b.updatedAt.localeCompare(a.updatedAt)),
+    [procurements]
+  );
+
+  const filtered = sf === 'all' ? payments : payments.filter(p => {
+    if (sf === 'pending') return p.status === 'payment' && !p.paidSum;
+    if (sf === 'paid')    return (p.paidSum??0) >= (p.contractSum??0);
+    if (sf === 'partial') return (p.paidSum??0) > 0 && (p.paidSum??0) < (p.contractSum??1);
+    if (sf === 'overdue') return p.isOverdue;
+    return true;
+  });
+
+  const totalPending = payments.filter(p=>p.status==='payment'&&!(p.paidSum)).reduce((s,p)=>s+(p.contractSum??0),0);
+  const totalPaid    = payments.reduce((s,p)=>s+(p.paidSum??0),0);
+  const overdueCnt   = payments.filter(p=>p.isOverdue).length;
+
+  const STATUS_INFO: Record<string,{label:string;cls:string;icon:React.ReactNode}> = {
+    payment:      {label:'Ожидает оплаты', cls:'bg-orange-50 text-orange-700 border-orange-300', icon:<Clock size={11}/>},
+    execution:    {label:'Исполнение',     cls:'bg-blue-50 text-blue-700 border-blue-300',   icon:<CreditCard size={11}/>},
+    eis_reporting:{label:'Отчётность ЕИС', cls:'bg-sky-50 text-sky-700 border-sky-300',     icon:<CheckCircle size={11}/>},
+    archive:      {label:'Архив',          cls:'bg-gray-100 text-gray-600 border-gray-300', icon:<CheckCircle size={11}/>},
+  };
 
   return (
     <AppLayout>
-      <div className="p-4">
-        <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Реестр платежей'}]}/>
-        <h1 className="text-base font-bold mb-3">Реестр платежей</h1>
+      <div className="p-3 sm:p-4">
+        <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Платежи'}]}/>
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h1 className="text-base font-bold">Платежи</h1>
+            <p className="text-xs text-gray-500">
+              Договоры ожидающие оплаты — формируются из реестра закупок автоматически
+            </p>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-4 gap-2 mb-3">
+        <div className="gov-alert gov-alert-info mb-3 text-xs">
+          <CreditCard size={13} className="flex-shrink-0 mt-0.5"/>
+          <span>
+            Запись появляется здесь когда закупка переходит на этап «Оплата».
+            Бухгалтер видит сумму, поставщика и реквизиты договора — всё из карточки закупки.
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           {[
-            {label:'Всего',val:PAYMENTS.length,cls:'text-gray-700'},
-            {label:'Оплачено',val:formatCurrency(paid),cls:'text-green-700'},
-            {label:'К оплате',val:formatCurrency(pending),cls:'text-blue-700'},
-            {label:'Просрочено',val:formatCurrency(overdue),cls:'text-red-600'},
+            {label:'Всего записей',    val:payments.length,           cls:'text-gray-700',   icon:<CreditCard size={14}/>},
+            {label:'К оплате',         val:formatCurrency(totalPending), cls:'text-orange-600', icon:<Clock size={14}/>},
+            {label:'Оплачено',         val:formatCurrency(totalPaid),    cls:'text-green-700',  icon:<CheckCircle size={14}/>},
+            {label:'Просрочено',       val:overdueCnt,                cls:overdueCnt>0?'text-red-600':'text-gray-400', icon:<AlertTriangle size={14}/>},
           ].map(s=>(
-            <div key={s.label} className="gov-card p-2 text-center">
-              <div className={`text-lg font-bold ${s.cls}`}>{s.val}</div>
-              <div className="text-xs text-gray-400">{s.label}</div>
+            <div key={s.label} className="gov-card p-3 flex items-start gap-2">
+              <div className={`mt-0.5 ${s.cls}`}>{s.icon}</div>
+              <div>
+                <div className={`text-lg font-bold leading-tight ${s.cls}`}>{s.val}</div>
+                <div className="text-xs text-gray-500">{s.label}</div>
+              </div>
             </div>
           ))}
         </div>
 
-        {PAYMENTS.some(p=>p.status==='overdue')&&(
-          <div className="gov-alert gov-alert-danger mb-3">
-            <AlertTriangle size={13} className="flex-shrink-0 mt-0.5"/>
-            <div className="text-xs"><strong>Просроченный платёж!</strong> ЗАО КанцЛайф — {formatCurrency(91800)}. Срок: 15.05.2026.
-              <Link href="/zakupki/p004" className="ml-2 underline font-bold">Перейти к закупке →</Link>
-            </div>
-          </div>
-        )}
-
-        <div className="gov-card p-2 mb-3 flex gap-1 flex-wrap">
-          {['all','planned','completed','overdue'].map(s=>(
-            <button key={s} onClick={()=>setSf(s)} className={`gov-btn gov-btn-sm ${sf===s?'gov-btn-primary':'gov-btn-ghost'}`}>
-              {{all:'Все',planned:'Запланированные',completed:'Оплаченные',overdue:'Просроченные'}[s as 'all']}
+        <div className="gov-card p-1.5 flex gap-1 mb-3 flex-wrap">
+          {[
+            {k:'all',     l:'Все'},
+            {k:'pending', l:'Ожидают оплаты'},
+            {k:'paid',    l:'Оплачены'},
+            {k:'overdue', l:'Просрочены'},
+          ].map(b=>(
+            <button key={b.k} onClick={()=>setSf(b.k)}
+              className={`gov-btn gov-btn-sm ${sf===b.k?'gov-btn-primary':'gov-btn-ghost'}`}>
+              {b.l}
             </button>
           ))}
         </div>
 
-        <div className="gov-card overflow-hidden">
-          <div className="overflow-x-auto">
+        {filtered.length === 0 ? (
+          <div className="gov-card p-8 text-center text-gray-400">
+            <CreditCard size={32} className="mx-auto mb-2 opacity-20"/>
+            <p className="text-sm">Платежей нет</p>
+            <p className="text-xs mt-1">Переведите закупку на этап «Оплата» — она появится здесь</p>
+          </div>
+        ) : (
+          <div className="gov-card overflow-hidden">
             <table className="gov-table">
               <thead>
-                <tr><th>№ Договора</th><th>Описание</th><th>Поставщик</th><th className="text-right">Сумма</th><th>Плановая дата</th><th>Фактическая</th><th>Статус</th><th>№ ПП</th><th>Действия</th></tr>
+                <tr>
+                  <th>Закупка</th>
+                  <th>Поставщик</th>
+                  <th>Статус</th>
+                  <th className="text-right">Сумма договора</th>
+                  <th className="text-right">Оплачено</th>
+                  <th>Срок</th>
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
-                {filtered.map(p=>(
-                  <tr key={p.id} className={p.status==='overdue'?'bg-red-50':''}>
-                    <td>
-                      <div className="text-xs font-bold text-blue-600">{p.contract}</div>
-                    </td>
-                    <td className="text-xs">{p.desc}</td>
-                    <td className="text-xs font-bold">{p.supplier}</td>
-                    <td className="text-xs font-bold text-right">{formatCurrency(p.amount)}</td>
-                    <td className={`text-xs ${p.status==='overdue'?'text-red-600 font-bold':''}`}>{formatDate(p.planned)}</td>
-                    <td className="text-xs">{p.actual?<span className="text-green-700 font-bold">✓ {formatDate(p.actual)}</span>:<span className="text-gray-400">—</span>}</td>
-                    <td><span className={`gov-badge ${ST[p.status].cls}`}>{p.status==='overdue'&&'⚠ '}{ST[p.status].label}</span></td>
-                    <td className="text-xs font-mono text-gray-500">{p.order??'—'}</td>
-                    <td>
-                      {p.status==='overdue'&&<Link href={`/zakupki/${p.proc}`} className="gov-btn gov-btn-danger gov-btn-sm py-0 text-xs">Устранить</Link>}
-                      {p.status==='planned'&&<button className="gov-btn gov-btn-secondary gov-btn-sm py-0 text-xs">Оформить</button>}
-                    </td>
-                  </tr>
-                ))}
+                {filtered.map(p => {
+                  const paidPct = p.contractSum ? Math.round((p.paidSum??0)/p.contractSum*100) : 0;
+                  const info = STATUS_INFO[p.status] ?? {label:p.status,cls:'',icon:null};
+                  return (
+                    <tr key={p.id} className={p.isOverdue?'bg-red-50':''}>
+                      <td>
+                        <div className="text-xs font-mono font-bold text-blue-600">{p.registryNumber}</div>
+                        <div className="text-xs text-gray-700 max-w-xs truncate">{p.title}</div>
+                        {p.eatNumber && <div className="text-xs font-mono text-gray-400">{p.eatNumber}</div>}
+                      </td>
+                      <td>
+                        <div className="text-xs font-bold">{p.supplierName??'—'}</div>
+                        <div className="text-xs text-gray-400">{p.supplierInn}</div>
+                      </td>
+                      <td>
+                        <span className={`gov-badge flex items-center gap-1 ${info.cls}`}>
+                          {info.icon} {info.label}
+                        </span>
+                        {p.isOverdue && (
+                          <div className="text-xs text-red-600 font-bold mt-0.5 flex items-center gap-1">
+                            <AlertTriangle size={10}/> Просрочка {p.overduedays}д.
+                          </div>
+                        )}
+                      </td>
+                      <td className="text-right">
+                        <div className="text-xs font-bold">{formatCurrency(p.contractSum??0)}</div>
+                      </td>
+                      <td className="text-right">
+                        <div className={`text-xs font-bold ${paidPct===100?'text-green-600':paidPct>0?'text-blue-600':'text-gray-400'}`}>
+                          {formatCurrency(p.paidSum??0)}
+                        </div>
+                        <div className="w-16 gov-progress mt-0.5 ml-auto">
+                          <div className="gov-progress-bar"
+                            style={{width:`${paidPct}%`, background:paidPct===100?'#16a34a':'#2563eb'}}/>
+                        </div>
+                      </td>
+                      <td className="text-xs text-gray-500">
+                        {formatDate(p.contractEndDate??p.plannedEndDate)}
+                      </td>
+                      <td>
+                        <Link href={`/zakupki/${p.id}`}
+                          className="gov-btn gov-btn-ghost gov-btn-sm text-xs">→</Link>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
+              <tfoot>
+                <tr className="bg-gray-50">
+                  <td colSpan={3} className="text-xs font-bold text-gray-700 px-3 py-2">Итого</td>
+                  <td className="text-right text-xs font-bold px-3 py-2">{formatCurrency(filtered.reduce((s,p)=>s+(p.contractSum??0),0))}</td>
+                  <td className="text-right text-xs font-bold text-green-700 px-3 py-2">{formatCurrency(filtered.reduce((s,p)=>s+(p.paidSum??0),0))}</td>
+                  <td colSpan={2}></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
-        </div>
+        )}
       </div>
     </AppLayout>
   );
