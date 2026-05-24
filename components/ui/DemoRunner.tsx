@@ -365,7 +365,10 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
   const isLast = step === STEPS.length - 1;
   const pct    = Math.round(((step + 1) / STEPS.length) * 100);
 
-  useEffect(() => { sessionStorage.setItem(SESS_STEP, String(step)); }, [step]);
+  useEffect(() => {
+    sessionStorage.setItem(SESS_STEP, String(step));
+    sessionStorage.setItem('epp_demo_open', 'true'); // держим панель открытой
+  }, [step]);
   useEffect(() => { sessionStorage.setItem(SESS_PLAYING, String(playing)); }, [playing]);
 
   const navigate = useCallback((route: string) => { router.push(route); }, [router]);

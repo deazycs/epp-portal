@@ -8,22 +8,30 @@ import { useDeadlineChecker } from '@/lib/useDeadlineChecker';
 import { DemoRunner, DemoButton } from '@/components/ui/DemoRunner';
 import { cn } from '@/lib/utils';
 
-const SESS_KEY = 'epp_tour2_step';
+const SESS_STEP = 'epp_demo_step';
+const SESS_OPEN = 'epp_demo_open';
 
 export function AppInner({ children }: { children: React.ReactNode }) {
   useDeadlineChecker();
   const [sidebarCollapsed, setSidebarCollapsed]   = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [demoOpen, setDemoOpen] = useState(false);
+
+  // Читаем начальное состояние из sessionStorage синхронно
+  const [demoOpen, setDemoOpen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem(SESS_OPEN) === 'true';
+  });
+
+  // Синхронизируем demoOpen с sessionStorage при каждом изменении
+  useEffect(() => {
+    sessionStorage.setItem(SESS_OPEN, String(demoOpen));
+  }, [demoOpen]);
 
   useEffect(() => {
-    // Восстанавливаем если тур был активен до навигации
-    if (sessionStorage.getItem(SESS_KEY) !== null) {
-      setDemoOpen(true);
-    }
-    // Слушаем запуск тура с любой страницы
+    // Слушаем запуск демо
     const handler = () => {
-      sessionStorage.removeItem(SESS_KEY);
+      sessionStorage.removeItem(SESS_STEP);
+      sessionStorage.setItem(SESS_OPEN, 'true');
       setDemoOpen(true);
     };
     window.addEventListener('epp:demo:run', handler);
@@ -31,8 +39,9 @@ export function AppInner({ children }: { children: React.ReactNode }) {
   }, []);
 
   const handleClose = () => {
-    sessionStorage.removeItem(SESS_KEY);
-    sessionStorage.removeItem('epp_tour2_playing');
+    sessionStorage.removeItem(SESS_STEP);
+    sessionStorage.removeItem(SESS_OPEN);
+    sessionStorage.removeItem('epp_demo_playing');
     setDemoOpen(false);
   };
 
@@ -64,7 +73,7 @@ export function AppInner({ children }: { children: React.ReactNode }) {
             }}
             sidebarCollapsed={sidebarCollapsed}
           />
-          <main className='flex-1 overflow-y-auto bg-gray-100'>
+          <main className={`flex-1 overflow-y-auto bg-gray-100 ${demoOpen ? 'pb-44' : ''}`}>
             {children}
           </main>
         </div>

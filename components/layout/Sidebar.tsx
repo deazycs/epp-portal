@@ -176,7 +176,7 @@ export function Sidebar({ collapsed }: { collapsed: boolean }) {
                 return (
                   <div key={item.label}>
                     <button onClick={() => toggle(item.label)}
-                      className={cn('sidebar-link w-full text-left', active && 'bg-blue-900')}>
+                      className={cn('gov-sidebar-link w-full text-left', active && 'bg-blue-900')}>
                       <span className="flex items-center gap-2 flex-1 min-w-0">
                         <span className="flex-shrink-0">{item.icon}</span>
                         {!collapsed && <span className="truncate">{item.label}</span>}
@@ -192,7 +192,7 @@ export function Sidebar({ collapsed }: { collapsed: boolean }) {
                       <div className="ml-3 border-l border-blue-800 pl-2">
                         {item.children.map(child => (
                           <Link key={child.href} href={child.href!}
-                            className={cn('sidebar-link text-xs', isActive(child.href) && 'active')}>
+                            className={cn('gov-sidebar-link text-xs', isActive(child.href) && 'active')}>
                             <span className="flex-shrink-0">{child.icon}</span>
                             <span className="truncate flex-1">{child.label}</span>
                           </Link>
@@ -204,7 +204,7 @@ export function Sidebar({ collapsed }: { collapsed: boolean }) {
               }
               return (
                 <Link key={item.href} href={item.href!}
-                  className={cn('sidebar-link justify-between', isActive(item.href) && 'active')}>
+                  className={cn('gov-sidebar-link justify-between', isActive(item.href) && 'active')}>
                   <span className="flex items-center gap-2 flex-1 min-w-0">
                     <span className="flex-shrink-0">{item.icon}</span>
                     {!collapsed && <span className="truncate">{item.label}</span>}
