@@ -229,7 +229,7 @@ function ZakupkiContent() {
                   <td className="text-xs">
                     {p.isOverdue
                       ? <OverdueBadge days={p.overduedays}/>
-                      : <span className="text-gray-500">{formatDate(p.plannedEndDate)}</span>}
+                      : <span className="text-gray-500">{(p as any).deliveryDate ? formatDate((p as any).deliveryDate) : formatDate(p.plannedEndDate)}</span>}
                   </td>
                   <td className="text-xs font-bold">{p.responsibleName}</td>
                   <td>

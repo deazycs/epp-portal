@@ -10,7 +10,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 const EXECUTIONS = [
-  { id:'e1', contractNum:'РЗ-2026-00142/Д-01', procId:'p001', supplier:'ООО «ТехноОфис»', subject:'Поставка картриджей для принтеров и МФУ', stage:'Поставка товара', plannedDate:'2026-06-30', actualDate:null, status:'in_progress', totalSum:156400, paidSum:0, completedPct:45, items:[{name:'Картридж HP LaserJet CF217A',qty:28,done:12},{name:'Картридж Canon 725',qty:20,done:20},{name:'Тонер Samsung MLT-D111S',qty:14,done:0},{name:'Картридж Epson C13T66414A',qty:12,done:0}] },
+  { id:'e1', contractNum:'РЗ-2026-00142/Д-01', procId:'p001', supplier:'ООО «ТехноОфис»', subject:'Поставка картриджей для принтеров и МФУ', stage:'Поставка товара', plannedDate:'2026-06-30', actualDate:null, status:'in_progress', totalSum:156400, paidSum:0, completedPct:45, deliveryDate:'2026-06-30', acceptanceDays:5, deliveryAddress:'Склад МТО, каб. 102', deliveryConditions:'Партиями по заявке', items:[{name:'Картридж HP LaserJet CF217A',qty:28,done:12},{name:'Картридж Canon 725',qty:20,done:20},{name:'Тонер Samsung MLT-D111S',qty:14,done:0},{name:'Картридж Epson C13T66414A',qty:12,done:0}] },
   { id:'e2', contractNum:'РЗ-2026-00098/Д-01', procId:'p009', supplier:'ООО «МоскваСофт»', subject:'Лицензии Microsoft 365 Business Premium (50 лиц.)', stage:'Лицензии активированы', plannedDate:'2026-05-10', actualDate:'2026-04-28', status:'completed', totalSum:378000, paidSum:378000, completedPct:100, items:[{name:'Microsoft 365 Business Premium, 50 лиц.',qty:50,done:50}] },
   { id:'e3', contractNum:'РЗ-2026-00056/Д-01', procId:'p004', supplier:'ЗАО «КанцЛайф»', subject:'Поставка бумаги офисной А4/А3', stage:'Товар принят, ожидается оплата', plannedDate:'2026-04-15', actualDate:'2026-04-15', status:'awaiting_payment', totalSum:91800, paidSum:0, completedPct:95, items:[{name:'Бумага А4 Navigator 80г, 310 пач.',qty:310,done:310},{name:'Бумага А3 Navigator 80г, 28 пач.',qty:28,done:28}] },
   { id:'e4', contractNum:'РЗ-2026-00089/Д-01', procId:'p002', supplier:'ООО «СитиКомп»', subject:'Поставка серверного оборудования для ЦОД', stage:'Договор на подписании', plannedDate:'2026-07-31', actualDate:null, status:'planned', totalSum:4720000, paidSum:0, completedPct:0, items:[{name:'Сервер Dell PowerEdge R750, 4 шт.',qty:4,done:0},{name:'СХД NetApp AFF A250, 1 шт.',qty:1,done:0}] },
@@ -159,6 +159,33 @@ export default function IspolneniePage() {
                     </div>
                   )}
 
+                  {(sel as any).deliveryDate && (
+                    <div className="p-2 bg-blue-50 border border-blue-200 rounded text-xs space-y-1">
+                      <div className="font-bold text-blue-700">🚚 Условия поставки</div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Срок поставки</span>
+                        <span className="font-bold">{formatDate((sel as any).deliveryDate)}</span>
+                      </div>
+                      {(sel as any).acceptanceDays && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Приёмка</span>
+                          <span className="font-bold">{(sel as any).acceptanceDays} р.д.</span>
+                        </div>
+                      )}
+                      {(sel as any).deliveryAddress && (
+                        <div>
+                          <span className="text-gray-500">Адрес: </span>
+                          <span>{(sel as any).deliveryAddress}</span>
+                        </div>
+                      )}
+                      {(sel as any).deliveryConditions && (
+                        <div>
+                          <span className="text-gray-500">Порядок: </span>
+                          <span>{(sel as any).deliveryConditions}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <Link href={`/zakupki/${sel.procId}`}
                     className="gov-btn gov-btn-primary gov-btn-sm w-full justify-center">
                     → Открыть карточку закупки

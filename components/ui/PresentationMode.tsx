@@ -136,7 +136,7 @@ export function PrintRegistryButton({ data }: { data: Procurement[] }) {
         <td style="text-align:right"><strong>${formatCurrency(p.plannedSum)}</strong></td>
         <td>${p.contractSum ? formatCurrency(p.contractSum) : '—'}</td>
         <td>${p.supplierName ?? '—'}</td>
-        <td>${p.isOverdue ? `<span style="color:red;font-weight:bold">Просрочено</span>` : formatDate(p.plannedEndDate)}</td>
+        <td>${p.isOverdue ? `<span style="color:red;font-weight:bold">Просрочено</span>` : ((p as any).deliveryDate ? formatDate((p as any).deliveryDate) : formatDate(p.plannedEndDate))}</td>
         <td>${p.responsibleName}</td>
       </tr>
     `).join('');

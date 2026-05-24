@@ -25,8 +25,13 @@ export default function NovayaZakupkaPage() {
   const [deptName, setDeptName] = useState('Отдел МТО');
   const [procedure, setProcedure] = useState<string>('eat_kotировки');
   const [method, setMethod] = useState('ЕАТ «Берёзка»');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate]           = useState('');
+  const [endDate, setEndDate]               = useState('');
+  const [deliveryDate, setDeliveryDate]     = useState('');
+  const [deliveryDays, setDeliveryDays]     = useState('30');
+  const [acceptanceDays, setAcceptanceDays] = useState('5');
+  const [deliveryAddress, setDeliveryAddress] = useState('г. Воронеж, ул. Средне-Московская, д. 14, склад МТО');
+  const [deliveryConditions, setDeliveryConditions] = useState('');
   const [kbk, setKbk] = useState('321 0113 4590100002 244');
   const [kosgu, setKosgu] = useState('244');
   const [items, setItems] = useState<FormItem[]>([{ id:1, name:'', unit:'шт.', qty:1, price:0 }]);
@@ -283,6 +288,54 @@ export default function NovayaZakupkaPage() {
                 <div>
                   <label className="gov-label">КБК *</label>
                   <input className="gov-input font-mono" value={kbk} onChange={e=>setKbk(e.target.value)} placeholder="321 0113 4590100002 244"/>
+                </div>
+                {/* ── СРОКИ ПОСТАВКИ И ПРИЁМКИ ── */}
+                <div className="sm:col-span-2">
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="text-xs font-bold text-blue-700 mb-2 flex items-center gap-1">
+                      🚚 Условия поставки и приёмки
+                      <span className="text-blue-400 font-normal">(обязательные условия договора по 44-ФЗ)</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div>
+                        <label className="gov-label">Срок поставки — дата</label>
+                        <input type="date" className="gov-input text-xs"
+                          value={deliveryDate} onChange={e=>setDeliveryDate(e.target.value)}/>
+                        <div className="text-xs text-gray-400 mt-0.5">Конкретная дата по договору</div>
+                      </div>
+                      <div>
+                        <label className="gov-label">Срок поставки — дней</label>
+                        <input type="number" className="gov-input text-xs"
+                          value={deliveryDays} onChange={e=>setDeliveryDays(e.target.value)}
+                          placeholder="30" min="1" max="365"/>
+                        <div className="text-xs text-gray-400 mt-0.5">Рабочих дней с даты заключения</div>
+                      </div>
+                      <div>
+                        <label className="gov-label">Срок приёмки — дней</label>
+                        <input type="number" className="gov-input text-xs"
+                          value={acceptanceDays} onChange={e=>setAcceptanceDays(e.target.value)}
+                          placeholder="5" min="1" max="30"/>
+                        <div className="text-xs text-gray-400 mt-0.5">Р.д. на проверку товара комиссией</div>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="gov-label">Адрес поставки</label>
+                        <input type="text" className="gov-input text-xs"
+                          value={deliveryAddress} onChange={e=>setDeliveryAddress(e.target.value)}
+                          placeholder="г. Воронеж, ул. Средне-Московская, д. 14, склад МТО"/>
+                      </div>
+                      <div>
+                        <label className="gov-label">Порядок поставки</label>
+                        <select className="gov-select text-xs"
+                          value={deliveryConditions} onChange={e=>setDeliveryConditions(e.target.value)}>
+                          <option value="">Выбрать...</option>
+                          <option value="Единовременная поставка">Единовременная поставка</option>
+                          <option value="Поставка партиями по заявке">Партиями по заявке</option>
+                          <option value="Поставка и монтаж">Поставка и монтаж</option>
+                          <option value="Оказание услуг ежемесячно">Услуги ежемесячно</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <label className="gov-label">КОСГУ *</label>

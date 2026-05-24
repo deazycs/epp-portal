@@ -148,6 +148,12 @@ export interface Procurement {
   contractEndDate?: string;
   actualEndDate?: string;
   eatPlacementDate?: string;
+  deliveryDate?: string;       // Срок поставки по договору
+  deliveryDays?: number;       // Срок поставки в днях с даты заключения
+  acceptanceDate?: string;     // Фактическая дата приёмки
+  acceptanceDays?: number;     // Срок приёмки товара (рабочих дней)
+  deliveryAddress?: string;    // Адрес поставки
+  deliveryConditions?: string; // Условия поставки (описание)
 
   // Документы
   documentIds: string[];

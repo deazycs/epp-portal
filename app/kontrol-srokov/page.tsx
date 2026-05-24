@@ -94,7 +94,38 @@ export default function KontrolSrokovPage() {
         }
       }
 
-      // 4. Размещение в ЕАТ (если статус preparation или sz_approval)
+      // 4. Срок поставки по договору
+      const deliveryDate = (p as any).deliveryDate;
+      if (deliveryDate && ['execution'].includes(p.status)) {
+        const d = daysBetween(deliveryDate);
+        const notifId = `delivery-${p.id}`;
+        if (d <= 14 || d < 0) {
+          result.push({
+            id: notifId, procId: p.id, procNum: p.registryNumber, title: p.title,
+            type: 'Срок поставки', date: deliveryDate, daysLeft: d,
+            zone: zone(d), responsible: p.responsibleName, status: p.status,
+          });
+        }
+      }
+
+      // 5. Срок приёмки (после поставки нужно принять товар)
+      const acceptanceDays = (p as any).acceptanceDays;
+      const deliveryD = (p as any).deliveryDate;
+      if (deliveryD && acceptanceDays && p.status === 'execution' && !(p as any).acceptanceDate) {
+        const acceptDeadline = new Date(deliveryD);
+        acceptDeadline.setDate(acceptDeadline.getDate() + Number(acceptanceDays));
+        const acceptStr = acceptDeadline.toISOString().split('T')[0];
+        const d = daysBetween(acceptStr);
+        if (d <= 10) {
+          result.push({
+            id: `accept-${p.id}`, procId: p.id, procNum: p.registryNumber, title: p.title,
+            type: 'Срок приёмки товара', date: acceptStr, daysLeft: d,
+            zone: zone(d), responsible: p.responsibleName, status: p.status,
+          });
+        }
+      }
+
+      // 6. Размещение в ЕАТ (если статус preparation или sz_approval)
       if (['preparation','financing','sz_approval'].includes(p.status) && p.plannedStartDate) {
         const placementDate = new Date(p.plannedStartDate);
         const d = daysBetween(placementDate.toISOString().split('T')[0]);
