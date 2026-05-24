@@ -2,7 +2,7 @@
 
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
-import { DemoTourButton } from '@/components/ui/DemoTour';
+import { DemoButton } from '@/components/ui/DemoRunner';
 import { useAppStore } from '@/store/index';
 import { formatCurrency } from '@/lib/utils';
 import { TrendingDown, Clock, FileX, CheckCircle, Users, BarChart3 } from 'lucide-react';
@@ -72,7 +72,7 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="flex-shrink-0">
-                <DemoTourButton variant="primary" />
+                <DemoButton variant="primary" />
               </div>
             </div>
           </div>
