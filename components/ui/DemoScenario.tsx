@@ -42,7 +42,7 @@ const STEPS: Step[] = [
     route: '/zakupki/p001',
     title: '💰 Переход к оплате',
     what: 'Система переводит закупку на этап «Оплата». Поставка получена.',
-    why: 'Каждый переход фиксируется с датой и именем. Бухгалтерия получает уведомление автоматически.',
+    why: 'Каждый переход фиксируется с датой и именем. ФЭО получает уведомление автоматически.',
     newStatus: 'payment',
     duration: 5000,
   },
@@ -129,7 +129,7 @@ export function DemoScenario({ onClose }: { onClose: () => void }) {
 
     // Выполняем действие текущего шага
     if (cur.newStatus) {
-      changeStatus('p001', cur.newStatus, 'u1', 'Петров А.В.');
+      changeStatus('p001', cur.newStatus, 'u_shv', 'Швецов К.Е.');
     }
 
     const nextStep = step + 1;

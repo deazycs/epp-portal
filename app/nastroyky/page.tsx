@@ -92,7 +92,7 @@ export default function NastroykiPage() {
                 </div>
                 <div>
                   <label className="gov-label">Адрес электронной почты</label>
-                  <input type="email" className="gov-input" defaultValue="petrov.av@rosreestr.gov.ru" placeholder="example@rosreestr.gov.ru"/>
+                  <input type="email" className="gov-input" defaultValue="petrov.av@rosreestr.gov.ru" placeholder="u360516@r36.rosreestr.rurosreestr.gov.ru"/>
                 </div>
                 <div className="flex flex-col gap-2">
                   {[

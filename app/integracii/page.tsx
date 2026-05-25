@@ -8,7 +8,7 @@ const INTS=[
   {name:'СМЭВ 3.0',status:'pending',desc:'Система межведомственного электронного взаимодействия. Интеграция с ГИС ЕГРН.',last:'—'},
   {name:'Казначейство (СУФД)',status:'active',desc:'Система удалённого финансового документооборота. Платёжные поручения, реестры.',last:'19.05.2026 17:00'},
   {name:'ГИС ЕГРН',status:'active',desc:'Государственная информационная система ЕГРН. Сведения об объектах недвижимости.',last:'20.05.2026 06:00'},
-  {name:'1С:Бухгалтерия',status:'vruchnuyu',desc:'Интеграция в ручном режиме через выгрузку Excel. Автоматизация в планах.',last:'—'},
+  {name:'1С:ФЭО',status:'vruchnuyu',desc:'Интеграция в ручном режиме через выгрузку Excel. Автоматизация в планах.',last:'—'},
 ];
 const ST: Record<string,string>={active:'bg-green-50 text-green-700 border-green-300',pending:'bg-yellow-50 text-yellow-700 border-yellow-300',manual:'bg-gray-100 text-gray-600 border-gray-300',error:'bg-red-50 text-red-700 border-red-300'};
 const STL: Record<string,string>={active:'✓ Активна',pending:'⏳ Настройка',manual:'Ручной режим',error:'✗ Ошибка'};

@@ -11,15 +11,15 @@ import { TrendingUp, Users, AlertTriangle, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 
 const WORKLOAD = [
-  { name: 'Петров А.В.', active: 5, overdue: 1, completed: 12 },
-  { name: 'Никитин П.А.', active: 3, overdue: 0, completed: 8 },
-  { name: 'Орлова Т.В.', active: 4, overdue: 0, completed: 15 },
+  { name: 'Швецов К.Е.', active: 5, overdue: 1, completed: 12 },
+  { name: 'Митусов С.А.', active: 3, overdue: 0, completed: 8 },
+  { name: 'Давыдова Ф.А.', active: 4, overdue: 0, completed: 15 },
 ];
 
 const DEPT_ANALYTICS = [
   { name: 'Отдел МТО', count: 18, sum: 1240000 },
   { name: 'ИТ-отдел', count: 12, sum: 2180000 },
-  { name: 'АХО', count: 10, sum: 680000 },
+  { name: 'Отдел общего обеспечения', count: 10, sum: 680000 },
 ];
 
 const COLORS = ['#003087', '#1890ff', '#52c41a'];
@@ -39,7 +39,7 @@ export default function RukovoditelPage() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-base font-bold">Панель руководителя</h1>
-            <p className="text-xs text-gray-500">Фёдоров С.В. · Заместитель руководителя по обеспечению</p>
+            <p className="text-xs text-gray-500">Толоконников Ю.В. · Заместитель руководителя по обеспечению</p>
           </div>
           <div className="flex gap-2">
             <Link href="/otchetnost" className="gov-btn gov-btn-secondary gov-btn-sm">Отчётность</Link>

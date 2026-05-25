@@ -8,11 +8,11 @@ import Link from 'next/link';
 import { AlertTriangle } from 'lucide-react';
 
 const OVERDUE_PAYMENTS = [
-  { id: 'op1', registry: 'РЗ-МО-2026-00089', title: 'Поставка бумаги', supplier: 'ЗАО КанцЛайф', sum: 85200, dueDate: '2026-06-05', overdueDays: 5, responsible: 'Петров А.В.' },
+  { id: 'op1', registry: 'РЗ-МО-2026-00089', title: 'Поставка бумаги', supplier: 'ЗАО КанцЛайф', sum: 85200, dueDate: '2026-06-05', overdueDays: 5, responsible: 'Швецов К.Е.' },
 ];
 
 const OVERDUE_CONTRACTS = [
-  { id: 'oc1', registry: 'РЗ-МО-2026-00134', title: 'Мебель для кабинетов', supplier: 'ООО ТехноОфис', sum: 408500, dueDate: '2026-06-13', overdueDays: -3, responsible: 'Орлова Т.В.' },
+  { id: 'oc1', registry: 'РЗ-МО-2026-00134', title: 'Мебель для кабинетов', supplier: 'ООО ТехноОфис', sum: 408500, dueDate: '2026-06-13', overdueDays: -3, responsible: 'Давыдова Ф.А.' },
 ];
 
 export const dynamic = 'force-dynamic';

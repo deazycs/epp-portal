@@ -189,8 +189,8 @@ tr:nth-child(even) { background:#f8f8f8; }
 <tbody>${rows}</tbody>
 </table>
 <div class="sign">
-  <div><div style="font-size:9pt">Начальник отдела МТО:</div><div class="sign-line">_________________ / Смирнова Н.С. /</div></div>
-  <div><div style="font-size:9pt">Специалист МТО:</div><div class="sign-line">_________________ / Петров А.В. /</div></div>
+  <div><div style="font-size:9pt">Начальник отдела МТО:</div><div class="sign-line">_________________ / Черемных М.Ю. /</div></div>
+  <div><div style="font-size:9pt">Специалист МТО:</div><div class="sign-line">_________________ / Швецов К.Е. /</div></div>
 </div>
 <div class="footer">
   <span>ЕПП — Единый портал поставок Росреестра</span>

@@ -14,7 +14,7 @@ const KPIS = [
   {name:'Доля МСП',value:58,target:50,unit:'%',status:'good'},
   {name:'Заполненность карточек',value:94,target:100,unit:'%',status:'warning'},
 ];
-const EMP=[{name:'Петров А.В.',closed:8,onTime:7,overdue:1,score:88},{name:'Никитин П.А.',closed:6,onTime:6,overdue:0,score:100},{name:'Орлова Т.В.',closed:10,onTime:9,overdue:1,score:90}];
+const EMP=[{name:'Швецов К.Е.',closed:8,onTime:7,overdue:1,score:88},{name:'Митусов С.А.',closed:6,onTime:6,overdue:0,score:100},{name:'Давыдова Ф.А.',closed:10,onTime:9,overdue:1,score:90}];
 const ST_CLR: Record<string,string>={good:'text-green-700 bg-green-50',warning:'text-yellow-700 bg-yellow-50',bad:'text-red-600 bg-red-50'};
 const BAR_CLR: Record<string,string>={good:'bg-green-500',warning:'bg-yellow-400',bad:'bg-red-500'};
 

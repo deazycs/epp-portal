@@ -263,7 +263,7 @@ export default function NmckPage() {
                     </div>
                     <div>
                       <label className="gov-label">ИНН</label>
-                      <input className="gov-input text-xs font-mono" placeholder="7700000000"
+                      <input className="gov-input text-xs font-mono" placeholder="3664000000"
                         value={newSrc.inn ?? ''}
                         onChange={e => setNewSrc(p => ({ ...p, inn: e.target.value }))}/>
                     </div>

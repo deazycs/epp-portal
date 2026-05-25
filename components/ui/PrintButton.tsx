@@ -147,7 +147,7 @@ ${p.items.length > 0 ? `
   </div>
   <div>
     <div style="font-size:10pt;font-weight:bold">Начальник отдела МТО:</div>
-    <div class="sign-line">_________________ / Смирнова Н.С. /</div>
+    <div class="sign-line">_________________ / Черемных М.Ю. /</div>
   </div>
 </div>
 

@@ -15,7 +15,7 @@ export default function ZadachiPage() {
   const [search, setSearch] = useState('');
 
   const filtered = tasks.filter(t => {
-    const okTab = tab === 'mine' ? t.assigneeId === 'u1' : true;
+    const okTab = tab === 'mine' ? t.assigneeId === 'u_shv' : true;
     const okSearch = !search || t.title.toLowerCase().includes(search.toLowerCase());
     return okTab && okSearch;
   });

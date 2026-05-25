@@ -17,34 +17,34 @@ interface ApprovalItem {
 const PENDING_APPROVALS: ApprovalItem[] = [
   {
     id: 'ap1', procurementId: 'p003', title: 'Услуги по уборке служебных помещений',
-    registryNumber: 'РЗ-МО-2025-00178', initiator: 'Орлова Т.В.', department: 'АХО',
+    registryNumber: 'РЗ-МО-2025-00178', initiator: 'Давыдова Ф.А.', department: 'Отдел общего обеспечения',
     plannedSum: 340000, stage: 1, totalStages: 3, deadline: '2025-06-15',
-    currentApprover: 'Смирнова Н.С.', status: 'pending', sentAt: '2025-06-05',
+    currentApprover: 'Черемных М.Ю.', status: 'pending', sentAt: '2025-06-05',
   },
   {
     id: 'ap2', procurementId: 'p005', title: 'Техническое обслуживание серверного оборудования',
-    registryNumber: 'РЗ-МО-2025-00203', initiator: 'Никитин П.А.', department: 'ИТ-отдел',
+    registryNumber: 'РЗ-МО-2025-00203', initiator: 'Митусов С.А.', department: 'ИТ-отдел',
     plannedSum: 650000, stage: 2, totalStages: 3, deadline: '2025-06-18',
-    currentApprover: 'Козлов Д.М.', status: 'pending', sentAt: '2025-06-07',
+    currentApprover: 'Болдина А.В.', status: 'pending', sentAt: '2025-06-07',
   },
   {
     id: 'ap3', procurementId: 'p010', title: 'Техническое обслуживание лифтового оборудования',
-    registryNumber: 'РЗ-МО-2025-00181', initiator: 'Орлова Т.В.', department: 'АХО',
+    registryNumber: 'РЗ-МО-2025-00181', initiator: 'Давыдова Ф.А.', department: 'Отдел общего обеспечения',
     plannedSum: 185000, stage: 1, totalStages: 2, deadline: '2025-06-20',
-    currentApprover: 'Смирнова Н.С.', status: 'pending', sentAt: '2025-06-08',
+    currentApprover: 'Черемных М.Ю.', status: 'pending', sentAt: '2025-06-08',
   },
 ];
 
 const COMPLETED_APPROVALS: ApprovalItem[] = [
   {
     id: 'cp1', procurementId: 'p001', title: 'Поставка картриджей', registryNumber: 'РЗ-МО-2025-00142',
-    initiator: 'Петров А.В.', department: 'Отдел МТО', plannedSum: 148500,
-    stage: 3, totalStages: 3, deadline: '2025-04-10', currentApprover: 'Волкова Е.И.', status: 'approved', sentAt: '2025-04-05',
+    initiator: 'Швецов К.Е.', department: 'Отдел МТО', plannedSum: 148500,
+    stage: 3, totalStages: 3, deadline: '2025-04-10', currentApprover: 'Пикинер О.В.', status: 'approved', sentAt: '2025-04-05',
   },
   {
     id: 'cp2', procurementId: 'p002', title: 'Компьютерное оборудование', registryNumber: 'РЗ-МО-2025-00156',
-    initiator: 'Никитин П.А.', department: 'ИТ-отдел', plannedSum: 892000,
-    stage: 3, totalStages: 3, deadline: '2025-03-28', currentApprover: 'Волкова Е.И.', status: 'approved', sentAt: '2025-03-20',
+    initiator: 'Митусов С.А.', department: 'ИТ-отдел', plannedSum: 892000,
+    stage: 3, totalStages: 3, deadline: '2025-03-28', currentApprover: 'Пикинер О.В.', status: 'approved', sentAt: '2025-03-20',
   },
 ];
 

@@ -9,10 +9,10 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 const CHECKS = [
-  { id:'ch1', num:'ПРВ-2026-001', type:'Плановая', subject:'Проверка правомерности закупок МТО (I кв. 2026)', dept:'Отдел МТО', inspector:'Юридический отдел', dateFrom:'2026-04-10', dateTo:'2026-04-15', status:'completed', result:'Нарушений не выявлено. Все закупки соответствуют требованиям 44-ФЗ.', procIds:['p001','p004','p006'], findings:0 },
+  { id:'ch1', num:'ПРВ-2026-001', type:'Плановая', subject:'Проверка правомерности закупок МТО (I кв. 2026)', dept:'Отдел МТО', inspector:'Отдел правового обеспечения', dateFrom:'2026-04-10', dateTo:'2026-04-15', status:'completed', result:'Нарушений не выявлено. Все закупки соответствуют требованиям 44-ФЗ.', procIds:['p001','p004','p006'], findings:0 },
   { id:'ch2', num:'ПРВ-2026-002', type:'Внеплановая', subject:'Проверка документации по закупке серверного оборудования', dept:'ИТ-отдел', inspector:'Контрактная служба', dateFrom:'2026-05-05', dateTo:'2026-05-06', status:'completed', result:'Выявлено 1 замечание: в первоначальной редакции отсутствовало обоснование НМЦК. Замечание устранено.', procIds:['p002'], findings:1 },
   { id:'ch3', num:'ПРВ-2026-003', type:'Плановая', subject:'Проверка соблюдения сроков размещения в ЕИС (II кв. 2026)', dept:'Все подразделения', inspector:'Контрактный управляющий', dateFrom:'2026-07-01', dateTo:'2026-07-03', status:'planned', result:null, procIds:[], findings:0 },
-  { id:'ch4', num:'ПРВ-2026-004', type:'Внеплановая', subject:'Проверка исполнения договора Microsoft 365 — своевременность отчётности', dept:'ИТ-отдел', inspector:'Бухгалтерия + Юридический', dateFrom:'2026-05-15', dateTo:'2026-05-16', status:'in_progress', result:null, procIds:['p009'], findings:0 },
+  { id:'ch4', num:'ПРВ-2026-004', type:'Внеплановая', subject:'Проверка исполнения договора Microsoft 365 — своевременность отчётности', dept:'ИТ-отдел', inspector:'ФЭО + Юридический', dateFrom:'2026-05-15', dateTo:'2026-05-16', status:'in_progress', result:null, procIds:['p009'], findings:0 },
 ];
 
 const ST: Record<string,{label:string;cls:string;icon:React.ReactNode}> = {

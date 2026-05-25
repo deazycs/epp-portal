@@ -56,22 +56,22 @@ const STATUS_ORDER = WORKFLOW_STATUS_ORDER;
 
 const DOCS = [
   { id:'d1', name:'Техническое задание', file:'ТЗ_2026.docx', status:'approved', size:'148 КБ', date:'2026-04-05', author:'Швецов К.Е.' },
-  { id:'d2', name:'Договор', file:'Договор.pdf', status:'approved', size:'912 КБ', date:'2026-04-18', author:'Козлов Д.М.' },
-  { id:'d3', name:'Счёт-фактура', file:'СФ.pdf', status:'proverka_doc', size:'98 КБ', date:'2026-05-02', author:'Волкова Е.И.' },
+  { id:'d2', name:'Договор', file:'Договор.pdf', status:'approved', size:'912 КБ', date:'2026-04-18', author:'Болдина А.В.' },
+  { id:'d3', name:'Счёт-фактура', file:'СФ.pdf', status:'proverka_doc', size:'98 КБ', date:'2026-05-02', author:'Пикинер О.В.' },
 ];
 const DOC_CLR: Record<string,string> = { draft:'bg-gray-100 text-gray-600', review:'bg-yellow-50 text-yellow-700', approved:'bg-green-50 text-green-700', rejected:'bg-red-50 text-red-700' };
 const DOC_LBL: Record<string,string> = { draft:'Черновик', review:'На проверке', approved:'Утверждён', rejected:'Отклонён' };
 
 const APPROVALS = [
-  { id:'a1', stage:1, approver:'Смирнова Н.С.', role:'Нач. отдела МТО', status:'approved', date:'2026-04-08', comment:'Согласовано. Закупка плановая.' },
-  { id:'a2', stage:2, approver:'Козлов Д.М.',   role:'Контрактный управляющий', status:'approved', date:'2026-04-10', comment:'ТЗ соответствует требованиям.' },
-  { id:'a3', stage:3, approver:'Волкова Е.И.',  role:'Главный бухгалтер', status:'approved', date:'2026-04-12', comment:'Финансирование подтверждено.' },
+  { id:'a1', stage:1, approver:'Черемных М.Ю.', role:'Нач. отдела МТО', status:'approved', date:'2026-04-08', comment:'Согласовано. Закупка плановая.' },
+  { id:'a2', stage:2, approver:'Болдина А.В.',   role:'Контрактный управляющий', status:'approved', date:'2026-04-10', comment:'ТЗ соответствует требованиям.' },
+  { id:'a3', stage:3, approver:'Пикинер О.В.',  role:'Главный специалист ФЭО', status:'approved', date:'2026-04-12', comment:'Финансирование подтверждено.' },
 ];
 
 const COMMENTS = [
-  { id:'c1', author:'Смирнова Н.С.', role:'Нач. отдела', date:'2026-04-08T10:15:00', text:'Проверила ТЗ. Корректно. Прошу разместить в ЕАТ Берёзка.', internal:true },
+  { id:'c1', author:'Черемных М.Ю.', role:'Нач. отдела', date:'2026-04-08T10:15:00', text:'Проверила ТЗ. Корректно. Прошу разместить в ЕАТ Берёзка.', internal:true },
   { id:'c2', author:'Швецов К.Е.',   role:'Специалист МТО', date:'2026-04-10T14:30:00', text:'Скорректировал описание. Закупка размещена в ЕАТ.', internal:true },
-  { id:'c3', author:'Козлов Д.М.',   role:'Контрактный упр.', date:'2026-04-18T09:00:00', text:'Договор подписан. Оригинал передан в бухгалтерию.', internal:false },
+  { id:'c3', author:'Болдина А.В.',   role:'Контрактный упр.', date:'2026-04-18T09:00:00', text:'Договор подписан. Оригинал передан в специалист ФЭОию.', internal:false },
 ];
 
 export default function ZakupkaDetailPage() {
@@ -134,7 +134,7 @@ export default function ZakupkaDetailPage() {
   const handleAdvance = () => {
     setStatusChanging(true);
     setTimeout(() => {
-      advanceWorkflow(id, 'u1', 'Швецов К.Е.');
+      advanceWorkflow(id, 'u_shv', 'Швецов К.Е.');
       setStatusChanging(false);
     }, 600);
   };
@@ -143,7 +143,7 @@ export default function ZakupkaDetailPage() {
     setShowStatusMenu(false);
     setStatusChanging(true);
     setTimeout(() => {
-      changeStatus(id, newStatus, 'u1', 'Швецов К.Е.');
+      changeStatus(id, newStatus, 'u_shv', 'Швецов К.Е.');
       setStatusChanging(false);
     }, 400);
   };
@@ -515,7 +515,7 @@ export default function ZakupkaDetailPage() {
                       </td>
                       <td><span className="gov-badge bg-blue-50 text-blue-700 border-blue-200">Новый</span></td>
                       <td className="text-xs">{f.date}</td>
-                      <td className="text-xs font-bold">Петров А.В.</td>
+                      <td className="text-xs font-bold">Швецов К.Е.</td>
                       <td className="text-xs text-gray-500">{f.size}</td>
                       <td><button className="gov-btn gov-btn-ghost gov-btn-sm py-0"><Eye size={11}/></button></td>
                     </tr>

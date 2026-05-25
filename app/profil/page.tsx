@@ -11,9 +11,9 @@ import Link from 'next/link';
 
 export default function ProfilPage() {
   const { procurements, tasks } = useAppStore();
-  const myProcs = procurements.filter(p => p.responsibleId === 'u1');
-    const myProc = myProcs.filter(p=>p.responsibleId==='u1');
-  const myTasks = MOCK_TASKS.filter(t=>t.assigneeId==='u1');
+  const myProcs = procurements.filter(p => p.responsibleId === 'u_shv');
+    const myProc = myProcs.filter(p=>p.responsibleId==='u_shv');
+  const myTasks = MOCK_TASKS.filter(t=>t.assigneeId==='u_shv');
   const totalSum = myProc.reduce((s,p)=>s+p.plannedSum,0);
   return (
     <AppLayout>

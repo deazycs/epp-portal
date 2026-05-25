@@ -20,10 +20,10 @@ import { formatCurrency, formatDate, formatTimeAgo, truncate } from '@/lib/utils
 const PIE_COLORS = ['#94a3b8','#f59e0b','#3b82f6','#8b5cf6','#06b6d4','#22c55e','#64748b'];
 
 const FEED = [
-  { id:1, icon:'✏️', user:'Петров А.В.', action:'изменил статус', entity:'РЗ-2026-00142', time:'12 мин. назад', href:'/zakupki/p001' },
-  { id:2, icon:'✅', user:'Смирнова Н.С.', action:'согласовала закупку', entity:'РЗ-2026-00134', time:'1 ч. назад', href:'/zakupki/p008' },
-  { id:3, icon:'📄', user:'Козлов Д.М.', action:'загрузил договор', entity:'РЗ-2026-00142/Д', time:'2 ч. назад', href:'/dokumenty' },
-  { id:4, icon:'💳', user:'Волкова Е.И.', action:'провела оплату', entity:'378 000 руб.', time:'3 ч. назад', href:'/platezhi' },
+  { id:1, icon:'✏️', user:'Швецов К.Е.', action:'изменил статус', entity:'РЗ-2026-00142', time:'12 мин. назад', href:'/zakupki/p001' },
+  { id:2, icon:'✅', user:'Черемных М.Ю.', action:'согласовала закупку', entity:'РЗ-2026-00134', time:'1 ч. назад', href:'/zakupki/p008' },
+  { id:3, icon:'📄', user:'Болдина А.В.', action:'загрузил договор', entity:'РЗ-2026-00142/Д', time:'2 ч. назад', href:'/dokumenty' },
+  { id:4, icon:'💳', user:'Пикинер О.В.', action:'провела оплату', entity:'378 000 руб.', time:'3 ч. назад', href:'/platezhi' },
   { id:5, icon:'⚠️', user:'Система', action:'зафиксировала риск', entity:'Просрочка платежа', time:'5 ч. назад', href:'/riski' },
 ];
 
@@ -36,7 +36,7 @@ export default function DashboardPage() {
   const overdue = procurements.filter(p => p.isOverdue);
   const openRisks = MOCK_RISKS.filter(r => r.status === 'open');
   const unread = notifications.filter(n => !n.isRead);
-  const myTasks = tasks.filter(t => t.assigneeId === 'u1' && ['new','in_progress','overdue'].includes(t.status));
+  const myTasks = tasks.filter(t => t.assigneeId === 'u_shv' && ['new','in_progress','overdue'].includes(t.status));
   const onlineUsers = MOCK_USERS.filter(u => u.id);
 
   const totalPlanned = procurements.reduce((s,p) => s+p.plannedSum, 0);

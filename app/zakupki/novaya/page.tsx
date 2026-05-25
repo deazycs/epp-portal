@@ -43,7 +43,7 @@ export default function NovayaZakupkaPage() {
   const [acceptanceDays, setAcceptanceDays] = useState('5');
   const [deliveryAddress, setDeliveryAddress] = useState('г. Воронеж, ул. Средне-Московская, д. 14, склад МТО');
   const [deliveryConditions, setDeliveryConditions] = useState('');
-  const [kbk, setKbk] = useState('321 0113 4590100002 244');
+  const [kbk, setKbk] = useState('321 0412 4590100002 244');
   const [kosgu, setKosgu] = useState('244');
   const [items, setItems] = useState<FormItem[]>([{ id:1, name:'', unit:'шт.', qty:1, price:0 }]);
   const [saved, setSaved] = useState(false);
@@ -101,9 +101,9 @@ export default function NovayaZakupkaPage() {
       riskLevel: 'low',
       departmentId: dept,
       departmentName: deptName,
-      initiatorId: 'u1',
+      initiatorId: 'u_shv',
       initiatorName: 'Швецов К.Е.',
-      responsibleId: 'u1',
+      responsibleId: 'u_shv',
       responsibleName: 'Швецов К.Е.',
       plannedSum: totalSum,
       paidSum: 0,
@@ -149,7 +149,7 @@ export default function NovayaZakupkaPage() {
 
   const DEPTS = [
     {id:'d1',name:'Отдел МТО'},{id:'d4',name:'ИТ-отдел'},
-    {id:'d5',name:'АХО'},{id:'d3',name:'Бухгалтерия'},{id:'d6',name:'Юротдел'},
+    {id:'d5',name:'Отдел общего обеспечения'},{id:'d3',name:'ФЭО'},{id:'d6',name:'Юротдел'},
   ];
 
   if (submitted) {
@@ -237,7 +237,7 @@ export default function NovayaZakupkaPage() {
                     <label className="gov-label">Способ закупки и площадка *</label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {([
-                        { key:'eat_kotировки', icon:'🟢', short:'ЕАТ «Берёзка»', sub:'Запрос котировок в электронной форме. Поставщики подают ценовые предложения, побеждает наименьшая цена. Без публикации в ЕИС.' },
+                        { key:'eat_kotировки', icon:'🟢', short:'ЕАТ «Берёзка»', sub:'Закупка малого объёма в электронной форме. Поставщики подают ценовые предложения, побеждает наименьшая цена. Без публикации в ЕИС.' },
                         { key:'eis_auction',   icon:'🔵', short:'ЕИС + Сбер-АСТ', sub:'Сначала извещение на ЕИС, затем электронный аукцион на Сбер-АСТ. Торги на понижение в реальном времени.' },
                         { key:'eis_konkurs',   icon:'🟡', short:'ЕИС — конкурс', sub:'Конкурсная документация на ЕИС. Победитель по совокупности критериев: цена и квалификация.' },
                         { key:'single',        icon:'⚪', short:'Единственный поставщик', sub:'Без конкурентных процедур. Обоснование по ст. 93 44-ФЗ. Уведомление/отчёт в ЕИС.' },

@@ -139,8 +139,8 @@ function ZakupkiContent() {
             <option value="">Все подразделения</option>
             <option value="d1">Отдел МТО</option>
             <option value="d4">ИТ-отдел</option>
-            <option value="d5">АХО</option>
-            <option value="d3">Бухгалтерия</option>
+            <option value="d5">Отдел общего обеспечения</option>
+            <option value="d3">ФЭО</option>
           </select>
           <button onClick={() => setShowFilters(f => !f)}
             className={`gov-btn gov-btn-sm ${showFilters || statusFilter.length ? 'gov-btn-primary' : 'gov-btn-ghost'}`}>
