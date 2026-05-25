@@ -82,7 +82,7 @@ export default function PolzovateliPage() {
                   <td className="text-xs">{u.position}</td>
                   <td className="text-xs text-gray-600">{u.dept}</td>
                   <td className="text-xs text-blue-600">{u.email}</td>
-                  <td className="text-xs text-gray-500 whitespace-nowrap">{formatDateTime(u.email)}</td>
+                  <td className="text-xs text-gray-500">{u.ext ? `вн. ${u.ext}` : '—'}</td>
                   <td>
                     <span className="text-xs text-gray-500">
                       {u.role.includes('all') ? '⭐ Полные права' : `${u.role.length} прав`}
