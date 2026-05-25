@@ -28,8 +28,8 @@
 html { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
 
 body {
-  background: var(--gov-gray);
-  color: var(--gov-text);
+  background: #f4f6f9;
+  color: #1a2332;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru">
-      <body className="font-sans bg-gov-gray text-gov-text antialiased">
+      <body className="antialiased" style={{ fontFamily: "Inter, Segoe UI, Arial, sans-serif", background: "#f4f6f9", color: "#1a2332" }}>
         {children}
       </body>
     </html>

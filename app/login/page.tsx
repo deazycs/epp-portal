@@ -60,11 +60,12 @@ export default function LoginPage() {
               <button key={u.userId}
                 onClick={() => handleLogin(u.userId)}
                 disabled={loading}
-                className={`text-left p-4 rounded-xl border transition-all duration-200 disabled:opacity-60 ${
-                  selected === u.userId
-                    ? 'border-white border-opacity-70 bg-white bg-opacity-20 shadow-lg'
-                    : 'border-white border-opacity-10 bg-white bg-opacity-5 hover:bg-opacity-12 hover:border-opacity-30'
-                }`}>
+                style={{
+                  textAlign: 'left', padding: 16, borderRadius: 12, border: '1px solid',
+                  borderColor: selected === u.userId ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.15)',
+                  background: selected === u.userId ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)',
+                  cursor: 'pointer', transition: 'all 0.2s', opacity: loading && selected !== u.userId ? 0.5 : 1,
+                }}>
                 <div className="flex items-start gap-3">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-white text-sm font-bold flex-shrink-0 ${
                       u.userId === 'u_shv' ? 'bg-blue-600' :

@@ -48,7 +48,7 @@ export function AppInner({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ToastBridge />
-      <div className="flex h-screen overflow-hidden">
+      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
         {mobileSidebarOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
             onClick={() => setMobileSidebarOpen(false)} />
@@ -56,7 +56,7 @@ export function AppInner({ children }: { children: React.ReactNode }) {
         <div className={cn(
           'hidden md:flex flex-col flex-shrink-0 transition-all duration-200',
           sidebarCollapsed ? 'w-12' : 'w-56'
-        )} style={{ height: '100vh' }}>
+        )} style={{ height: '100%' }}>
           <Sidebar collapsed={sidebarCollapsed} />
         </div>
         <div className={cn(
@@ -73,7 +73,7 @@ export function AppInner({ children }: { children: React.ReactNode }) {
             }}
             sidebarCollapsed={sidebarCollapsed}
           />
-          <main className={`flex-1 overflow-y-auto bg-gray-100 ${demoOpen ? 'pb-44' : ''}`}>
+          <main className={`flex-1 overflow-y-auto ${demoOpen ? 'pb-44' : ''}`} style={{ background: '#f4f6f9', minHeight: 0 }}>
             {children}
           </main>
         </div>

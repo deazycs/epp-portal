@@ -267,7 +267,7 @@ export default function KontrolSrokovPage() {
               {color:'bg-green-500', text:'В норме — срок более 10 дней, контролируйте регулярно'},
             ].map((l,i)=>(
               <div key={i} className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full flex-shrink-0 ${l.color}`}/>
+                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: l.color }}/>
                 <span>{l.text}</span>
               </div>
             ))}
