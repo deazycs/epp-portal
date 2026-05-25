@@ -11,7 +11,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 // В разделе платежей — закупки на этапе оплаты и исполнения с суммами
-const PAYMENT_STATUSES = ['payment','payment_docs','payment_sufd','payment_done','execution','eis_reporting','archive'];
+const PAYMENT_STATUSES = ['payment','payment_docs','payment_done','payment_done','execution','eis_reporting','archive'];
 
 export default function PlatezhiPage() {
   const { procurements } = useAppStore();
