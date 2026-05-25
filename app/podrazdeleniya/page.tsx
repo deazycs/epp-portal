@@ -17,10 +17,10 @@ export default function PodrazdeleniyaPage() {
                 <tr key={d.id}>
                   <td className="text-xs font-bold">{d.name}</td>
                   <td className="text-xs">{d.shortName}</td>
-                  <td className="text-xs font-mono text-blue-600">{d.code}</td>
+                  <td className="text-xs font-mono text-blue-600">{d.id}</td>
                   <td className="text-xs">{d.head}</td>
                   <td className="text-center text-xs font-bold">{d.employeeCount}</td>
-                  <td className="text-center text-xs font-bold text-blue-700">{d.activeProcurements}</td>
+                  <td className="text-center text-xs font-bold text-blue-700">{0}</td>
                 </tr>
               ))}
             </tbody>

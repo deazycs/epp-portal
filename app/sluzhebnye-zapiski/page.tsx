@@ -10,15 +10,15 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 const NOTES = [
-  { id:'sz1', number:'СЗ-МТО-2026-078', title:'Запрос на закупку картриджей для принтеров (II кв. 2026)', author:'Петров А.В.', dept:'Отдел МТО', addressee:'Смирнова Н.С.', procId:'p001', status:'approved', date:'2026-03-28', sum:162000, comment:'Согласована. Включить в план-график II кв. 2026.' },
-  { id:'sz2', number:'СЗ-АХО-2026-091', title:'Запрос на услуги комплексной уборки (III кв. 2026)', author:'Орлова Т.В.', dept:'АХО', addressee:'Фёдоров С.В.', procId:'p003', status:'pending', date:'2026-05-12', sum:375000, comment:'' },
-  { id:'sz3', number:'СЗ-ИТ-2026-055', title:'Запрос на лицензии Microsoft 365 Business Premium (50 лиц.)', author:'Никитин П.А.', dept:'ИТ-отдел', addressee:'Смирнова Н.С.', procId:'p009', status:'approved', date:'2026-01-18', sum:385000, comment:'Согласована. Единственный поставщик по ст.93.' },
-  { id:'sz4', number:'СЗ-ИТ-2026-112', title:'Запрос на разработку СМЭВ-адаптера для ГИС ЕГРН', author:'Никитин П.А.', dept:'ИТ-отдел', addressee:'Фёдоров С.В.', procId:'p005', status:'pending', date:'2026-04-19', sum:1850000, comment:'' },
-  { id:'sz5', number:'СЗ-АХО-2026-063', title:'Запрос на поставку офисной мебели (5 кабинетов)', author:'Орлова Т.В.', dept:'АХО', addressee:'Смирнова Н.С.', procId:'p008', status:'approved', date:'2026-04-03', sum:445000, comment:'Согласована. ЕАТ Берёзка, запрос котировок.' },
-  { id:'sz6', number:'СЗ-МТО-2026-034', title:'Запрос на закупку бумаги офисной А4/А3 (I п/г 2026)', author:'Петров А.В.', dept:'Отдел МТО', addressee:'Смирнова Н.С.', procId:'p004', status:'approved', date:'2026-01-08', sum:94500, comment:'Согласована.' },
-  { id:'sz7', number:'СЗ-ИТ-2026-088', title:'Запрос на серверное оборудование для ЦОД (Dell + NetApp)', author:'Никитин П.А.', dept:'ИТ-отдел', addressee:'Фёдоров С.В.', procId:'p002', status:'approved', date:'2026-02-06', sum:4850000, comment:'Согласована. Электронный аукцион ЕИС+Сбер-АСТ.' },
-  { id:'sz8', number:'СЗ-АХО-2026-119', title:'Запрос на страхование автотранспорта (КАСКО+ОСАГО)', author:'Орлова Т.В.', dept:'АХО', addressee:'Смирнова Н.С.', procId:'p007', status:'draft', date:'2026-05-18', sum:112000, comment:'' },
-  { id:'sz9', number:'СЗ-МТО-2026-095', title:'Запрос на ТО лифтового оборудования (2026 год, 6 мес.)', author:'Петров А.В.', dept:'Отдел МТО', addressee:'Фёдоров С.В.', procId:'p010', status:'approved', date:'2026-04-26', sum:198000, comment:'Согласована. ЕАТ Берёзка.' },
+  { id:'sz1', number:'СЗ-МТО-2026-078', title:'Запрос на закупку картриджей для принтеров (II кв. 2026)', author:'Швецов К.Е.', dept:'Отдел МТО', addressee:'Черемных М.Ю.', procId:'p001', status:'approved', date:'2026-03-28', sum:162000, comment:'Согласована. Включить в план-график II кв. 2026.' },
+  { id:'sz2', number:'СЗ-Отдел общего обеспечения-2026-091', title:'Запрос на услуги комплексной уборки (III кв. 2026)', author:'Давыдова Ф.А.', dept:'Отдел общего обеспечения', addressee:'Толоконников Ю.В.', procId:'p003', status:'pending', date:'2026-05-12', sum:375000, comment:'' },
+  { id:'sz3', number:'СЗ-ИТ-2026-055', title:'Запрос на лицензии Microsoft 365 Business Premium (50 лиц.)', author:'Митусов С.А.', dept:'ИТ-отдел', addressee:'Черемных М.Ю.', procId:'p009', status:'approved', date:'2026-01-18', sum:385000, comment:'Согласована. Единственный поставщик по ст.93.' },
+  { id:'sz4', number:'СЗ-ИТ-2026-112', title:'Запрос на разработку СМЭВ-адаптера для ГИС ЕГРН', author:'Митусов С.А.', dept:'ИТ-отдел', addressee:'Толоконников Ю.В.', procId:'p005', status:'pending', date:'2026-04-19', sum:1850000, comment:'' },
+  { id:'sz5', number:'СЗ-Отдел общего обеспечения-2026-063', title:'Запрос на поставку офисной мебели (5 кабинетов)', author:'Давыдова Ф.А.', dept:'Отдел общего обеспечения', addressee:'Черемных М.Ю.', procId:'p008', status:'approved', date:'2026-04-03', sum:445000, comment:'Согласована. ЕАТ Берёзка, запрос котировок.' },
+  { id:'sz6', number:'СЗ-МТО-2026-034', title:'Запрос на закупку бумаги офисной А4/А3 (I п/г 2026)', author:'Швецов К.Е.', dept:'Отдел МТО', addressee:'Черемных М.Ю.', procId:'p004', status:'approved', date:'2026-01-08', sum:94500, comment:'Согласована.' },
+  { id:'sz7', number:'СЗ-ИТ-2026-088', title:'Запрос на серверное оборудование для ЦОД (Dell + NetApp)', author:'Митусов С.А.', dept:'ИТ-отдел', addressee:'Толоконников Ю.В.', procId:'p002', status:'approved', date:'2026-02-06', sum:4850000, comment:'Согласована. Электронный аукцион ЕИС+Сбер-АСТ.' },
+  { id:'sz8', number:'СЗ-Отдел общего обеспечения-2026-119', title:'Запрос на страхование автотранспорта (КАСКО+ОСАГО)', author:'Давыдова Ф.А.', dept:'Отдел общего обеспечения', addressee:'Черемных М.Ю.', procId:'p007', status:'draft', date:'2026-05-18', sum:112000, comment:'' },
+  { id:'sz9', number:'СЗ-МТО-2026-095', title:'Запрос на ТО лифтового оборудования (2026 год, 6 мес.)', author:'Швецов К.Е.', dept:'Отдел МТО', addressee:'Толоконников Ю.В.', procId:'p010', status:'approved', date:'2026-04-26', sum:198000, comment:'Согласована. ЕАТ Берёзка.' },
 ];
 
 const ST: Record<string,{label:string;cls:string;icon:React.ReactNode}> = {
@@ -49,7 +49,7 @@ export default function SluzhebnyeZapiskiPage() {
         <div className="flex items-center justify-between mb-3">
           <div>
             <h1 className="text-base font-bold">Служебные записки</h1>
-            <p className="text-xs text-gray-500">Запросы на закупки от подразделений</p>
+            <p className="text-xs text-gray-500">Запросы на закупки от подразделений · Включают наименование, кол-во и обоснование потребности</p>
           </div>
           <button className="gov-btn gov-btn-primary gov-btn-sm"><Plus size={12}/> Новая СЗ</button>
         </div>

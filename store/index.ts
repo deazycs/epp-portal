@@ -115,12 +115,12 @@ export const useAppStore = create<AppStore>((set, get) => ({
         procurements: [p, ...s.procurements],
         tasks: [...s.tasks, autoTask],
         history: [
-          makeHEntry(p.id, p.responsibleId ?? 'u1', p.responsibleName, 'CREATE',
+          makeHEntry(p.id, p.responsibleId ?? 'u_shv', p.responsibleName, 'CREATE',
             `Создана закупка ${p.registryNumber}: ${p.title.slice(0, 80)}`),
           ...s.history,
         ],
         notifications: [{
-          id: `n-new-${Date.now()}`, userId: 'u1', type: 'success' as const,
+          id: `n-new-${Date.now()}`, userId: 'u_shv', type: 'success' as const,
           category: 'system' as const, title: `Создана: ${p.registryNumber}`,
           message: `«${p.title.slice(0, 70)}» добавлена в реестр. Задача на согласование СЗ создана.`,
           link: `/zakupki/${p.id}`, entityId: p.id, entityType: 'procurement',
@@ -173,7 +173,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
           ...s.history,
         ],
         notifications: [{
-          id:`n-${Date.now()}`, userId:'u1', type:'info' as const,
+          id:`n-${Date.now()}`, userId:'u_shv', type:'info' as const,
           category:'system' as const, title:'Статус изменён',
           message:`${proc.registryNumber}: ${STATUS_LABELS[oldStatus]} → ${STATUS_LABELS[newStatus]}`,
           link:`/zakupki/${id}`, entityId:id, entityType:'procurement',

@@ -157,7 +157,7 @@ export function PoiskContent() {
                       <tr key={s.id}>
                         <td className="text-xs font-bold">{s.name}</td>
                         <td className="text-xs font-mono">{s.inn}</td>
-                        <td className="text-xs text-center">{s.totalContracts}</td>
+                        <td className="text-xs text-center">{s.wonCount}</td>
                         <td className="text-xs font-bold">{formatCurrency(s.totalSum)}</td>
                       </tr>
                     ))}

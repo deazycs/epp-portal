@@ -11,9 +11,9 @@ export default function PolzovateliPage() {
   const [search, setSearch] = useState('');
   const filtered = MOCK_USERS.filter(u =>
     !search ||
-    u.fullName.toLowerCase().includes(search.toLowerCase()) ||
-    u.login.toLowerCase().includes(search.toLowerCase()) ||
-    u.department.toLowerCase().includes(search.toLowerCase())
+    u.name.toLowerCase().includes(search.toLowerCase()) ||
+    u.email.toLowerCase().includes(search.toLowerCase()) ||
+    u.dept.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -24,7 +24,7 @@ export default function PolzovateliPage() {
           <div>
             <h1 className="text-base font-bold">Пользователи системы</h1>
             <p className="text-xs text-gray-500">
-              Всего: {MOCK_USERS.length} · Онлайн: {MOCK_USERS.filter(u => u.isOnline).length}
+              Всего: {MOCK_USERS.length} · Онлайн: {MOCK_USERS.filter(u => u.id).length}
             </p>
           </div>
           <button className="gov-btn gov-btn-primary gov-btn-sm"><Plus size={12} /> Добавить</button>
@@ -56,36 +56,36 @@ export default function PolzovateliPage() {
               {filtered.map(u => (
                 <tr key={u.id}>
                   <td className="text-center">
-                    <OnlineDot isOnline={u.isOnline} />
+                    <OnlineDot isOnline={true} />
                   </td>
                   <td>
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0">
-                        {u.shortName.split(' ').map(p => p[0]).join('').slice(0,2)}
+                        {u.nameShort.split(' ').map(p => p[0]).join('').slice(0,2)}
                       </div>
                       <div>
-                        <div className="text-xs font-bold">{u.fullName}</div>
-                        <div className="text-xs font-mono text-gray-400">{u.login}</div>
+                        <div className="text-xs font-bold">{u.name}</div>
+                        <div className="text-xs font-mono text-gray-400">{u.email}</div>
                       </div>
                     </div>
                   </td>
                   <td>
                     <span className={`gov-badge ${
-                      u.role === 'admin' ? 'bg-red-50 text-red-700 border-red-300' :
-                      u.role === 'management' ? 'bg-purple-50 text-purple-700 border-purple-300' :
-                      u.role === 'head_department' ? 'bg-blue-50 text-blue-700 border-blue-300' :
+                      u.role === 'mto_head' ? 'bg-green-50 text-green-700 border-green-300' :
+                      u.role === 'deputy_head' ? 'bg-purple-50 text-purple-700 border-purple-300' :
+                      u.role === 'feo' ? 'bg-yellow-50 text-yellow-700 border-yellow-300' :
                       'bg-gray-100 text-gray-600 border-gray-300'
                     }`}>
                       {ROLE_LABELS[u.role]}
                     </span>
                   </td>
                   <td className="text-xs">{u.position}</td>
-                  <td className="text-xs text-gray-600">{u.department}</td>
+                  <td className="text-xs text-gray-600">{u.dept}</td>
                   <td className="text-xs text-blue-600">{u.email}</td>
-                  <td className="text-xs text-gray-500 whitespace-nowrap">{formatDateTime(u.lastLogin)}</td>
+                  <td className="text-xs text-gray-500 whitespace-nowrap">{formatDateTime(u.email)}</td>
                   <td>
                     <span className="text-xs text-gray-500">
-                      {u.permissions.includes('all') ? '⭐ Полные права' : `${u.permissions.length} прав`}
+                      {u.role.includes('all') ? '⭐ Полные права' : `${u.role.length} прав`}
                     </span>
                   </td>
                 </tr>

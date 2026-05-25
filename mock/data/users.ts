@@ -1,289 +1,478 @@
-import type { User, Department, Supplier } from '@/types';
+'use client';
 
-export const MOCK_USERS: User[] = [
+// ═══════════════════════════════════════════════════════════════
+// РЕАЛЬНЫЕ СОТРУДНИКИ РОСРЕЕСТРА — Управление по Воронежской области
+// Данные актуальны на 2026 год
+// ═══════════════════════════════════════════════════════════════
+
+export interface User {
+  id: string;
+  name: string;
+  nameShort: string;   // Фамилия И.О.
+  position: string;
+  dept: string;
+  deptShort: string;
+  email: string;
+  phone?: string;
+  ext?: string;        // Внутренний номер
+  role: 'mto_specialist' | 'mto_head' | 'deputy_head' | 'feo' | 'legal' | 'it_head' | 'dept_head' | 'initiator' | 'admin' | 'management' | 'specialist_mto' | 'head_department' | 'contract_manager' | 'accountant';
+  canInitiateSZ: boolean;   // Может подавать СЗ
+  canCreateOrder: boolean;  // Может создавать закупку (только МТО)
+  canSignContract: boolean; // Может подписывать договор
+  canApproveContract: boolean; // Может визировать договор
+  avatarColor: string;
+}
+
+// ─── РУКОВОДСТВО ─────────────────────────────────────────────
+export const USERS: User[] = [
   {
-    id: 'u1',
-    login: 'petrov.av',
-    fullName: 'Петров Андрей Викторович',
-    shortName: 'Петров А.В.',
-    role: 'specialist_mto',
-    department: 'Отдел материально-технического обеспечения',
-    departmentId: 'd1',
-    position: 'Ведущий специалист МТО',
-    email: 'petrov.av@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2341',
-    isOnline: true,
-    lastLogin: '2025-06-10T08:15:00',
-    permissions: ['procurement.read', 'procurement.write', 'document.upload', 'task.create'],
+    id: 'u_tol',
+    name: 'Толоконников Юрий Васильевич',
+    nameShort: 'Толоконников Ю.В.',
+    position: 'Заместитель руководителя',
+    dept: 'Руководство',
+    deptShort: 'Руководство',
+    email: 'tolokonnukov@r36.rosreestr.ru',
+    role: 'deputy_head',
+    canInitiateSZ: false,
+    canCreateOrder: false,
+    canSignContract: true,   // Уполномоченное лицо на подписание
+    canApproveContract: true, // Визирует договора
+    avatarColor: 'bg-purple-700',
   },
+
+  // ─── ОТДЕЛ МТО ───────────────────────────────────────────
   {
-    id: 'u2',
-    login: 'smirnova.ns',
-    fullName: 'Смирнова Наталья Сергеевна',
-    shortName: 'Смирнова Н.С.',
-    role: 'head_department',
-    department: 'Отдел материально-технического обеспечения',
-    departmentId: 'd1',
+    id: 'u_che',
+    name: 'Черемных Марина Юрьевна',
+    nameShort: 'Черемных М.Ю.',
     position: 'Начальник отдела МТО',
-    email: 'smirnova.ns@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2300',
-    isOnline: true,
-    lastLogin: '2025-06-10T07:45:00',
-    permissions: ['procurement.read', 'procurement.write', 'procurement.approve', 'document.all', 'report.read', 'analytics.read'],
+    dept: 'Отдел материально-технического обеспечения',
+    deptShort: 'Отдел МТО',
+    email: 'u361304@r36.rosreestr.ru',
+    phone: '8(473) 210-76-18',
+    ext: '3027',
+    role: 'mto_head',
+    canInitiateSZ: true,
+    canCreateOrder: true,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-green-700',
   },
   {
-    id: 'u3',
-    login: 'kozlov.dm',
-    fullName: 'Козлов Дмитрий Михайлович',
-    shortName: 'Козлов Д.М.',
-    role: 'contract_manager',
-    department: 'Контрактная служба',
-    departmentId: 'd2',
-    position: 'Контрактный управляющий',
-    email: 'kozlov.dm@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2210',
-    isOnline: false,
-    lastLogin: '2025-06-09T17:30:00',
-    permissions: ['procurement.read', 'procurement.write', 'contract.all', 'document.all', 'approval.manage'],
+    id: 'u_shc',
+    name: 'Щетинина Наталья Сергеевна',
+    nameShort: 'Щетинина Н.С.',
+    position: 'Заместитель начальника отдела МТО',
+    dept: 'Отдел материально-технического обеспечения',
+    deptShort: 'Отдел МТО',
+    email: 'u361308@r36.rosreestr.ru',
+    phone: '8(473) 210-76-37',
+    ext: '3028',
+    role: 'mto_specialist',
+    canInitiateSZ: true,
+    canCreateOrder: true,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-green-600',
   },
   {
-    id: 'u4',
-    login: 'volkova.ei',
-    fullName: 'Волкова Елена Игоревна',
-    shortName: 'Волкова Е.И.',
-    role: 'accountant',
-    department: 'Бухгалтерия',
-    departmentId: 'd3',
-    position: 'Главный бухгалтер',
-    email: 'volkova.ei@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2150',
-    isOnline: true,
-    lastLogin: '2025-06-10T08:00:00',
-    permissions: ['procurement.read', 'payment.all', 'report.all', 'analytics.read'],
+    id: 'u_bol',
+    name: 'Болдина Алла Викторовна',
+    nameShort: 'Болдина А.В.',
+    position: 'Главный специалист-эксперт',
+    dept: 'Отдел материально-технического обеспечения',
+    deptShort: 'Отдел МТО',
+    email: 'u361309@r36.rosreestr.ru',
+    ext: '3054',
+    role: 'mto_specialist',
+    canInitiateSZ: true,
+    canCreateOrder: true,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-green-500',
   },
   {
-    id: 'u5',
-    login: 'fedorov.sv',
-    fullName: 'Фёдоров Сергей Владимирович',
-    shortName: 'Фёдоров С.В.',
-    role: 'management',
-    department: 'Руководство',
-    departmentId: 'd0',
-    position: 'Заместитель руководителя по обеспечению',
-    email: 'fedorov.sv@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2001',
-    isOnline: true,
-    lastLogin: '2025-06-10T09:00:00',
-    permissions: ['all'],
+    id: 'u_shv',
+    name: 'Швецов Кирилл Евгеньевич',
+    nameShort: 'Швецов К.Е.',
+    position: 'Ведущий специалист-эксперт',
+    dept: 'Отдел материально-технического обеспечения',
+    deptShort: 'Отдел МТО',
+    email: 'u360516@r36.rosreestr.ru',
+    phone: '8(473) 210-76-37',
+    ext: '3159',
+    role: 'mto_specialist',
+    canInitiateSZ: true,
+    canCreateOrder: true,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-blue-600',
   },
   {
-    id: 'u6',
-    login: 'nikitin.pa',
-    fullName: 'Никитин Павел Александрович',
-    shortName: 'Никитин П.А.',
-    role: 'specialist_mto',
-    department: 'Отдел материально-технического обеспечения',
-    departmentId: 'd1',
-    position: 'Специалист МТО',
-    email: 'nikitin.pa@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2342',
-    isOnline: false,
-    lastLogin: '2025-06-09T16:00:00',
-    permissions: ['procurement.read', 'procurement.write', 'document.upload'],
+    id: 'u_rybalk',
+    name: 'Рыбалка Наталья Сергеевна',
+    nameShort: 'Рыбалка Н.С.',
+    position: 'Главный специалист-эксперт',
+    dept: 'Отдел материально-технического обеспечения',
+    deptShort: 'Отдел МТО',
+    email: 'u361323@r36.rosreestr.ru',
+    phone: '8(473) 210-76-08',
+    ext: '3156',
+    role: 'mto_specialist',
+    canInitiateSZ: true,
+    canCreateOrder: true,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-teal-600',
+  },
+
+  // ─── ИТ ОТДЕЛ (инициатор) ────────────────────────────────
+  {
+    id: 'u_mit',
+    name: 'Митусов Сергей Александрович',
+    nameShort: 'Митусов С.А.',
+    position: 'Начальник отдела эксплуатации ИС',
+    dept: 'Отдел эксплуатации информационных систем, технических средств и каналов связи',
+    deptShort: 'ИТ-отдел',
+    email: 'u361501@r36.rosreestr.ru',
+    phone: '8(473) 210-76-10',
+    ext: '3000',
+    role: 'dept_head',
+    canInitiateSZ: true,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-blue-700',
   },
   {
-    id: 'u7',
-    login: 'orlova.tv',
-    fullName: 'Орлова Татьяна Васильевна',
-    shortName: 'Орлова Т.В.',
-    role: 'specialist_mto',
-    department: 'Отдел материально-технического обеспечения',
-    departmentId: 'd1',
-    position: 'Ведущий специалист МТО',
-    email: 'orlova.tv@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2343',
-    isOnline: true,
-    lastLogin: '2025-06-10T08:30:00',
-    permissions: ['procurement.read', 'procurement.write', 'document.upload', 'task.create'],
+    id: 'u_boev',
+    name: 'Боев Станислав Егорович',
+    nameShort: 'Боев С.Е.',
+    position: 'Заместитель начальника ИТ-отдела',
+    dept: 'Отдел эксплуатации информационных систем, технических средств и каналов связи',
+    deptShort: 'ИТ-отдел',
+    email: 'u361402@r36.rosreestr.ru',
+    phone: '8(473) 252-57-86',
+    ext: '3033',
+    role: 'initiator',
+    canInitiateSZ: true,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-blue-500',
+  },
+
+  // ─── ОТДЕЛ ОБЩЕГО ОБЕСПЕЧЕНИЯ (инициатор) ────────────────
+  {
+    id: 'u_dav',
+    name: 'Давыдова Фатима Аскеровна',
+    nameShort: 'Давыдова Ф.А.',
+    position: 'Начальник отдела общего обеспечения',
+    dept: 'Отдел общего обеспечения',
+    deptShort: 'ОО',
+    email: 'u361201@r36.rosreestr.ru',
+    phone: '8(473) 210-76-24',
+    ext: '3044',
+    role: 'dept_head',
+    canInitiateSZ: true,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-orange-600',
   },
   {
-    id: 'u8',
-    login: 'admin.sys',
-    fullName: 'Системный администратор',
-    shortName: 'Сис. Адм.',
-    role: 'admin',
-    department: 'ИТ-отдел',
-    departmentId: 'd4',
-    position: 'Администратор системы',
-    email: 'admin@rosreestr.ru',
-    phone: '+7 (495) 945-00-00 доб. 2099',
-    isOnline: true,
-    lastLogin: '2025-06-10T07:00:00',
-    permissions: ['all', 'system.admin'],
+    id: 'u_bond',
+    name: 'Бондарь Юлия Николаевна',
+    nameShort: 'Бондарь Ю.Н.',
+    position: 'Заместитель начальника ОО',
+    dept: 'Отдел общего обеспечения',
+    deptShort: 'ОО',
+    email: 'u361219@r36.rosreestr.ru',
+    phone: '8(473) 235-50-90',
+    ext: '3046',
+    role: 'initiator',
+    canInitiateSZ: true,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-orange-500',
+  },
+
+  // ─── ОТДЕЛ ЗАЩИТЫ ГОС. ТАЙНЫ (инициатор) ────────────────
+  {
+    id: 'u_sch',
+    name: 'Щербинин Роман Сергеевич',
+    nameShort: 'Щербинин Р.С.',
+    position: 'Начальник отдела по защите гос. тайны',
+    dept: 'Отдел по защите гос. тайны и мобилизационной подготовки',
+    deptShort: 'ОГТ',
+    email: 'u361703@r36.rosreestr.ru',
+    phone: '8(473) 252-12-27',
+    ext: '3032',
+    role: 'dept_head',
+    canInitiateSZ: true,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: false,
+    avatarColor: 'bg-gray-700',
+  },
+
+  // ─── ФЭО ─────────────────────────────────────────────────
+  {
+    id: 'u_pik',
+    name: 'Пикинер Ольга Владимировна',
+    nameShort: 'Пикинер О.В.',
+    position: 'Начальник финансово-экономического отдела',
+    dept: 'Финансово-экономический отдел',
+    deptShort: 'ФЭО',
+    email: 'u360501@r36.rosreestr.ru',
+    phone: '8(473) 264-93-34',
+    ext: '1020',
+    role: 'feo',
+    canInitiateSZ: false,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: true,  // ФЭО визирует договор
+    avatarColor: 'bg-yellow-600',
+  },
+
+  // ─── ПРАВОВОЙ ОТДЕЛ ──────────────────────────────────────
+  {
+    id: 'u_sad',
+    name: 'Садовая Елена Николаевна',
+    nameShort: 'Садовая Е.Н.',
+    position: 'Начальник отдела правового обеспечения',
+    dept: 'Отдел правового обеспечения',
+    deptShort: 'Правовой отдел',
+    email: 'u361123@r36.rosreestr.ru',
+    phone: '8(473) 264-93-54',
+    ext: '1033',
+    role: 'legal',
+    canInitiateSZ: false,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: true,  // Правовой визирует договор
+    avatarColor: 'bg-red-700',
+  },
+  {
+    id: 'u_sek',
+    name: 'Секирин Александр Иванович',
+    nameShort: 'Секирин А.И.',
+    position: 'Заместитель начальника правового отдела',
+    dept: 'Отдел правового обеспечения',
+    deptShort: 'Правовой отдел',
+    email: 'u361109@r36.rosreestr.ru',
+    phone: '8(473) 264-93-56',
+    ext: '1408',
+    role: 'legal',
+    canInitiateSZ: false,
+    canCreateOrder: false,
+    canSignContract: false,
+    canApproveContract: true,
+    avatarColor: 'bg-red-600',
   },
 ];
 
-export const CURRENT_USER: User = MOCK_USERS[0];
-
-export const MOCK_DEPARTMENTS: Department[] = [
-  { id: 'd0', name: 'Руководство Росреестра', shortName: 'Руководство', head: 'Фёдоров С.В.', code: 'RUK', employeeCount: 5, activeProcurements: 2 },
-  { id: 'd1', name: 'Отдел материально-технического обеспечения', shortName: 'Отдел МТО', head: 'Смирнова Н.С.', code: 'MTO', employeeCount: 8, activeProcurements: 23 },
-  { id: 'd2', name: 'Контрактная служба', shortName: 'Контрактная служба', head: 'Козлов Д.М.', code: 'KS', employeeCount: 4, activeProcurements: 15 },
-  { id: 'd3', name: 'Бухгалтерия и финансы', shortName: 'Бухгалтерия', head: 'Волкова Е.И.', code: 'BUHG', employeeCount: 6, activeProcurements: 3 },
-  { id: 'd4', name: 'Отдел информационных технологий', shortName: 'ИТ-отдел', head: 'Захаров И.П.', code: 'IT', employeeCount: 12, activeProcurements: 7 },
-  { id: 'd5', name: 'Административно-хозяйственный отдел', shortName: 'АХО', head: 'Борисов В.Н.', code: 'AHO', employeeCount: 10, activeProcurements: 11 },
-  { id: 'd6', name: 'Юридический отдел', shortName: 'Юротдел', head: 'Крылова О.А.', code: 'JUR', employeeCount: 5, activeProcurements: 4 },
-  { id: 'd7', name: 'Отдел кадров', shortName: 'ОК', head: 'Новикова А.С.', code: 'OK', employeeCount: 4, activeProcurements: 2 },
+// ─── ОТДЕЛЫ-ИНИЦИАТОРЫ (могут подавать СЗ) ──────────────────
+export const INITIATING_DEPTS = [
+  { id: 'mto',  name: 'Отдел МТО',        short: 'МТО',      head: 'Черемных М.Ю.',    color: 'bg-green-100 text-green-800' },
+  { id: 'it',   name: 'ИТ-отдел',         short: 'ИТ-отдел', head: 'Митусов С.А.',     color: 'bg-blue-100 text-blue-800' },
+  { id: 'oo',   name: 'Отдел общего обеспечения', short: 'ОО', head: 'Давыдова Ф.А.', color: 'bg-orange-100 text-orange-800' },
+  { id: 'ogt',  name: 'Отдел по защите гос. тайны', short: 'ОГТ', head: 'Щербинин Р.С.', color: 'bg-gray-100 text-gray-800' },
 ];
 
-export const MOCK_SUPPLIERS: Supplier[] = [
+// ─── ПОЛНЫЙ СПИСОК ОТДЕЛОВ (для СЗ) ─────────────────────────
+export const ALL_DEPTS = [
+  'Отдел МТО',
+  'ИТ-отдел (Отдел эксплуатации ИС)',
+  'Отдел общего обеспечения',
+  'Отдел по защите гос. тайны и моб. подготовки',
+  'Финансово-экономический отдел',
+  'Отдел правового обеспечения',
+  'Руководство',
+];
+
+// ─── КБК РОСРЕЕСТРА — УПРАВЛЕНИЕ ПО ВОРОНЕЖСКОЙ ОБЛАСТИ ─────
+export const KBK_LIST = [
   {
-    id: 's1',
-    inn: '7701234567',
-    kpp: '770101001',
-    ogrn: '1027700123456',
-    name: 'ООО «ТехноОфис»',
-    shortName: 'ООО ТехноОфис',
-    legalAddress: '115093, г. Москва, ул. Павловская, д. 18, стр. 2',
-    actualAddress: '115093, г. Москва, ул. Павловская, д. 18, стр. 2',
-    contactPerson: 'Иванов Алексей Петрович',
-    phone: '+7 (495) 123-45-67',
-    email: 'zakupki@technooffice.ru',
-    bankName: 'ПАО Сбербанк',
-    bik: '044525225',
-    checkingAccount: '40702810400000012345',
-    correspondentAccount: '30101810400000000225',
-    category: 'legal',
-    isSmallBusiness: true,
-    rating: 4.8,
-    totalContracts: 12,
-    totalSum: 1845000,
-    status: 'active',
-    registeredAt: '2021-03-15',
-    lastContractAt: '2025-05-20',
+    code: '321 0412 54 4 01 90071 247',
+    name: 'Закупка товаров, работ, услуг (ПОДФД 90071)',
+    kosgu: ['347'],
+    kosguNames: ['347 — Увеличение стоимости мат. запасов для целей капвложений'],
+    types: ['goods', 'materials'],
   },
   {
-    id: 's2',
-    inn: '5010034782',
-    kpp: '501001001',
-    ogrn: '1035010034782',
-    name: 'ЗАО «КанцЛайф»',
-    shortName: 'ЗАО КанцЛайф',
-    legalAddress: '141400, г. Химки, Московской обл., ул. Первомайская, д. 12',
-    actualAddress: '141400, г. Химки, Московской обл., ул. Первомайская, д. 12',
-    contactPerson: 'Петрова Светлана Николаевна',
-    phone: '+7 (498) 234-56-78',
-    email: 'tender@kanclive.ru',
-    bankName: 'АО Альфа-Банк',
-    bik: '044525593',
-    checkingAccount: '40702810901234567890',
-    correspondentAccount: '30101810200000000593',
-    category: 'legal',
-    isSmallBusiness: true,
-    rating: 4.5,
-    totalContracts: 8,
-    totalSum: 620000,
-    status: 'active',
-    registeredAt: '2019-07-22',
-    lastContractAt: '2025-04-10',
+    code: '321 0412 54 4 01 90071 244',
+    name: 'Прочие закупки (ПОДФД 90071)',
+    kosgu: ['341', '342', '343', '344', '345', '346', '347', '349'],
+    kosguNames: [
+      '341 — Увеличение стоимости лекарственных препаратов',
+      '342 — Увеличение стоимости продуктов питания',
+      '343 — Увеличение стоимости ГСМ',
+      '344 — Увеличение стоимости расходных материалов (картриджи, канцтовары, бумага)',
+      '345 — Увеличение стоимости мягкого инвентаря',
+      '346 — Увеличение стоимости прочих мат. запасов',
+      '347 — Увеличение стоимости мат. запасов для капвложений',
+      '349 — Увеличение стоимости прочих мат. запасов (разовое)',
+    ],
+    types: ['goods', 'materials', 'it_consumables'],
   },
   {
-    id: 's3',
-    inn: '7743012345',
-    kpp: '774301001',
-    ogrn: '1047743012345',
-    name: 'ООО «СитиКомп»',
-    shortName: 'ООО СитиКомп',
-    legalAddress: '109147, г. Москва, ул. Таганская, д. 21, офис 45',
-    actualAddress: '109147, г. Москва, ул. Таганская, д. 21, офис 45',
-    contactPerson: 'Соколов Дмитрий Андреевич',
-    phone: '+7 (495) 345-67-89',
-    email: 'gos@citycomp.ru',
-    bankName: 'ВТБ (ПАО)',
-    bik: '044525187',
-    checkingAccount: '40702810700123456789',
-    correspondentAccount: '30101810700000000187',
-    category: 'legal',
-    isSmallBusiness: false,
-    rating: 4.2,
-    totalContracts: 25,
-    totalSum: 5670000,
-    status: 'active',
-    registeredAt: '2015-11-08',
-    lastContractAt: '2025-06-01',
+    code: '321 0412 54 4 01 90020 244',
+    name: 'Прочие закупки (ПОДФД 90020)',
+    kosgu: ['344', '346', '349'],
+    kosguNames: [
+      '344 — Расходные материалы',
+      '346 — Прочие материальные запасы',
+      '349 — Прочие материалы (одноразовое потребление)',
+    ],
+    types: ['goods', 'materials'],
   },
   {
-    id: 's4',
-    inn: '6234056789',
-    kpp: '623401001',
-    ogrn: '1086234056789',
-    name: 'ИП Козлов Роман Игоревич',
-    shortName: 'ИП Козлов Р.И.',
-    legalAddress: '390006, г. Рязань, ул. Садовая, д. 15, кв. 7',
-    actualAddress: '390006, г. Рязань, ул. Садовая, д. 15, кв. 7',
-    contactPerson: 'Козлов Роман Игоревич',
-    phone: '+7 (910) 456-78-90',
-    email: 'ip.kozlov@mail.ru',
-    bankName: 'ПАО Сбербанк',
-    bik: '046577674',
-    checkingAccount: '40802810600012345678',
-    correspondentAccount: '30101810600000000674',
-    category: 'individual',
-    isSmallBusiness: true,
-    rating: 3.9,
-    totalContracts: 4,
-    totalSum: 185000,
-    status: 'active',
-    registeredAt: '2022-01-10',
-    lastContractAt: '2025-02-15',
+    code: '321 0412 54 4 01 90020 243',
+    name: 'Закупка услуг связи, коммунальных и прочих (ПОДФД 90020)',
+    kosgu: ['221', '222', '223', '224', '225', '226'],
+    kosguNames: [
+      '221 — Услуги связи',
+      '222 — Транспортные услуги',
+      '223 — Коммунальные услуги',
+      '224 — Арендная плата за пользование имуществом',
+      '225 — Работы, услуги по содержанию имущества (ТО, уборка, охрана)',
+      '226 — Прочие работы и услуги (ИТ-услуги, разработка, обучение)',
+    ],
+    types: ['services', 'it_services'],
   },
   {
-    id: 's5',
-    inn: '7725678901',
-    kpp: '772501001',
-    ogrn: '1057725678901',
-    name: 'ООО «МоскваСофт»',
-    shortName: 'ООО МоскваСофт',
-    legalAddress: '119019, г. Москва, ул. Новый Арбат, д. 36, офис 12',
-    actualAddress: '119019, г. Москва, ул. Новый Арбат, д. 36, офис 12',
-    contactPerson: 'Алексеева Ирина Борисовна',
-    phone: '+7 (495) 567-89-01',
-    email: 'contracts@moskasoft.ru',
-    bankName: 'Банк «Открытие»',
-    bik: '044525985',
-    checkingAccount: '40702810900987654321',
-    correspondentAccount: '30101810800000000985',
-    category: 'legal',
-    isSmallBusiness: false,
-    rating: 4.6,
-    totalContracts: 18,
-    totalSum: 3240000,
-    status: 'active',
-    registeredAt: '2017-04-20',
-    lastContractAt: '2025-05-30',
+    code: '321 0412 54 4 01 90020 242',
+    name: 'Закупка товаров в сфере ИТ (ПОДФД 90020)',
+    kosgu: ['310', '320', '226'],
+    kosguNames: [
+      '310 — Увеличение стоимости ОС (компьютеры, серверы, оргтехника стоимостью >100 тыс.)',
+      '320 — Увеличение стоимости нематериальных активов (ПО, лицензии >100 тыс.)',
+      '226 — Прочие услуги в сфере ИТ',
+    ],
+    types: ['it_equipment', 'software'],
   },
   {
-    id: 's6',
-    inn: '5003045678',
-    ogrn: '1145003045678',
-    name: 'ООО «ЧистоДом»',
-    shortName: 'ООО ЧистоДом',
-    legalAddress: '142000, г. Домодедово, Московской обл., ул. Промышленная, д. 8',
-    actualAddress: '142000, г. Домодедово, Московской обл., ул. Промышленная, д. 8',
-    contactPerson: 'Белова Анастасия Юрьевна',
-    phone: '+7 (498) 678-90-12',
-    email: 'tender@chistodom.ru',
-    bankName: 'ПАО «Промсвязьбанк»',
-    bik: '044525555',
-    checkingAccount: '40702810200567891234',
-    correspondentAccount: '30101810000000000555',
-    category: 'legal',
-    isSmallBusiness: true,
-    rating: 4.1,
-    totalContracts: 6,
-    totalSum: 420000,
-    status: 'active',
-    registeredAt: '2020-08-14',
-    lastContractAt: '2025-03-20',
+    code: '321 0412 54 4 01 90019 244',
+    name: 'Закупки по ПОДФД 90019 (прочие нужды)',
+    kosgu: ['226', '310', '344', '346'],
+    kosguNames: [
+      '226 — Прочие работы и услуги',
+      '310 — Увеличение стоимости основных средств',
+      '344 — Расходные материалы',
+      '346 — Прочие материальные запасы',
+    ],
+    types: ['goods', 'services', 'it_equipment'],
   },
 ];
+
+// ─── ПОДБОР КБК ПО ТИПУ ЗАКУПКИ ─────────────────────────────
+export function getKbkForType(procType: string, kosgu?: string): string {
+  if (procType === 'it_equipment' || procType === 'software') {
+    return '321 0412 54 4 01 90020 242';
+  }
+  if (procType === 'it_services') {
+    return '321 0412 54 4 01 90020 243';
+  }
+  if (procType === 'services') {
+    return '321 0412 54 4 01 90020 243';
+  }
+  return '321 0412 54 4 01 90020 244';
+}
+
+// ─── УПОЛНОМОЧЕННЫЕ ПО ПРИЁМКЕ ───────────────────────────────
+// Зависит от КОСГУ / типа закупки
+export function getAcceptancePersons(procTitle: string, kosgu?: string): typeof USERS {
+  const title = procTitle.toLowerCase();
+  const k = kosgu ?? '';
+
+  // 242 — компьютеры, серверы, оргтехника → Митусов С.А.
+  if (k === '310' || k === '320' || k.includes('242') ||
+      title.includes('компьютер') || title.includes('сервер') ||
+      title.includes('картридж') || title.includes('принтер') ||
+      title.includes('лицензи') || title.includes('программ') ||
+      title.includes('ит') || title.includes('телефон')) {
+    return USERS.filter(u => ['u_mit', 'u_boev'].includes(u.id));
+  }
+
+  // Охрана → Щербинин Р.С.
+  if (title.includes('охран') || title.includes('безопасност') || title.includes('сигнализ')) {
+    return USERS.filter(u => u.id === 'u_sch');
+  }
+
+  // Канцелярия, офисные товары → Давыдова Ф.А.
+  if (title.includes('канцел') || title.includes('бумаг') || title.includes('папк') ||
+      title.includes('ручк') || title.includes('офисн')) {
+    return USERS.filter(u => u.id === 'u_dav');
+  }
+
+  // Всё остальное (мебель, ТО, уборка, ГСМ, расходники МТО) → Черемных М.Ю.
+  return USERS.filter(u => u.id === 'u_che');
+}
+
+// ─── ПЕРСОНАЖИ ДЛЯ ЭКРАНА ВХОДА ─────────────────────────────
+export const LOGIN_USERS = [
+  {
+    userId: 'u_shv',
+    name: 'Швецов Кирилл Евгеньевич',
+    role: 'Ведущий специалист-эксперт МТО',
+    dept: 'Отдел МТО',
+    avatar: 'ШК',
+    color: 'bg-blue-600',
+    desc: 'Создание закупок, сравнение КП, работа с ЕАТ и ЕИС',
+  },
+  {
+    userId: 'u_che',
+    name: 'Черемных Марина Юрьевна',
+    role: 'Начальник отдела МТО',
+    dept: 'Отдел МТО',
+    avatar: 'ЧМ',
+    color: 'bg-green-700',
+    desc: 'Контроль закупок, согласование, подписание актов приёмки',
+  },
+  {
+    userId: 'u_tol',
+    name: 'Толоконников Юрий Васильевич',
+    role: 'Заместитель руководителя',
+    dept: 'Руководство',
+    avatar: 'ТЮ',
+    color: 'bg-purple-700',
+    desc: 'Согласование СЗ, визирование и подписание договоров',
+  },
+  {
+    userId: 'u_pik',
+    name: 'Пикинер Ольга Владимировна',
+    role: 'Начальник ФЭО',
+    dept: 'Финансово-экономический отдел',
+    avatar: 'ПО',
+    color: 'bg-yellow-600',
+    desc: 'Финансирование, экспертиза договоров, платежи',
+  },
+];
+
+// ─── MOCK поставщики (для демо) ───────────────────────────────
+export const MOCK_SUPPLIERS = [
+  { id: 'sup1', name: 'ООО «ТехноОфис»', inn: '3664078901', rating: 4.8, status: 'reliable' as const, wonCount: 3, completedCount: 3, overdueCount: 0, totalSum: 523600, isSmallBusiness: true },
+  { id: 'sup2', name: 'ООО «КанцМастер»', inn: '3666125843', rating: 4.2, status: 'reliable' as const, wonCount: 2, completedCount: 2, overdueCount: 0, totalSum: 312000, isSmallBusiness: true },
+  { id: 'sup3', name: 'ООО «СитиКомп»', inn: '7743012345', rating: 3.5, status: 'neutral' as const, wonCount: 1, completedCount: 0, overdueCount: 0, totalSum: 4720000, isSmallBusiness: false },
+  { id: 'sup4', name: 'ЗАО «КанцЛайф»', inn: '3661034782', rating: 2.8, status: 'unreliable' as const, wonCount: 3, completedCount: 2, overdueCount: 2, totalSum: 187000, isSmallBusiness: true },
+  { id: 'sup5', name: 'ООО «МоскваСофт»', inn: '7725678901', rating: 4.5, status: 'reliable' as const, wonCount: 1, completedCount: 1, overdueCount: 0, totalSum: 378000, isSmallBusiness: false },
+];
+
+// Алиас для совместимости
+export const MOCK_USERS = USERS;
+
+// Алиас MOCK_DEPARTMENTS для совместимости
+export const MOCK_DEPARTMENTS = INITIATING_DEPTS.map(d => ({
+  id: d.id,
+  name: d.name,
+  shortName: d.short,
+  head: d.head,
+  color: d.color,
+  employeeCount: USERS.filter(u => u.deptShort === d.short).length,
+}));
+
+// Текущий пользователь (Швецов К.Е. — для демонстрации)
+export const CURRENT_USER = USERS.find(u => u.id === 'u_shv')!;

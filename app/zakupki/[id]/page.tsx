@@ -55,7 +55,7 @@ const TABS = [
 const STATUS_ORDER = WORKFLOW_STATUS_ORDER;
 
 const DOCS = [
-  { id:'d1', name:'Техническое задание', file:'ТЗ_2026.docx', status:'approved', size:'148 КБ', date:'2026-04-05', author:'Петров А.В.' },
+  { id:'d1', name:'Техническое задание', file:'ТЗ_2026.docx', status:'approved', size:'148 КБ', date:'2026-04-05', author:'Швецов К.Е.' },
   { id:'d2', name:'Договор', file:'Договор.pdf', status:'approved', size:'912 КБ', date:'2026-04-18', author:'Козлов Д.М.' },
   { id:'d3', name:'Счёт-фактура', file:'СФ.pdf', status:'proverka_doc', size:'98 КБ', date:'2026-05-02', author:'Волкова Е.И.' },
 ];
@@ -70,7 +70,7 @@ const APPROVALS = [
 
 const COMMENTS = [
   { id:'c1', author:'Смирнова Н.С.', role:'Нач. отдела', date:'2026-04-08T10:15:00', text:'Проверила ТЗ. Корректно. Прошу разместить в ЕАТ Берёзка.', internal:true },
-  { id:'c2', author:'Петров А.В.',   role:'Специалист МТО', date:'2026-04-10T14:30:00', text:'Скорректировал описание. Закупка размещена в ЕАТ.', internal:true },
+  { id:'c2', author:'Швецов К.Е.',   role:'Специалист МТО', date:'2026-04-10T14:30:00', text:'Скорректировал описание. Закупка размещена в ЕАТ.', internal:true },
   { id:'c3', author:'Козлов Д.М.',   role:'Контрактный упр.', date:'2026-04-18T09:00:00', text:'Договор подписан. Оригинал передан в бухгалтерию.', internal:false },
 ];
 
@@ -109,7 +109,7 @@ export default function ZakupkaDetailPage() {
 
   const handleAddComment = () => {
     if (!commentText.trim()) return;
-    addComment({ procurementId:id, author:'Петров А.В.', role:'Специалист МТО', text:commentText.trim(), internal:isInternal });
+    addComment({ procurementId:id, author:'Швецов К.Е.', role:'Специалист МТО', text:commentText.trim(), internal:isInternal });
     setCommentText('');
   };
   const [statusChanging, setStatusChanging] = useState(false);
@@ -134,7 +134,7 @@ export default function ZakupkaDetailPage() {
   const handleAdvance = () => {
     setStatusChanging(true);
     setTimeout(() => {
-      advanceWorkflow(id, 'u1', 'Петров А.В.');
+      advanceWorkflow(id, 'u1', 'Швецов К.Е.');
       setStatusChanging(false);
     }, 600);
   };
@@ -143,7 +143,7 @@ export default function ZakupkaDetailPage() {
     setShowStatusMenu(false);
     setStatusChanging(true);
     setTimeout(() => {
-      changeStatus(id, newStatus, 'u1', 'Петров А.В.');
+      changeStatus(id, newStatus, 'u1', 'Швецов К.Е.');
       setStatusChanging(false);
     }, 400);
   };
@@ -585,9 +585,9 @@ export default function ZakupkaDetailPage() {
 
               {/* Блоки визирования */}
               {[
-                { key:'feo',    title:'ФЭО (Финансово-экономический отдел)', person:'Волкова Е.И.', role:'Главный бухгалтер', desc:'Финансовая экспертиза: проверка КБК, КОСГУ, наличие ЛБО, соответствие плану-графику.' },
-                { key:'legal',  title:'Правовой отдел',                      person:'Иванова С.П.', role:'Начальник правового отдела', desc:'Правовая экспертиза: соответствие договора 44-ФЗ, условия ответственности, порядок расторжения.' },
-                { key:'deputy', title:'Заместитель руководителя',            person:'Фёдоров С.В.', role:'Зам. руководителя по обеспечению', desc:'Итоговое визирование после получения всех виз ФЭО и правового отдела.' },
+                { key:'feo',    title:'ФЭО (Финансово-экономический отдел)', person:'Пикинер О.В.', role:'Начальник ФЭО', desc:'Финансовая экспертиза: проверка КБК, КОСГУ, наличие ЛБО, соответствие плану финансово-хозяйственной деятельности.' },
+                { key:'legal',  title:'Отдел правового обеспечения',          person:'Садовая Е.Н.', role:'Начальник правового отдела', desc:'Правовая экспертиза: соответствие договора 44-ФЗ, условия ответственности, порядок расторжения.' },
+                { key:'deputy', title:'Заместитель руководителя',            person:'Толоконников Ю.В.', role:'Заместитель руководителя', desc:'Итоговое визирование и подписание договора как уполномоченное лицо. После виз ФЭО и правового отдела.' },
               ].map(dept => {
                 const viza = vizaState[dept.key];
                 const comment = vizaComment[dept.key] ?? '';

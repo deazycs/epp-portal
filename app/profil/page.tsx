@@ -24,18 +24,18 @@ export default function ProfilPage() {
           <div>
             <div className="gov-card p-4 text-center mb-3">
               <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-700 mx-auto mb-3">
-                {CURRENT_USER.shortName.split(' ').map((p:string)=>p[0]).join('').slice(0,2)}
+                {CURRENT_USER.nameShort.split(' ').map((p:string)=>p[0]).join('').slice(0,2)}
               </div>
               <div className="flex items-center justify-center gap-2 mb-1">
-                <OnlineDot isOnline={CURRENT_USER.isOnline}/>
-                <span className="text-sm font-bold">{CURRENT_USER.fullName}</span>
+                <OnlineDot isOnline={true}/>
+                <span className="text-sm font-bold">{CURRENT_USER.name}</span>
               </div>
               <div className="text-xs text-gray-500 mb-0.5">{CURRENT_USER.position}</div>
-              <div className="text-xs text-gray-400">{CURRENT_USER.department}</div>
+              <div className="text-xs text-gray-400">{CURRENT_USER.dept}</div>
               <div className="mt-3 pt-3 border-t border-gray-100 space-y-1.5 text-left">
                 <div className="flex items-center gap-2 text-xs text-gray-600"><Mail size={12} className="text-gray-400"/>{CURRENT_USER.email}</div>
                 <div className="flex items-center gap-2 text-xs text-gray-600"><Phone size={12} className="text-gray-400"/>{CURRENT_USER.phone}</div>
-                <div className="flex items-center gap-2 text-xs text-gray-600"><Building2 size={12} className="text-gray-400"/>{CURRENT_USER.department}</div>
+                <div className="flex items-center gap-2 text-xs text-gray-600"><Building2 size={12} className="text-gray-400"/>{CURRENT_USER.dept}</div>
                 <div className="flex items-center gap-2 text-xs text-gray-600"><Shield size={12} className="text-gray-400"/>{ROLE_LABELS[CURRENT_USER.role]}</div>
               </div>
             </div>
@@ -62,17 +62,13 @@ export default function ProfilPage() {
               <div className="gov-section-title">Служебные сведения</div>
               <div className="p-3">
                 <InfoRow label="Табельный номер" value="МТО-004512"/>
-                <InfoRow label="Логин" value={<span className="font-mono">{CURRENT_USER.login}</span>}/>
+                <InfoRow label="Логин" value={<span className="font-mono">{CURRENT_USER.email}</span>}/>
                 <InfoRow label="Роль" value={ROLE_LABELS[CURRENT_USER.role]}/>
-                <InfoRow label="Подразделение" value={CURRENT_USER.department}/>
+                <InfoRow label="Подразделение" value={CURRENT_USER.dept}/>
                 <InfoRow label="Должность" value={CURRENT_USER.position}/>
-                <InfoRow label="Последний вход" value={formatDateTime(CURRENT_USER.lastLogin)}/>
-                <InfoRow label="Права" value={
-                  <div className="flex flex-wrap gap-1">
-                    {CURRENT_USER.permissions.map((p:string)=>(
-                      <span key={p} className="text-xs px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded border border-blue-200 font-mono">{p}</span>
-                    ))}
-                  </div>
+                <InfoRow label="Email" value={CURRENT_USER.email}/>
+                <InfoRow label="Роль" value={
+                  <span className="text-xs px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded border border-blue-200">{CURRENT_USER.role}</span>
                 }/>
               </div>
             </div>

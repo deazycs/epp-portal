@@ -123,7 +123,7 @@ export default function SoglasovaniyaPage() {
                   </div>
                   <div className="text-sm font-bold text-gray-800 mb-0.5">{a.title}</div>
                   <div className="text-xs text-gray-500">
-                    {a.registryNumber} · {a.department} · Инициатор: {a.initiator}
+                    {a.registryNumber} · {(a as any).departmentName ?? (a as any).department ?? "—"} · Инициатор: {(a as any).responsibleName ?? (a as any).initiator ?? "—"}
                   </div>
                   <div className="flex items-center gap-4 mt-1.5 text-xs">
                     <span>Сумма: <strong>{formatCurrency(a.plannedSum)}</strong></span>

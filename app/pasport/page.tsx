@@ -26,7 +26,7 @@ const INTEGRATIONS = [
   { name:'ЕИС (zakupki.gov.ru)', url:'zakupki.gov.ru', basis:'44-ФЗ ст. 4', status:'Поддерживается' },
   { name:'Сбербанк-АСТ', url:'sberbank-ast.ru', basis:'44-ФЗ ст. 59-71', status:'Поддерживается' },
   { name:'СМЭВ 3.0', url:'smev.gosuslugi.ru', basis:'Постановление Правительства РФ от 08.09.2010 № 697', status:'Планируется' },
-  { name:'Казначейство (СУФД)', url:'sufd.budget.gov.ru', basis:'Приказ Казначейства от 29.12.2012 № 24н', status:'Поддерживается' },
+  { name:'Казначейство (СУФД)', url:'sufd.id.gov.ru', basis:'Приказ Казначейства от 29.12.2012 № 24н', status:'Поддерживается' },
 ];
 
 const LEGAL = [

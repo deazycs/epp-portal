@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { STATUS_LABELS, STATUS_COLORS, RISK_LABELS, RISK_COLORS } from '@/mock/data/procurements';
 import { AlertTriangle, Clock, CheckCircle2, Circle, Minus } from 'lucide-react';
@@ -287,6 +288,27 @@ export function InfoRow({ label, value, className }: {
     <div className={cn('flex gap-2 py-1 border-b border-gray-100', className)}>
       <span className="text-xs text-gray-500 w-44 flex-shrink-0">{label}:</span>
       <span className="text-xs text-gray-800 flex-1 font-medium">{value ?? '—'}</span>
+    </div>
+  );
+}
+
+// PageHint — описание назначения страницы (показывается вверху каждого раздела)
+export function PageHint({ title, text, law }: { title: string; text: string; law?: string }) {
+  const [open, setOpen] = useState(true);
+  if (!open) return (
+    <button onClick={() => setOpen(true)} className="text-xs text-blue-600 mb-3 flex items-center gap-1 hover:underline">
+      <span>ℹ</span> Показать описание раздела
+    </button>
+  );
+  return (
+    <div className="gov-alert gov-alert-info mb-3 text-xs flex items-start gap-2">
+      <span className="text-blue-500 text-base flex-shrink-0 mt-0.5">ℹ</span>
+      <div className="flex-1">
+        <span className="font-bold text-blue-800">{title}: </span>
+        <span className="text-blue-700">{text}</span>
+        {law && <span className="text-blue-500 ml-1 opacity-70">({law})</span>}
+      </div>
+      <button onClick={() => setOpen(false)} className="text-blue-400 hover:text-blue-600 flex-shrink-0 text-lg leading-none ml-1">×</button>
     </div>
   );
 }

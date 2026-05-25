@@ -127,10 +127,10 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
           <button onClick={() => { setUserOpen(!userOpen); setNotifOpen(false); }}
             className="flex items-center gap-1.5 text-white opacity-80 hover:opacity-100 px-1">
             <div className="w-6 h-6 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold text-white">
-              {CURRENT_USER.shortName.split(' ').map((p: string) => p[0]).join('').slice(0, 2)}
+              {CURRENT_USER.nameShort.split(' ').map((p: string) => p[0]).join('').slice(0, 2)}
             </div>
             <div className="hidden md:block text-left">
-              <div className="text-xs font-bold leading-tight">{CURRENT_USER.shortName}</div>
+              <div className="text-xs font-bold leading-tight">{CURRENT_USER.nameShort}</div>
               <div className="text-xs opacity-60 leading-tight">Специалист МТО</div>
             </div>
             <ChevronDown size={11} className="opacity-60" />
@@ -139,7 +139,7 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
           {userOpen && (
             <div className="absolute right-0 top-full mt-1 w-52 bg-white border border-gray-200 rounded shadow-xl z-50">
               <div className="px-3 py-2 border-b bg-gray-50">
-                <div className="font-bold text-xs">{CURRENT_USER.fullName}</div>
+                <div className="font-bold text-xs">{CURRENT_USER.name}</div>
                 <div className="text-xs text-gray-500">{CURRENT_USER.position}</div>
               </div>
               <Link href="/profil" className="flex items-center gap-2 px-3 py-2 text-xs hover:bg-gray-50">

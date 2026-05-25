@@ -148,13 +148,13 @@ export default function RukovoditelPage() {
         <div className="gov-card">
           <div className="gov-section-title">🟢 Сотрудники на рабочем месте</div>
           <div className="p-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {MOCK_USERS.filter(u => u.isOnline).map(u => (
+            {MOCK_USERS.filter(u => u.id).map(u => (
               <div key={u.id} className="flex items-center gap-2 p-2 bg-green-50 border border-green-200 rounded">
                 <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0">
-                  {u.shortName.split(' ').map(p => p[0]).join('').slice(0,2)}
+                  {u.nameShort.split(' ').map(p => p[0]).join('').slice(0,2)}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs font-bold leading-tight truncate">{u.shortName}</div>
+                  <div className="text-xs font-bold leading-tight truncate">{u.nameShort}</div>
                   <div className="text-xs text-gray-400 leading-tight truncate">{u.position}</div>
                 </div>
               </div>

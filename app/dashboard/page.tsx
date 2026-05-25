@@ -37,7 +37,7 @@ export default function DashboardPage() {
   const openRisks = MOCK_RISKS.filter(r => r.status === 'open');
   const unread = notifications.filter(n => !n.isRead);
   const myTasks = tasks.filter(t => t.assigneeId === 'u1' && ['new','in_progress','overdue'].includes(t.status));
-  const onlineUsers = MOCK_USERS.filter(u => u.isOnline);
+  const onlineUsers = MOCK_USERS.filter(u => u.id);
 
   const totalPlanned = procurements.reduce((s,p) => s+p.plannedSum, 0);
   const totalContract = procurements.reduce((s,p) => s+(p.contractSum??0), 0);
@@ -368,9 +368,9 @@ export default function DashboardPage() {
               <div className="p-2 space-y-1">
                 {MOCK_USERS.map(u=>(
                   <div key={u.id} className="flex items-center gap-2 px-1 py-0.5">
-                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${u.isOnline?'bg-green-500':'bg-gray-300'}`}/>
+                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${true?'bg-green-500':'bg-gray-300'}`}/>
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs font-bold leading-tight truncate">{u.shortName}</div>
+                      <div className="text-xs font-bold leading-tight truncate">{u.nameShort}</div>
                       <div className="text-xs text-gray-400 leading-tight truncate">{u.position}</div>
                     </div>
                   </div>

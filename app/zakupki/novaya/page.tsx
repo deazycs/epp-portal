@@ -102,9 +102,9 @@ export default function NovayaZakupkaPage() {
       departmentId: dept,
       departmentName: deptName,
       initiatorId: 'u1',
-      initiatorName: 'Петров А.В.',
+      initiatorName: 'Швецов К.Е.',
       responsibleId: 'u1',
-      responsibleName: 'Петров А.В.',
+      responsibleName: 'Швецов К.Е.',
       plannedSum: totalSum,
       paidSum: 0,
       budgetCode: '051',
@@ -310,7 +310,7 @@ export default function NovayaZakupkaPage() {
                 </div>
                 <div>
                   <label className="gov-label">КБК *</label>
-                  <input className="gov-input font-mono" value={kbk} onChange={e=>setKbk(e.target.value)} placeholder="321 0113 4590100002 244"/>
+                  <input className="gov-input font-mono" value={kbk} onChange={e=>setKbk(e.target.value)} placeholder="321 0412 54 4 01 90020 244"/>
                 </div>
                 {/* ── СРОКИ ПОСТАВКИ И ПРИЁМКИ ── */}
                 <div className="sm:col-span-2">

@@ -97,11 +97,19 @@ export const PRIORITY_COLORS = {
   urgent: 'text-red-600',
 } as const;
 
-export const ROLE_LABELS = {
-  specialist_mto: 'Специалист МТО',
+export const ROLE_LABELS: Record<string, string> = {
+  mto_specialist:   'Специалист МТО',
+  mto_head:        'Начальник МТО',
+  deputy_head:     'Зам. руководителя',
+  feo:             'Нач. ФЭО',
+  legal:           'Правовой отдел',
+  it_head:         'Начальник ИТ-отдела',
+  dept_head:       'Начальник отдела',
+  initiator:       'Инициатор закупки',
+  admin:           'Администратор',
+  management:      'Руководство',
+  specialist_mto:  'Специалист МТО',
   head_department: 'Начальник отдела',
-  contract_manager: 'Контрактный управляющий',
-  accountant: 'Бухгалтерия',
-  admin: 'Администратор',
-  management: 'Руководство',
+  contract_manager:'Контрактный управляющий',
+  accountant:      'ФЭО',
 } as const;

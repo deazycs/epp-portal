@@ -9,43 +9,20 @@ import {
   CheckCircle, XCircle, Clock, AlertTriangle,
   Upload, FileText, Printer, Users, Package
 } from 'lucide-react';
+import { getAcceptancePersons } from '@/mock/data/users';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-// Уполномоченные лица по типам закупок (из приказа о разделении обязанностей)
-const RESPONSIBLE_BY_TYPE: Record<string, { name: string; position: string; dept: string }[]> = {
-  goods: [
-    { name: 'Петров А.В.',    position: 'Ведущий специалист МТО',         dept: 'Отдел МТО' },
-    { name: 'Смирнова Н.С.', position: 'Начальник отдела МТО',            dept: 'Отдел МТО' },
-  ],
-  it: [
-    { name: 'Никитин П.А.', position: 'Начальник ИТ-отдела',              dept: 'ИТ-отдел' },
-    { name: 'Фёдоров С.В.', position: 'Заместитель руководителя',          dept: 'Руководство' },
-  ],
-  services: [
-    { name: 'Орлова Т.В.',   position: 'Начальник АХО',                    dept: 'АХО' },
-    { name: 'Смирнова Н.С.', position: 'Начальник отдела МТО',            dept: 'Отдел МТО' },
-  ],
-  construction: [
-    { name: 'Козлов Д.М.',   position: 'Контрактный управляющий',          dept: 'Отдел МТО' },
-    { name: 'Фёдоров С.В.', position: 'Заместитель руководителя',          dept: 'Руководство' },
-  ],
-};
-
+// Уполномоченные лица — из централизованной функции users.ts
+// Зависит от типа закупки: ИТ→Митусов, охрана→Щербинин, канцелярия→Давыдова, остальное→Черемных
 function getResponsible(procurement: any) {
-  const title = (procurement.title ?? '').toLowerCase();
-  if (title.includes('ит') || title.includes('сервер') || title.includes('компьютер') ||
-      title.includes('программ') || title.includes('лицензи') || title.includes('картридж')) {
-    return RESPONSIBLE_BY_TYPE.it;
-  }
-  if (title.includes('уборк') || title.includes('охран') || title.includes('клинин')) {
-    return RESPONSIBLE_BY_TYPE.services;
-  }
-  if (title.includes('строит') || title.includes('ремонт') || title.includes('работ')) {
-    return RESPONSIBLE_BY_TYPE.construction;
-  }
-  return RESPONSIBLE_BY_TYPE.goods;
+  const persons = getAcceptancePersons(procurement.title ?? '', (procurement as any).kosgu);
+  return persons.map(p => ({
+    name: p.nameShort,
+    position: p.position,
+    dept: p.deptShort,
+  }));
 }
 
 interface AcceptDoc {
