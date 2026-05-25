@@ -2,8 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, ChevronRight } from 'lucide-react';
 import { LOGIN_USERS } from '@/mock/data/users';
+
+const AVATAR_COLORS: Record<string, string> = {
+  u_shv: '#1d4ed8',
+  u_che: '#15803d',
+  u_tol: '#7e22ce',
+  u_pik: '#b45309',
+};
+
+const AVATARS: Record<string, string> = {
+  u_shv: 'ШК',
+  u_che: 'ЧМ',
+  u_tol: 'ТЮ',
+  u_pik: 'ПО',
+};
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,96 +26,122 @@ export default function LoginPage() {
   const handleLogin = async (userId: string) => {
     setSelected(userId);
     setLoading(true);
-    await new Promise(r => setTimeout(r, 600));
+    await new Promise(r => setTimeout(r, 500));
     router.push('/dashboard');
   };
 
   return (
-    <div className="min-h-screen flex flex-col"
-      style={{ background: 'linear-gradient(135deg, #001435 0%, #002570 50%, #003087 100%)' }}>
+    <div style={{
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      background: 'linear-gradient(160deg, #00112e 0%, #001e5e 45%, #003087 100%)',
+      fontFamily: 'Inter, Segoe UI, Arial, sans-serif',
+    }}>
 
       {/* Верхняя полоса */}
-      <div className="border-b border-white border-opacity-10 px-4 sm:px-6 py-3">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded bg-white bg-opacity-15 flex items-center justify-center flex-shrink-0">
-              <Shield size={16} className="text-white"/>
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '12px 24px' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.15)' }}>
+              <span style={{ color: '#fff', fontSize: 12, fontWeight: 800 }}>РР</span>
             </div>
             <div>
-              <div className="text-white text-xs font-bold leading-tight">Росреестр</div>
-              <div className="text-blue-300 text-xs opacity-70 hidden sm:block">Управление по Воронежской области</div>
+              <div style={{ color: '#fff', fontSize: 13, fontWeight: 700, lineHeight: 1.2 }}>Росреестр</div>
+              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11 }}>Управление по Воронежской области</div>
             </div>
           </div>
-          <div className="text-blue-300 text-xs opacity-50 hidden sm:block">
-            Внутренняя система · v3.0 · 2026
-          </div>
+          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>Внутренняя система · v3.0 · 2026</div>
         </div>
       </div>
 
       {/* Основной контент */}
-      <div className="flex-1 flex items-center justify-center p-4 py-6">
-        <div className="w-full max-w-3xl">
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+        <div style={{ width: '100%', maxWidth: 680 }}>
 
-          {/* Заголовок */}
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-white bg-opacity-10 border border-white border-opacity-20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-xl font-bold text-white">ЕПП</span>
+          {/* Логотип */}
+          <div style={{ textAlign: 'center', marginBottom: 36 }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: 20,
+              background: 'rgba(255,255,255,0.1)',
+              border: '1.5px solid rgba(255,255,255,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 16px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            }}>
+              <span style={{ color: '#fff', fontSize: 22, fontWeight: 900, letterSpacing: -1 }}>ЕПП</span>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1">Единый портал поставок</h1>
-            <p className="text-blue-200 text-sm opacity-80">
-              Система сопровождения закупок · Выберите учётную запись для входа
+            <h1 style={{ color: '#fff', fontSize: 26, fontWeight: 800, margin: '0 0 8px', letterSpacing: -0.5 }}>
+              Единый портал поставок
+            </h1>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>
+              Система сопровождения закупок · Выберите учётную запись
             </p>
           </div>
 
-          {/* Карточки пользователей */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-            {LOGIN_USERS.map(u => (
-              <button key={u.userId}
-                onClick={() => handleLogin(u.userId)}
-                disabled={loading}
-                style={{
-                  textAlign: 'left', padding: 16, borderRadius: 12, border: '1px solid',
-                  borderColor: selected === u.userId ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.15)',
-                  background: selected === u.userId ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)',
-                  cursor: 'pointer', transition: 'all 0.2s', opacity: loading && selected !== u.userId ? 0.5 : 1,
-                }}>
-                <div className="flex items-start gap-3">
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-white text-sm font-bold flex-shrink-0 ${
-                      u.userId === 'u_shv' ? 'bg-blue-600' :
-                      u.userId === 'u_che' ? 'bg-green-700' :
-                      u.userId === 'u_tol' ? 'bg-purple-700' :
-                      'bg-yellow-600'
-                    }`}>
-                    {selected === u.userId && loading
-                      ? <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"/>
-                      : u.userId === 'u_shv' ? 'bg-blue-600' : u.userId === 'u_che' ? 'bg-green-700' : u.userId === 'u_tol' ? 'bg-purple-700' : 'bg-yellow-600'
+          {/* Карточки */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, marginBottom: 20 }}>
+            {LOGIN_USERS.map(u => {
+              const isSelected = selected === u.userId;
+              const isLoading  = loading && isSelected;
+              return (
+                <button
+                  key={u.userId}
+                  onClick={() => handleLogin(u.userId)}
+                  disabled={loading}
+                  style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 12,
+                    padding: '16px', borderRadius: 14, textAlign: 'left',
+                    border: `1.5px solid ${isSelected ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.12)'}`,
+                    background: isSelected ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.05)',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading && !isSelected ? 0.45 : 1,
+                    transition: 'all 0.18s',
+                    boxShadow: isSelected ? '0 0 0 3px rgba(77,159,255,0.35)' : 'none',
+                  }}
+                  onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.1)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = isSelected ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.05)'; }}
+                >
+                  {/* Аватар */}
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                    background: AVATAR_COLORS[u.userId] ?? '#1d4ed8',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                  }}>
+                    {isLoading
+                      ? <div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }}/>
+                      : <span style={{ color: '#fff', fontSize: 14, fontWeight: 800 }}>{AVATARS[u.userId] ?? '??'}</span>
                     }
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-white text-sm font-bold leading-tight">{u.name}</div>
-                    <div className="text-blue-300 text-xs mt-0.5 opacity-80">{u.role}</div>
-                    <div className="text-blue-400 text-xs mt-1 opacity-60 leading-snug">{u.desc}</div>
+
+                  {/* Текст */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ color: '#fff', fontSize: 13, fontWeight: 700, lineHeight: 1.3, marginBottom: 2 }}>{u.name}</div>
+                    <div style={{ color: 'rgba(147,197,253,0.9)', fontSize: 11, marginBottom: 4 }}>{u.role}</div>
+                    <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, lineHeight: 1.4 }}>{u.desc}</div>
                   </div>
-                  <ChevronRight size={16} className="text-white opacity-30 flex-shrink-0 mt-1"/>
-                </div>
-              </button>
-            ))}
+
+                  {/* Стрелка */}
+                  <div style={{ color: 'rgba(255,255,255,0.3)', marginTop: 2, flexShrink: 0, fontSize: 16 }}>›</div>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Подсказка */}
-          <p className="text-center text-blue-300 text-xs opacity-40">
-            Нажмите на карточку для входа · Демонстрационный режим · Данные защищены
+          <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.28)', fontSize: 11 }}>
+            Нажмите на карточку для входа · Демонстрационный режим · Пароль не требуется
           </p>
         </div>
       </div>
 
       {/* Нижняя полоса */}
-      <div className="border-t border-white border-opacity-10 px-4 sm:px-6 py-2.5">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <span className="text-blue-300 text-xs opacity-40">ЕПП v3.0 · © Росреестр 2026</span>
-          <span className="text-blue-300 text-xs opacity-40 hidden sm:block">г. Воронеж, ул. Средне-Московская, д. 14</span>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', padding: '10px 24px' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>ЕПП v3.0 · © Росреестр 2026</span>
+          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>г. Воронеж, ул. Средне-Московская, д. 14</span>
         </div>
       </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

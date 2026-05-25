@@ -73,7 +73,7 @@ export function AppInner({ children }: { children: React.ReactNode }) {
             }}
             sidebarCollapsed={sidebarCollapsed}
           />
-          <main className={`flex-1 overflow-y-auto ${demoOpen ? 'pb-44' : ''}`} style={{ background: '#f4f6f9', minHeight: 0 }}>
+          <main className={`flex-1 overflow-y-auto ${demoOpen ? 'pb-44' : ''}`} style={{ background: '#f4f6f9', minHeight: 0, paddingBottom: demoOpen ? 180 : 0 }}>
             {children}
           </main>
         </div>
