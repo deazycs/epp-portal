@@ -17,7 +17,7 @@ const COMMISSION_MEMBERS = [
 ];
 
 export default function PriemkaPage() {
-  const { procurements } = useAppStore();
+  const { procurements, changeStatus } = useAppStore();
 
   // Закупки на приёмке — этап «Исполнение» с поставщиком
   const forAcceptance = procurements.filter(p =>
@@ -320,12 +320,19 @@ ${COMMISSION_MEMBERS.map(m=>`<div class="sign-box"><div>${m.role}</div><div styl
                     )}
 
                     {accepted[sel.id] && (
-                      <div className="p-3 bg-green-50 border-t border-green-200 flex items-center gap-2">
-                        <CheckCircle size={16} className="text-green-600"/>
-                        <div>
-                          <div className="text-xs font-bold text-green-700">Товар принят {new Date().toLocaleDateString('ru-RU')}</div>
-                          <div className="text-xs text-green-600">Акт приёмки подписан всеми членами комиссии. Документы переданы в бухгалтерию.</div>
+                      <div className="p-3 bg-green-50 border-t border-green-200">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CheckCircle size={16} className="text-green-600"/>
+                          <div>
+                            <div className="text-xs font-bold text-green-700">Товар принят {new Date().toLocaleDateString('ru-RU')}</div>
+                            <div className="text-xs text-green-600">Акт подписан. Документы переданы в бухгалтерию.</div>
+                          </div>
                         </div>
+                        <button
+                          onClick={() => changeStatus(sel.id, 'payment', 'u1', 'Петров А.В.')}
+                          className="gov-btn gov-btn-primary gov-btn-sm w-full justify-center">
+                          → Перевести закупку на этап «Оплата»
+                        </button>
                       </div>
                     )}
 

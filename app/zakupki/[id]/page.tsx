@@ -275,6 +275,13 @@ export default function ZakupkaDetailPage() {
                       <span className="text-xs font-bold">{PROCEDURE_LABELS[procurement.procedure ?? "eat_kotировки"]}</span>
                     </div>
                   }/>
+                  {['preparation','sz_approval','financing'].includes(procurement.status) && (
+                    <div className="sm:col-span-2">
+                      <a href="/kp" className="inline-flex items-center gap-2 px-3 py-2 bg-indigo-50 border border-indigo-200 rounded-lg text-xs text-indigo-700 font-bold hover:bg-indigo-100 transition-colors">
+                        📊 Перейти к сравнению КП и расчёту НМЦК →
+                      </a>
+                    </div>
+                  )}
                   <InfoRow label="Инициирующее подразд." value={procurement.szInitiatorDept ?? "—"}/>
                   <InfoRow label="Дата СЗ" value={procurement.szDate ? formatDate(procurement.szDate) : "—"}/>
                   {procurement.nmck && <InfoRow label="НМЦК" value={formatCurrency(procurement.nmck)}/>}

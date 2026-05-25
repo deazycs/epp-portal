@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
@@ -29,6 +29,15 @@ export default function NovayaZakupkaPage() {
   const [endDate, setEndDate]               = useState('');
   const [contractDuration, setContractDuration] = useState(''); // Срок действия договора
   const [contractEndDate2, setContractEndDate2] = useState('');   // Конкретная дата окончания
+
+  // Автоматически вычисляем дату окончания из длительности
+  useEffect(() => {
+    if (contractDuration && contractDuration !== 'custom' && !contractEndDate2) {
+      const d = new Date();
+      d.setDate(d.getDate() + Number(contractDuration));
+      setContractEndDate2(d.toISOString().split('T')[0]);
+    }
+  }, [contractDuration]);
   const [deliveryDate, setDeliveryDate]          = useState('');
   const [deliveryDays, setDeliveryDays]     = useState('30');
   const [acceptanceDays, setAcceptanceDays] = useState('5');
@@ -292,6 +301,12 @@ export default function NovayaZakupkaPage() {
                 <div>
                   <label className="gov-label">Плановая дата окончания *</label>
                   <input type="date" className={`gov-input ${errors.some(e=>e.includes('окончания'))?'border-red-400':''}`} value={endDate} onChange={e=>setEndDate(e.target.value)}/>
+                </div>
+                <div className="sm:col-span-2">
+                  <div className="p-2 bg-indigo-50 border border-indigo-200 rounded text-xs text-indigo-700 flex items-center justify-between">
+                    <span>📊 Для расчёта НМЦК запросите 3 коммерческих предложения от поставщиков</span>
+                    <a href="/kp" target="_blank" className="font-bold underline flex-shrink-0 ml-2">Открыть сравнение КП →</a>
+                  </div>
                 </div>
                 <div>
                   <label className="gov-label">КБК *</label>

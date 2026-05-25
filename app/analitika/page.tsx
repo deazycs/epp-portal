@@ -30,6 +30,8 @@ export default function AnalitikaPage() {
   const contracted = procurements.reduce((s,p) => s+(p.contractSum??0), 0);
   const paid = procurements.reduce((s,p) => s+(p.paidSum??0), 0);
   const completed = procurements.filter(p => p.status === 'archive').length;
+  const economy = total - contracted;
+  const economyPct = total > 0 ? (economy / total * 100) : 0;
 
   return (
     <AppLayout>
