@@ -104,7 +104,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ show, success, error, warning, info }}>
       {children}
       {/* Контейнер тостов — правый нижний угол */}
-      <div className="fixed bottom-6 left-4 z-[9995] flex flex-col gap-2 pointer-events-none">
+      <div
+        className="fixed left-4 z-[9995] flex flex-col gap-2 pointer-events-none"
+        style={{
+          bottom: typeof window !== 'undefined' &&
+            sessionStorage.getItem('epp_demo_open') === 'true'
+            ? 200 : 24
+        }}>
         {toasts.map(t => (
           <div key={t.id} className="pointer-events-auto">
             <ToastItem toast={t} onRemove={remove}/>
