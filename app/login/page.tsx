@@ -66,10 +66,15 @@ export default function LoginPage() {
                     : 'border-white border-opacity-10 bg-white bg-opacity-5 hover:bg-opacity-12 hover:border-opacity-30'
                 }`}>
                 <div className="flex items-start gap-3">
-                  <div className={`w-11 h-11 rounded-xl ${u.color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
+                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-white text-sm font-bold flex-shrink-0 ${
+                      u.userId === 'u_shv' ? 'bg-blue-600' :
+                      u.userId === 'u_che' ? 'bg-green-700' :
+                      u.userId === 'u_tol' ? 'bg-purple-700' :
+                      'bg-yellow-600'
+                    }`}>
                     {selected === u.userId && loading
                       ? <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"/>
-                      : u.color
+                      : u.userId === 'u_shv' ? 'bg-blue-600' : u.userId === 'u_che' ? 'bg-green-700' : u.userId === 'u_tol' ? 'bg-purple-700' : 'bg-yellow-600'
                     }
                   </div>
                   <div className="flex-1 min-w-0">
