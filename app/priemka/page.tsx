@@ -174,7 +174,7 @@ ${respList}
 
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[{ label: 'Рабочий стол', href: '/dashboard' }, { label: 'Приёмка товаров' }]}/>
 
         <div className="flex items-center justify-between mb-3">
@@ -219,7 +219,7 @@ ${respList}
                 return (
                   <div key={p.id}
                     onClick={() => setSelectedId(p.id === selectedId ? null : p.id)}
-                    className={`gov-card p-3 cursor-pointer hover:shadow transition-all ${selectedId === p.id ? 'border-blue-400 border-2' : ''}`}>
+                    className={`gov-card gov-card-hover p-3 cursor-pointer ${selectedId === p.id ? 'border-blue-400 border-2' : ''}`}>
                     <div className="flex items-start justify-between gap-2 mb-1.5">
                       <div className="flex-1 min-w-0">
                         <div className="text-xs font-mono font-bold text-blue-600">{p.registryNumber}</div>

@@ -40,7 +40,7 @@ export default function MonitoringPage() {
                 <AlertTriangle size={14} /> Просроченные платежи ({OVERDUE_PAYMENTS.length})
               </h2>
               <div className="gov-card overflow-hidden">
-                <table className="gov-table">
+          <table className="gov-table">
                   <thead><tr><th>Закупка</th><th>Поставщик</th><th>Сумма</th><th>Срок оплаты</th><th>Просрочка</th><th>Ответственный</th><th></th></tr></thead>
                   <tbody>
                     {OVERDUE_PAYMENTS.map(p => (
@@ -69,7 +69,7 @@ export default function MonitoringPage() {
                   <AlertTriangle size={14} /> Просроченные закупки ({overdueProc.length})
                 </h2>
                 <div className="gov-card overflow-hidden">
-                  <table className="gov-table">
+          <table className="gov-table">
                     <thead><tr><th>Закупка</th><th>Статус</th><th>Сумма</th><th>Плановый срок</th><th>Ответственный</th><th></th></tr></thead>
                     <tbody>
                       {overdueProc.map(p => (

@@ -29,7 +29,7 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
     <header className="flex items-center h-10 px-3 gap-3 border-b border-blue-900 flex-shrink-0"
       style={{ background: '#003087' }}>
 
-      <button onClick={onMenuToggle} className="text-white opacity-70 hover:opacity-100 p-1 rounded">
+      <button onClick={onMenuToggle} className="text-white  hover:opacity-100 p-1 rounded">
         {sidebarCollapsed ? <Menu size={16} /> : <X size={16} />}
       </button>
 
@@ -41,7 +41,7 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
           </div>
           <div className="hidden sm:block">
             <div className="text-white font-bold text-xs leading-tight">Единый портал поставок</div>
-            <div className="text-blue-300 text-xs opacity-70 leading-tight">Росреестр · ЕИС · ЕАТ «Берёзка»</div>
+            <div className="text-blue-300 text-xs  leading-tight">Росреестр · ЕИС · ЕАТ «Берёзка»</div>
           </div>
         </div>
       </Link>
@@ -74,7 +74,7 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
         {/* Просрочки */}
         {overdueCount > 0 && (
           <Link href="/kontrol-srokov"
-            className="flex items-center gap-1 text-xs text-yellow-200 bg-red-700 bg-opacity-60 px-2 py-0.5 rounded hover:bg-opacity-80 transition-colors">
+            className="flex items-center gap-1 text-xs text-yellow-200 bg-red-700 bg- px-2 py-0.5 rounded hover:bg- transition-colors">
             <Clock size={11} />
             <span className="hidden sm:inline">{overdueCount} просрочки</span>
           </Link>
@@ -83,7 +83,7 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
         {/* Уведомления */}
         <div className="relative">
           <button onClick={() => { setNotifOpen(!notifOpen); setUserOpen(false); }}
-            className="relative p-1.5 text-white opacity-70 hover:opacity-100">
+            className="relative p-1.5 text-white  hover:opacity-100">
             <Bell size={15} />
             {unread.length > 0 && (
               <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold leading-none">
@@ -125,15 +125,15 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
         {/* Пользователь */}
         <div className="relative">
           <button onClick={() => { setUserOpen(!userOpen); setNotifOpen(false); }}
-            className="flex items-center gap-1.5 text-white opacity-80 hover:opacity-100 px-1">
+            className="flex items-center gap-1.5 text-white  hover:opacity-100 px-1">
             <div className="w-6 h-6 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold text-white">
               {CURRENT_USER.nameShort.split(' ').map((p: string) => p[0]).join('').slice(0, 2)}
             </div>
             <div className="hidden md:block text-left">
               <div className="text-xs font-bold leading-tight">{CURRENT_USER.nameShort}</div>
-              <div className="text-xs opacity-60 leading-tight">Специалист МТО</div>
+              <div className="text-xs  leading-tight">Специалист МТО</div>
             </div>
-            <ChevronDown size={11} className="opacity-60" />
+            <ChevronDown size={11} className="" />
           </button>
 
           {userOpen && (

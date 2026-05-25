@@ -395,3 +395,80 @@ body {
   .gov-card { box-shadow: none !important; border: 1px solid #ddd !important; }
   body { background: white !important; }
 }
+
+/* ── Skeleton loading ──────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #e8edf5 25%, #f4f6f9 50%, #e8edf5 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+  border-radius: 6px;
+}
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-text  { height: 12px; margin-bottom: 6px; border-radius: 4px; }
+.skeleton-title { height: 18px; margin-bottom: 8px; border-radius: 4px; }
+.skeleton-card  { height: 80px; border-radius: 10px; }
+
+/* ── Fade-in animation ─────────────────────────── */
+.fade-in {
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Status badge pulse (для просрочек) ─────────── */
+.badge-pulse {
+  animation: badgePulse 2s ease infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+/* ── Card hover effect ─────────────────────────── */
+.gov-card-hover {
+  transition: box-shadow 0.18s, transform 0.18s;
+  cursor: pointer;
+}
+.gov-card-hover:hover {
+  box-shadow: 0 4px 16px rgba(0,48,135,0.10);
+  transform: translateY(-1px);
+}
+
+/* ── Status transition ─────────────────────────── */
+.status-badge {
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* ── Empty state ───────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: #9ca3af;
+}
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+.empty-state-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+.empty-state-desc {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 16px;
+  max-width: 280px;
+  line-height: 1.5;
+}

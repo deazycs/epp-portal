@@ -279,7 +279,7 @@ export default function SluzhebnyeZapiskiPage() {
               return (
                 <div key={n.id}
                   onClick={()=>setSelected(n.id===selected?null:n.id)}
-                  className={`gov-card p-3 cursor-pointer hover:shadow transition-all ${selected===n.id?'border-blue-400 border-2':''}`}>
+                  className={`gov-card gov-card-hover p-3 cursor-pointer ${selected===n.id?'border-blue-400 border-2':''}`}>
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">

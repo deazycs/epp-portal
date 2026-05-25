@@ -36,7 +36,7 @@ export default function PlatezhiFeoPage() {
 
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[
           { label: 'Рабочий стол', href: '/dashboard' },
           { label: 'Платежи', href: '/platezhi' },

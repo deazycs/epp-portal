@@ -1,131 +1,114 @@
 'use client';
-import { useState } from 'react';
+
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
-import { ExternalLink, Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { ExternalLink, BookOpen, Database, Search, Shield } from 'lucide-react';
+import { KBK_LIST } from '@/mock/data/users';
 
 export const dynamic = 'force-dynamic';
 
-const KBK_LIST = [
-  { code:'321 0113 4590100002 244', name:'Закупка товаров (расходные материалы, канцтовары)', kosgu:'340,344' },
-  { code:'321 0113 4590100002 242', name:'Закупка товаров в сфере ИТ (оборудование, ПО)', kosgu:'226,310' },
-  { code:'321 0113 4590100002 225', name:'Услуги по содержанию имущества (уборка, ТО)', kosgu:'225,226' },
-  { code:'321 0113 4590100002 310', name:'Увеличение стоимости ОС (мебель, оборудование)', kosgu:'310' },
-  { code:'321 0113 4590100002 226', name:'Прочие работы и услуги (ИТ-услуги, разработка)', kosgu:'226' },
+const LINKS = [
+  { name:'ЕАТ «Берёзка»',           url:'https://agregatoreat.ru',              icon:'🌲', desc:'Закупки малого объёма (п.4 ч.1 ст.93 44-ФЗ). Размещение и мониторинг закупок до 600 тыс. руб.' },
+  { name:'ЕИС (zakupki.gov.ru)',     url:'https://zakupki.gov.ru',              icon:'🏛', desc:'Единая информационная система в сфере закупок. Размещение планов-графиков, извещений, отчётов.' },
+  { name:'Реестр НДП (РНП)',         url:'https://reestr.zakupki.gov.ru',       icon:'⛔', desc:'Реестр недобросовестных поставщиков. Проверка перед заключением контракта обязательна.' },
+  { name:'ОКПД 2 (классификатор)',   url:'https://classifikator.ru/okpd2',      icon:'📋', desc:'Общероссийский классификатор продукции по видам экономической деятельности.' },
+  { name:'Приказ №567 (НМЦК)',       url:'https://consultant.ru',               icon:'📊', desc:'Приказ Минэкономразвития №567 от 02.10.2013 — методика определения и обоснования НМЦК.' },
+  { name:'Сбербанк-АСТ (ЕИС)',      url:'https://sberbank-ast.ru',             icon:'💼', desc:'Электронная площадка для аукционов и конкурсов свыше 600 тыс. руб.' },
+  { name:'Официальный сайт 44-ФЗ',  url:'https://consultant.ru/document/cons_doc_LAW_144624/', icon:'⚖', desc:'Федеральный закон от 05.04.2013 №44-ФЗ «О контрактной системе» — актуальная редакция.' },
+  { name:'Казначейство России',      url:'https://roskazna.gov.ru',             icon:'🏦', desc:'Федеральное казначейство. Исполнение бюджета, ЛБО, лицевые счета.' },
 ];
 
-const OKPD_LIST = [
-  { code:'26.20.16', name:'Картриджи для принтеров и МФУ', unit:'шт.' },
-  { code:'26.20.15', name:'Серверы и системы хранения данных', unit:'шт.' },
-  { code:'26.20.22', name:'СХД (системы хранения данных)', unit:'шт.' },
-  { code:'21.20.24', name:'Бумага офисная А4, А3', unit:'пач./кор.' },
-  { code:'31.01.11', name:'Мебель офисная (столы, стулья, шкафы)', unit:'шт.' },
-  { code:'58.29.29', name:'Программное обеспечение (лицензии)', unit:'лиц.' },
-  { code:'81.21', name:'Услуги по уборке помещений', unit:'м²/мес.' },
-  { code:'43.22', name:'Техническое обслуживание лифтов', unit:'усл.' },
-];
-
-const REFS = [
-  { name:'ЕИС закупки', url:'https://zakupki.gov.ru', desc:'Единая информационная система в сфере закупок', category:'Площадки' },
-  { name:'ЕАТ «Берёзка»', url:'https://agregatoreat.ru', desc:'Единый агрегатор торговли', category:'Площадки' },
-  { name:'Сбербанк-АСТ', url:'https://sberbank-ast.ru', desc:'Электронная торговая площадка', category:'Площадки' },
-  { name:'ОКПД2', url:'https://classifikators.ru/okpd', desc:'Классификатор продукции по видам деятельности', category:'Классификаторы' },
-  { name:'КТРУ', url:'https://zakupki.gov.ru/epz/ktru/', desc:'Каталог товаров, работ, услуг', category:'Классификаторы' },
-  { name:'Реестр НДП', url:'https://zakupki.gov.ru/epz/dishonestsupplier/', desc:'Реестр недобросовестных поставщиков', category:'Реестры' },
-  { name:'ЕГРЮЛ', url:'https://egrul.nalog.ru', desc:'Проверка контрагента по ИНН', category:'Реестры' },
-  { name:'КБК 2026', url:'https://minfin.gov.ru', desc:'Коды бюджетной классификации', category:'Финансы' },
-];
+const KOSGU: Record<string,string> = {
+  '221':'Услуги связи',
+  '222':'Транспортные услуги',
+  '223':'Коммунальные услуги',
+  '224':'Аренда имущества',
+  '225':'Содержание имущества (ТО, уборка, охрана)',
+  '226':'Прочие работы и услуги (ИТ, обучение)',
+  '310':'Основные средства (ОС) — компьютеры, серверы',
+  '320':'Нематериальные активы — лицензии ПО',
+  '341':'Лекарственные препараты',
+  '344':'Расходные материалы (картриджи, канцтовары)',
+  '346':'Прочие материальные запасы',
+  '347':'Материалы для капвложений',
+  '349':'Прочие материалы (одноразовое потребление)',
+};
 
 export default function SpravochnikiPage() {
-  const [tab, setTab]     = useState('kbk');
-  const [search, setSearch] = useState('');
-  const [expanded, setExpanded] = useState<string[]>(['Площадки']);
-
-  const filteredKBK  = KBK_LIST.filter(k => !search || k.code.includes(search) || k.name.toLowerCase().includes(search.toLowerCase()));
-  const filteredOKPD = OKPD_LIST.filter(k => !search || k.code.includes(search) || k.name.toLowerCase().includes(search.toLowerCase()));
-
-  const categories = Array.from(new Set(REFS.map(r => r.category)));
-  const toggleCat  = (cat: string) => setExpanded(e => e.includes(cat) ? e.filter(c=>c!==cat) : [...e, cat]);
-
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Справочники'}]}/>
-        <h1 className="text-base font-bold mb-3">Нормативно-справочная информация</h1>
 
-        <div className="gov-card p-1.5 flex gap-1 mb-3 flex-wrap">
-          {[{k:'kbk',label:'КБК 2026'},{k:'okpd',label:'ОКПД2'},{k:'refs',label:'Внешние ресурсы'}].map(t=>(
-            <button key={t.k} onClick={()=>{setTab(t.k);setSearch('');}} className={`gov-btn gov-btn-sm ${tab===t.k?'gov-btn-primary':'gov-btn-ghost'}`}>{t.label}</button>
-          ))}
+        <div className="mb-4">
+          <h1 className="text-base font-bold">Справочники и внешние ресурсы</h1>
+          <p className="text-xs text-gray-500">КБК, КОСГУ, ссылки на федеральные системы</p>
         </div>
 
-        <div className="relative mb-3">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
-          <input className="gov-input pl-8 text-sm" placeholder="Поиск по коду или наименованию..." value={search} onChange={e=>setSearch(e.target.value)}/>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-        {tab === 'kbk' && (
+          {/* КБК */}
           <div className="gov-card overflow-hidden">
-            <div className="gov-section-title">Коды бюджетной классификации (КБК) — 2026</div>
-            <table className="gov-table">
-              <thead><tr><th>Код КБК</th><th>Наименование расходов</th><th>КОСГУ</th></tr></thead>
-              <tbody>
-                {filteredKBK.map(k=>(
-                  <tr key={k.code}>
-                    <td className="font-mono text-xs text-blue-700 font-bold">{k.code}</td>
-                    <td className="text-xs">{k.name}</td>
-                    <td className="text-xs font-mono">{k.kosgu}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {tab === 'okpd' && (
-          <div className="gov-card overflow-hidden">
-            <div className="gov-section-title">Коды ОКПД2 — часто используемые в МТО</div>
-            <table className="gov-table">
-              <thead><tr><th>Код ОКПД2</th><th>Наименование</th><th>Ед. изм.</th></tr></thead>
-              <tbody>
-                {filteredOKPD.map(k=>(
-                  <tr key={k.code}>
-                    <td className="font-mono text-xs text-blue-700 font-bold">{k.code}</td>
-                    <td className="text-xs">{k.name}</td>
-                    <td className="text-xs text-gray-500">{k.unit}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {tab === 'refs' && (
-          <div className="space-y-2">
-            {categories.map(cat=>(
-              <div key={cat} className="gov-card overflow-hidden">
-                <button onClick={()=>toggleCat(cat)} className="gov-section-title w-full flex items-center justify-between hover:bg-gray-100 transition-colors">
-                  <span>{cat}</span>
-                  {expanded.includes(cat) ? <ChevronDown size={14}/> : <ChevronRight size={14}/>}
-                </button>
-                {expanded.includes(cat) && (
-                  <div className="divide-y divide-gray-100">
-                    {REFS.filter(r=>r.category===cat).map(r=>(
-                      <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center justify-between p-3 hover:bg-gray-50 transition-colors">
-                        <div>
-                          <div className="text-xs font-bold text-blue-600">{r.name}</div>
-                          <div className="text-xs text-gray-500">{r.desc}</div>
-                        </div>
-                        <ExternalLink size={13} className="text-gray-400 flex-shrink-0 ml-2"/>
-                      </a>
+            <div className="gov-section-title flex items-center gap-2">
+              <Database size={13}/> КБК — Росреестр, Управление по Воронежской области
+            </div>
+            <div className="divide-y divide-gray-50">
+              {KBK_LIST.map((kbk, i) => (
+                <div key={i} className="p-3">
+                  <div className="text-xs font-mono font-bold text-blue-700 mb-0.5">{kbk.code}</div>
+                  <div className="text-xs font-bold text-gray-800 mb-1">{kbk.name}</div>
+                  <div className="flex flex-wrap gap-1">
+                    {kbk.kosguNames.map((kg, j) => (
+                      <span key={j} className="text-xs px-1.5 py-0.5 rounded"
+                        style={{background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe'}}>
+                        {kg}
+                      </span>
                     ))}
                   </div>
-                )}
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
-        )}
+
+          <div className="space-y-4">
+            {/* КОСГУ */}
+            <div className="gov-card overflow-hidden">
+              <div className="gov-section-title flex items-center gap-2">
+                <BookOpen size={13}/> КОСГУ — коды операций сектора госуправления
+              </div>
+              <div className="p-3">
+                <div className="space-y-1.5">
+                  {Object.entries(KOSGU).map(([code, name]) => (
+                    <div key={code} className="flex items-start gap-2">
+                      <span className="text-xs font-mono font-bold text-indigo-600 w-8 flex-shrink-0 mt-0.5">{code}</span>
+                      <span className="text-xs text-gray-700">{name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Внешние ресурсы */}
+            <div className="gov-card overflow-hidden">
+              <div className="gov-section-title flex items-center gap-2">
+                <ExternalLink size={13}/> Федеральные системы и нормативная база
+              </div>
+              <div className="divide-y divide-gray-50">
+                {LINKS.map((link, i) => (
+                  <a key={i} href={link.url} target="_blank" rel="noopener noreferrer"
+                    className="flex items-start gap-3 p-3 hover:bg-gray-50 transition-colors group">
+                    <span className="text-lg flex-shrink-0">{link.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-blue-600 group-hover:underline">{link.name}</div>
+                      <div className="text-xs text-gray-500 mt-0.5 leading-snug">{link.desc}</div>
+                    </div>
+                    <ExternalLink size={11} className="text-gray-300 group-hover:text-blue-400 flex-shrink-0 mt-0.5 transition-colors"/>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </AppLayout>
   );

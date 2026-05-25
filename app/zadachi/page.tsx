@@ -29,7 +29,7 @@ export default function ZadachiPage() {
 
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Задачи'}]}/>
         <div className="flex items-center justify-between mb-3">
           <div>

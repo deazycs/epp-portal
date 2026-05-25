@@ -47,7 +47,7 @@ export default function IspolneniePage() {
 
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Исполнение договоров'}]}/>
         <div className="flex items-center justify-between mb-3">
           <div>

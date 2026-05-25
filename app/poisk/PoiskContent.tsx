@@ -128,7 +128,7 @@ export function PoiskContent() {
             <div className="mb-4">
               <h2 className="text-sm font-bold text-gray-700 mb-2">📄 Договоры ({contractResults.length})</h2>
               <div className="gov-card overflow-hidden">
-                <table className="gov-table">
+          <table className="gov-table">
                   <thead><tr><th>№</th><th>Предмет</th><th>Поставщик</th><th>Сумма</th></tr></thead>
                   <tbody>
                     {contractResults.map(c => (
@@ -150,7 +150,7 @@ export function PoiskContent() {
             <div className="mb-4">
               <h2 className="text-sm font-bold text-gray-700 mb-2">🏢 Поставщики ({supplierResults.length})</h2>
               <div className="gov-card overflow-hidden">
-                <table className="gov-table">
+          <table className="gov-table">
                   <thead><tr><th>Наименование</th><th>ИНН</th><th>Договоров</th><th>Сумма</th></tr></thead>
                   <tbody>
                     {supplierResults.map(s => (
@@ -172,7 +172,7 @@ export function PoiskContent() {
             <div className="mb-4">
               <h2 className="text-sm font-bold text-gray-700 mb-2">✅ Задачи ({taskResults.length})</h2>
               <div className="gov-card overflow-hidden">
-                <table className="gov-table">
+          <table className="gov-table">
                   <thead><tr><th>Задача</th><th>Исполнитель</th><th>Срок</th></tr></thead>
                   <tbody>
                     {taskResults.map(t => (

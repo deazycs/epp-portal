@@ -49,7 +49,7 @@ export default function KontraktyPage() {
 
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Договоры'}]}/>
 
         <div className="flex items-center justify-between mb-3">
@@ -115,7 +115,7 @@ export default function KontraktyPage() {
               filtered.map(p=>(
                 <div key={p.id}
                   onClick={()=>setSelected(p.id===selected?null:p.id)}
-                  className={`gov-card p-3 cursor-pointer hover:shadow transition-all ${selected===p.id?'border-blue-400 border-2':''}`}>
+                  className={`gov-card gov-card-hover p-3 cursor-pointer ${selected===p.id?'border-blue-400 border-2':''}`}>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
