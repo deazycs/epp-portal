@@ -5,7 +5,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Breadcrumbs } from '@/components/ui/index';
 import { useAppStore } from '@/store/index';
 import { formatCurrency } from '@/lib/utils';
-import { Star, Shield, AlertTriangle, TrendingUp, Package, CheckCircle as CheckIcon } from 'lucide-react';
+import { Shield, AlertTriangle, TrendingUp, Package, CheckCircle as CheckIcon } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -90,17 +90,6 @@ export default function PostavshchikiPage() {
 
   const sel = suppliers.find(s => s.inn === selected);
 
-  function StarRating({ val }: { val: number }) {
-    return (
-      <div className="flex items-center gap-0.5">
-        {[1,2,3,4,5].map(i => (
-          <Star key={i} size={11}
-            className={i <= Math.round(val) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'}/>
-        ))}
-        <span className="text-xs font-bold text-gray-700 ml-1">{val.toFixed(1)}</span>
-      </div>
-    );
-  }
 
   return (
     <AppLayout>
@@ -187,7 +176,7 @@ export default function PostavshchikiPage() {
                         )}
                       </div>
                       <div className="text-xs text-gray-400 mb-1.5">ИНН {s.inn}</div>
-                      <StarRating val={s.rating}/>
+                      
                     </div>
                     <div className="text-right flex-shrink-0">
                       <div className="text-sm font-bold text-blue-700">{formatCurrency(s.totalContract)}</div>
@@ -232,7 +221,7 @@ export default function PostavshchikiPage() {
 
                   <div>
                     <div className="gov-label mb-1">Рейтинг</div>
-                    <StarRating val={sel.rating}/>
+                    
                     <div className="mt-2 text-xs text-gray-500 space-y-0.5">
                       <div className="flex justify-between">
                         <span>База</span><span>3.0</span>

@@ -304,8 +304,8 @@ export default function NovayaZakupkaPage() {
                 </div>
                 <div className="sm:col-span-2">
                   <div className="p-2 bg-indigo-50 border border-indigo-200 rounded text-xs text-indigo-700 flex items-center justify-between">
-                    <span>📊 Для расчёта НМЦК запросите 3 коммерческих предложения от поставщиков</span>
-                    <a href="/kp" target="_blank" className="font-bold underline flex-shrink-0 ml-2">Открыть сравнение КП →</a>
+                    <span>📊 Для обоснования НМЦК запросите ≥3 КП и рассчитайте по Приказу №567</span>
+                    <a href="/nmck" target="_blank" className="font-bold underline flex-shrink-0 ml-2">Открыть калькулятор НМЦК →</a>
                   </div>
                 </div>
                 <div>

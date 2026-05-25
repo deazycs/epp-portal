@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { CheckSquare, BarChart3,
+import { CheckSquare, BarChart3, Calculator,
   LayoutDashboard, ShoppingCart, FileText, Building2, Users, Calendar, AlertTriangle, CheckCircle, Bell,
   Search, Settings, Shield, Archive, Clock, BookOpen,
   CreditCard, ChevronDown, ChevronRight, Star, Database,
