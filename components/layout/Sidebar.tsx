@@ -97,6 +97,8 @@ export function Sidebar({ collapsed }: { collapsed: boolean }) {
           hint: 'Оплата по договорам' },
         { href: '/grafik-platezhey',  label: 'График платежей', icon: <Calendar size={14}/>,
           hint: 'Сводный план оплат по месяцам' },
+        { href: '/platezhi-feo',      label: 'ФЭО → СУФД → 1С', icon: <Building2 size={14}/>,
+          hint: 'Цепочка оплаты: передача в Казначейство' },
       ],
     },
     {

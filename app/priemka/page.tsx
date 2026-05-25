@@ -93,7 +93,8 @@ export default function PriemkaPage() {
   };
 
   const moveToPayment = (procId: string) => {
-    changeStatus(procId, 'payment', 'u1', 'Петров А.В.');
+    // Документы переданы в ФЭО — первый шаг оплаты
+    changeStatus(procId, 'payment_docs' as any, 'u_shv', 'Швецов К.Е.');
   };
 
   const printAct = () => {

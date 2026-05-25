@@ -274,7 +274,7 @@ export default function KontrolSrokovPage() {
           </div>
           <div className="mt-3 pt-2 border-t border-gray-100 text-xs text-gray-500">
             <strong>Типы дедлайнов отслеживаемых системой:</strong>
-            <span className="ml-1">Срок договора · Плановый срок · Отчётность в ЕИС (5 р.д. после исполнения) · Плановое размещение в ЕАТ</span>
+            <span className="ml-1">Срок договора · Срок поставки · Срок приёмки · Отчётность в ЕИС (ч.9 ст.94) · Оплата в ФЭО/СУФД · Плановое размещение</span>
           </div>
         </div>
       </div>
