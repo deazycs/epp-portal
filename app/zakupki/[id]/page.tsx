@@ -79,6 +79,12 @@ export default function ZakupkaDetailPage() {
   const id = params.id as string;
   const [activeTab, setActiveTab] = useState('info');
   const [commentText, setCommentText] = useState('');
+  const [vizaState, setVizaState] = useState<Record<string,{status:'pending'|'approved'|'rejected';comment:string}>>({
+    'feo':    { status: 'pending', comment: '' },
+    'legal':  { status: 'pending', comment: '' },
+    'deputy': { status: 'pending', comment: '' },
+  });
+  const [vizaComment, setVizaComment] = useState<Record<string,string>>({});
   const [uploadedFiles, setUploadedFiles] = useState<{name:string;size:string;date:string}[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -564,26 +570,140 @@ export default function ZakupkaDetailPage() {
 
             {/* ══ СОГЛАСОВАНИЯ ══ */}
             {activeTab === 'soglasovaniya2' && (
-              <div className="space-y-3">
-                {APPROVALS.map(step => (
-                  <div key={step.id} className={`border rounded p-3 ${step.status==='approved'?'border-green-200 bg-green-50':'border-yellow-200 bg-yellow-50'}`}>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="text-xs font-bold">Этап {step.stage}: {step.approver}</div>
-                        <div className="text-xs text-gray-500">{step.role}</div>
-                      </div>
-                      <span className={`gov-badge ${step.status==='approved'?'bg-green-100 text-green-700 border-green-300':'bg-yellow-100 text-yellow-700 border-yellow-300'}`}>
-                        {step.status==='approved'?'✓ Согласовано':'⏳ Ожидает'}
-                      </span>
-                    </div>
-                    {step.comment && <div className="mt-2 text-xs text-gray-700 bg-white border border-gray-200 rounded p-2">{step.comment}</div>}
-                    {step.date && <div className="text-xs text-gray-400 mt-1">{formatDate(step.date)}</div>}
-                  </div>
-                ))}
+            <div className="space-y-3">
+              {/* Подсказка */}
+              <div className="gov-alert gov-alert-info text-xs">
+                <span>Цепочка согласований: ФЭО → Правовой отдел → Заместитель руководителя. При завершении используйте кнопку перехода на следующий этап в шапке карточки.</span>
               </div>
-            )}
 
-            {/* ══ РИСКИ ══ */}
+              {/* Блоки визирования */}
+              {[
+                { key:'feo',    title:'ФЭО (Финансово-экономический отдел)', person:'Волкова Е.И.', role:'Главный бухгалтер', desc:'Финансовая экспертиза: проверка КБК, КОСГУ, наличие ЛБО, соответствие плану-графику.' },
+                { key:'legal',  title:'Правовой отдел',                      person:'Иванова С.П.', role:'Начальник правового отдела', desc:'Правовая экспертиза: соответствие договора 44-ФЗ, условия ответственности, порядок расторжения.' },
+                { key:'deputy', title:'Заместитель руководителя',            person:'Фёдоров С.В.', role:'Зам. руководителя по обеспечению', desc:'Итоговое визирование после получения всех виз ФЭО и правового отдела.' },
+              ].map(dept => {
+                const viza = vizaState[dept.key];
+                const comment = vizaComment[dept.key] ?? '';
+                return (
+                  <div key={dept.key} className={`gov-card overflow-hidden border-l-4 ${
+                    viza?.status === 'approved' ? 'border-green-500' :
+                    viza?.status === 'rejected' ? 'border-red-500' : 'border-gray-200'
+                  }`}>
+                    <div className="p-4">
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div>
+                          <div className="text-xs font-bold text-gray-800">{dept.title}</div>
+                          <div className="text-xs text-gray-500 mt-0.5">{dept.person} · {dept.role}</div>
+                          <div className="text-xs text-gray-400 mt-1">{dept.desc}</div>
+                        </div>
+                        <div className="flex-shrink-0">
+                          {viza?.status === 'approved' && (
+                            <span className="gov-badge bg-green-50 text-green-700 border-green-300 flex items-center gap-1">
+                              ✓ Согласовано
+                            </span>
+                          )}
+                          {viza?.status === 'rejected' && (
+                            <span className="gov-badge bg-red-50 text-red-700 border-red-300 flex items-center gap-1">
+                              ✗ Замечания
+                            </span>
+                          )}
+                          {viza?.status === 'pending' && (
+                            <span className="gov-badge bg-yellow-50 text-yellow-700 border-yellow-300">
+                              На рассмотрении
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Замечание если отклонено */}
+                      {viza?.status === 'rejected' && viza.comment && (
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-3">
+                          <div className="text-xs font-bold text-red-700 mb-1">⚠ Замечание:</div>
+                          <div className="text-xs text-red-800">{viza.comment}</div>
+                        </div>
+                      )}
+
+                      {viza?.status === 'approved' && viza.comment && (
+                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg mb-3">
+                          <div className="text-xs text-green-700">{viza.comment}</div>
+                        </div>
+                      )}
+
+                      {/* Поле для комментария + кнопки */}
+                      {viza?.status === 'pending' && (
+                        <div className="space-y-2">
+                          <textarea
+                            className="gov-input text-xs resize-none"
+                            rows={2}
+                            placeholder="Комментарий или замечание (необязательно)..."
+                            value={comment}
+                            onChange={e => setVizaComment(prev => ({...prev, [dept.key]: e.target.value}))}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => setVizaState(prev => ({
+                                ...prev,
+                                [dept.key]: { status: 'approved', comment }
+                              }))}
+                              className="gov-btn gov-btn-success gov-btn-sm flex-1 justify-center">
+                              ✓ Согласовать
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (!comment.trim()) { alert('Укажите замечание при отклонении'); return; }
+                                setVizaState(prev => ({
+                                  ...prev,
+                                  [dept.key]: { status: 'rejected', comment }
+                                }));
+                              }}
+                              className="gov-btn gov-btn-danger gov-btn-sm flex-1 justify-center">
+                              ✗ Отклонить с замечанием
+                            </button>
+                          </div>
+                          {dept.key === 'legal' && (
+                            <div className="text-xs text-gray-400">⚠ При отклонении — укажите конкретное замечание. Документ вернётся на доработку.</div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Повторное рассмотрение */}
+                      {(viza?.status === 'approved' || viza?.status === 'rejected') && (
+                        <button
+                          onClick={() => setVizaState(prev => ({...prev, [dept.key]: { status: 'pending', comment: '' }}))}
+                          className="gov-btn gov-btn-ghost gov-btn-sm text-xs mt-2">
+                          ↩ Пересмотреть
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Итоговый статус */}
+              {Object.values(vizaState).every(v => v?.status === 'approved') && (
+                <div className="p-4 bg-green-50 border border-green-300 rounded-lg">
+                  <div className="flex items-center gap-2 text-green-700 font-bold text-sm mb-1">
+                    ✓ Все визы получены — договор готов к подписанию
+                  </div>
+                  <div className="text-xs text-green-600">
+                    ФЭО ✓ · Правовой отдел ✓ · Заместитель руководителя ✓. Передайте договор на подписание ЭЦП.
+                  </div>
+                </div>
+              )}
+              {Object.values(vizaState).some(v => v?.status === 'rejected') && (
+                <div className="p-4 bg-red-50 border border-red-300 rounded-lg">
+                  <div className="flex items-center gap-2 text-red-700 font-bold text-sm mb-1">
+                    ✗ Договор завёрнут — требуется доработка
+                  </div>
+                  <div className="text-xs text-red-600">
+                    Устраните замечания указанные выше и направьте договор на повторное согласование.
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ══ РИСКИ ══ */}
             {activeTab === 'riski2' && (
               <div>
                 <div className="flex justify-between mb-3">

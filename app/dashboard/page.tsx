@@ -88,6 +88,50 @@ export default function DashboardPage() {
         )}
 
         {/* KPI плитки */}
+
+        {/* ── БЫСТРЫЕ ДЕЙСТВИЯ ── */}
+        <div className="gov-card overflow-hidden mb-4">
+          <div className="gov-section-title">⚡ Быстрые действия</div>
+          <div className="p-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {[
+              { icon:'📋', label:'Новая закупка', desc:'Создать из формы', href:'/zakupki/novaya', cls:'bg-blue-600 hover:bg-blue-700 text-white' },
+              { icon:'📊', label:'Сравнить КП', desc:'Анализ рынка / НМЦК', href:'/kp', cls:'bg-indigo-600 hover:bg-indigo-700 text-white' },
+              { icon:'✅', label:'Приёмка товара', desc:'Акт приёмочной комиссии', href:'/priemka', cls:'bg-green-700 hover:bg-green-800 text-white' },
+              { icon:'📄', label:'Служебная записка', desc:'Зарегистрировать СЗ', href:'/sluzhebnye-zapiski', cls:'bg-gray-700 hover:bg-gray-800 text-white' },
+            ].map(a => (
+              <Link key={a.label} href={a.href}
+                className={`flex items-start gap-2 p-3 rounded-lg transition-all ${a.cls}`}>
+                <span className="text-xl flex-shrink-0">{a.icon}</span>
+                <div>
+                  <div className="text-xs font-bold leading-tight">{a.label}</div>
+                  <div className="text-xs opacity-70 mt-0.5">{a.desc}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          {/* Быстрые переходы по активным закупкам требующим действия */}
+          {procurements.filter(p => ['sz_approval','winner_approval','contract_expertise','deputy_signing'].includes(p.status)).length > 0 && (
+            <div className="px-3 pb-3 border-t border-gray-100 pt-2">
+              <div className="text-xs font-bold text-gray-500 mb-2">Требуют вашего решения прямо сейчас:</div>
+              <div className="space-y-1">
+                {procurements
+                  .filter(p => ['sz_approval','winner_approval','contract_expertise','deputy_signing'].includes(p.status))
+                  .slice(0, 3)
+                  .map(p => (
+                  <Link key={p.id} href={`/zakupki/${p.id}`}
+                    className="flex items-center justify-between p-2 rounded-lg bg-orange-50 border border-orange-200 hover:bg-orange-100 transition-colors">
+                    <div>
+                      <span className="text-xs font-mono text-orange-700">{p.registryNumber}</span>
+                      <span className="text-xs text-gray-700 ml-2">{p.title.slice(0,45)}…</span>
+                    </div>
+                    <span className="text-xs text-orange-600 font-bold flex-shrink-0 ml-2">→ {STATUS_LABELS[p.status]}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           {[
             { label:'Активных закупок', value:active.length, icon:<ShoppingCart size={13}/>, href:'/zakupki', color:'text-blue-700', bg:'bg-blue-50' },

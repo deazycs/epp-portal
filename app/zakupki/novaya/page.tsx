@@ -27,7 +27,9 @@ export default function NovayaZakupkaPage() {
   const [method, setMethod] = useState('ЕАТ «Берёзка»');
   const [startDate, setStartDate]           = useState('');
   const [endDate, setEndDate]               = useState('');
-  const [deliveryDate, setDeliveryDate]     = useState('');
+  const [contractDuration, setContractDuration] = useState(''); // Срок действия договора
+  const [contractEndDate2, setContractEndDate2] = useState('');   // Конкретная дата окончания
+  const [deliveryDate, setDeliveryDate]          = useState('');
   const [deliveryDays, setDeliveryDays]     = useState('30');
   const [acceptanceDays, setAcceptanceDays] = useState('5');
   const [deliveryAddress, setDeliveryAddress] = useState('г. Воронеж, ул. Средне-Московская, д. 14, склад МТО');
@@ -111,6 +113,7 @@ export default function NovayaZakupkaPage() {
       priority,
       isOverdue: false,
       procedure: procedure,
+      contractEndDate: contractEndDate2 || undefined,
       deliveryDate: deliveryDate || undefined,
       deliveryDays: deliveryDays ? Number(deliveryDays) : undefined,
       acceptanceDays: acceptanceDays ? Number(acceptanceDays) : undefined,
@@ -295,6 +298,43 @@ export default function NovayaZakupkaPage() {
                   <input className="gov-input font-mono" value={kbk} onChange={e=>setKbk(e.target.value)} placeholder="321 0113 4590100002 244"/>
                 </div>
                 {/* ── СРОКИ ПОСТАВКИ И ПРИЁМКИ ── */}
+                <div className="sm:col-span-2">
+                  <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+                    <div className="text-xs font-bold text-indigo-700 mb-2">📅 Срок действия договора</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div>
+                        <label className="gov-label">Срок действия</label>
+                        <select className="gov-select text-xs"
+                          value={contractDuration} onChange={e=>setContractDuration(e.target.value)}>
+                          <option value="">Выбрать...</option>
+                          <option value="30">30 дней</option>
+                          <option value="60">60 дней</option>
+                          <option value="90">90 дней (квартал)</option>
+                          <option value="180">180 дней (полгода)</option>
+                          <option value="365">365 дней (год)</option>
+                          <option value="custom">Указать дату</option>
+                        </select>
+                        <div className="text-xs text-gray-400 mt-0.5">С даты подписания договора</div>
+                      </div>
+                      <div>
+                        <label className="gov-label">Дата окончания договора</label>
+                        <input type="date" className="gov-input text-xs"
+                          value={contractEndDate2} onChange={e=>setContractEndDate2(e.target.value)}/>
+                        <div className="text-xs text-gray-400 mt-0.5">Конкретная дата по договору</div>
+                      </div>
+                      <div className="flex items-end">
+                        {contractDuration && contractDuration !== 'custom' && (
+                          <div className="p-2 bg-white border border-indigo-200 rounded text-xs w-full">
+                            <div className="text-indigo-600 font-bold">{contractDuration} дней</div>
+                            <div className="text-gray-500 mt-0.5">
+                              Договор действует {contractDuration} дней с момента подписания ЭЦП
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div className="sm:col-span-2">
                   <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="text-xs font-bold text-blue-700 mb-2 flex items-center gap-1">

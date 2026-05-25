@@ -96,9 +96,13 @@ function ZakupkiContent() {
           </p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => exportProcurementsXLSX(filtered)}
+          <button onClick={() => exportProcurementsXLSX(filtered, "Реестр закупок CSV")}
             className="gov-btn gov-btn-ghost gov-btn-sm hidden sm:flex">
             <Download size={12}/> CSV
+          </button>
+          <button onClick={() => exportProcurementsXLSX(filtered)}
+            className="gov-btn gov-btn-ghost gov-btn-sm hidden sm:flex">
+            <Download size={12}/> Excel
           </button>
           <PrintRegistryButton data={filtered} />
           <Link href="/zakupki/novaya" className="gov-btn gov-btn-primary gov-btn-sm">

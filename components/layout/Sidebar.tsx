@@ -3,9 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import {
-  LayoutDashboard, ShoppingCart, FileText, Building2, Users,
-  BarChart3, Calendar, AlertTriangle, CheckCircle, Bell,
+import { CheckSquare, BarChart3,
+  LayoutDashboard, ShoppingCart, FileText, Building2, Users, Calendar, AlertTriangle, CheckCircle, Bell,
   Search, Settings, Shield, Archive, Clock, BookOpen,
   CreditCard, ChevronDown, ChevronRight, Star, Database,
   Eye, TrendingUp, Boxes, Plug, MessageSquare, HelpCircle,
