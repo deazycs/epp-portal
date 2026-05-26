@@ -41,7 +41,7 @@ export default function NovayaZakupkaPage() {
   const [deliveryDate, setDeliveryDate]          = useState('');
   const [deliveryDays, setDeliveryDays]     = useState('30');
   const [acceptanceDays, setAcceptanceDays] = useState('5');
-  const [deliveryAddress, setDeliveryAddress] = useState('г. Воронеж, ул. Средне-Московская, д. 14, склад МТО');
+  const [deliveryAddress, setDeliveryAddress] = useState('г. Воронеж, ул. Донбасская, д. 2, склад МТО');
   const [deliveryConditions, setDeliveryConditions] = useState('');
   const [kbk, setKbk] = useState('321 0412 4590100002 244');
   const [kosgu, setKosgu] = useState('244');
@@ -381,7 +381,7 @@ export default function NovayaZakupkaPage() {
                         <label className="gov-label">Адрес поставки</label>
                         <input type="text" className="gov-input text-xs"
                           value={deliveryAddress} onChange={e=>setDeliveryAddress(e.target.value)}
-                          placeholder="г. Воронеж, ул. Средне-Московская, д. 14, склад МТО"/>
+                          placeholder="г. Воронеж, ул. Донбасская, д. 2, склад МТО"/>
                       </div>
                       <div>
                         <label className="gov-label">Порядок поставки</label>
