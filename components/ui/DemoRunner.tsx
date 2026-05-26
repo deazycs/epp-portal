@@ -439,7 +439,11 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
   );
   const [done, setDone]             = useState(false);
   const [showToc, setShowToc]       = useState(false);
-  const [showWelcome, setShowWelcome] = useState(true); // Приветственный экран
+  const [showWelcome, setShowWelcome] = useState(() =>
+    typeof window !== 'undefined'
+      ? sessionStorage.getItem('epp_demo_welcome') !== 'done'
+      : true
+  ); // Приветственный экран — показывается один раз
   const [spotlightEl, setSpotlightEl] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stepRef  = useRef(step);
@@ -512,6 +516,7 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
     sessionStorage.removeItem(SESS_STEP);
     sessionStorage.removeItem(SESS_PLAYING);
     sessionStorage.removeItem(SESS_OPEN);
+    sessionStorage.removeItem('epp_demo_welcome');
     onClose();
   };
 
@@ -591,7 +596,7 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <div style={{ fontSize: 11, color: '#9ca3af' }}>← → клавиши · Пробел = пауза · ↓ Свернуть</div>
                 <div style={{ flex: 1 }}/>
-                <button onClick={() => { setShowWelcome(false); navigate(STEPS[0].route); }}
+                <button onClick={() => { sessionStorage.setItem('epp_demo_welcome', 'done'); setShowWelcome(false); navigate(STEPS[0].route); }}
                   style={{ padding: '10px 28px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #003087, #0050b3)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 12px rgba(0,48,135,0.4)' }}>
                   <Play size={14}/> Начать тур
                 </button>
