@@ -131,7 +131,7 @@ th{background:#f0f0f0;font-weight:bold}
 <tr><td>Поставщик</td><td>${sel.supplierName ?? '—'} · ИНН ${sel.supplierInn ?? '—'}</td></tr>
 <tr><td>Сумма контракта</td><td><b>${formatCurrency(sel.contractSum ?? sel.plannedSum)}</b></td></tr>
 <tr><td>Срок поставки по договору</td><td>${(sel as any).deliveryDate ? formatDate((sel as any).deliveryDate) : '—'}</td></tr>
-<tr><td>Адрес поставки</td><td>${(sel as any).deliveryAddress ?? 'г. Воронеж, ул. Средне-Московская, д. 14'}</td></tr>
+<tr><td>Адрес поставки</td><td>${(sel as any).deliveryAddress ?? 'г. Воронеж, ул. Донбасская, д. 2'}</td></tr>
 <tr><td>Дата приёмки</td><td>${new Date().toLocaleDateString('ru-RU')}</td></tr>
 </table>
 <p><b>Основание:</b> ч.3 ст.94 44-ФЗ от 05.04.2013, условия контракта</p>
@@ -264,7 +264,7 @@ ${respList}
                           { label: 'Дата контракта',   value: sel.contractDate ? formatDate(sel.contractDate) : '—' },
                           { label: 'Срок поставки',    value: (sel as any).deliveryDate ? formatDate((sel as any).deliveryDate) : '—' },
                           { label: 'Дней на приёмку',  value: `${(sel as any).acceptanceDays ?? 5} р.д. (ч.13 ст.94)` },
-                          { label: 'Адрес поставки',   value: (sel as any).deliveryAddress ?? 'г. Воронеж, Средне-Московская, 14' },
+                          { label: 'Адрес поставки',   value: (sel as any).deliveryAddress ?? 'г. Воронеж, ул. Донбасская, д. 2' },
                           { label: 'Порядок поставки', value: (sel as any).deliveryConditions ?? 'Единовременная поставка' },
                         ].map((item, i) => (
                           <div key={i} className={`p-2.5 border-b border-r border-gray-100 ${i % 4 === 3 ? 'border-r-0' : ''} ${i >= 4 ? 'border-b-0' : ''}`}>

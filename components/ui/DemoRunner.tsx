@@ -142,7 +142,7 @@ const STEPS: Step[] = [
     route: '/zakupki/novaya', block: '4. Создание закупки', blockNum: 4,
     title: 'Условия поставки и приёмки — обязательные по 44-ФЗ',
     role: '👤 Швецов К.Е. — специалист МТО',
-    what: 'Блок «🚚 Условия поставки»: срок поставки — 30 рабочих дней с даты договора, срок приёмки — 5 рабочих дней (ч.13 ст.94 44-ФЗ, максимум 20 р.д.), адрес — склад МТО, ул. Средне-Московская д.14, порядок — «Партиями по заявке». Срок действия договора — 90 дней.',
+    what: 'Блок «🚚 Условия поставки»: срок поставки — 30 рабочих дней с даты договора, срок приёмки — 5 рабочих дней (ч.13 ст.94 44-ФЗ, максимум 20 р.д.), адрес — склад МТО, ул. ул. Донбасская, д. 2, порядок — «Партиями по заявке». Срок действия договора — 90 дней.',
     why: 'Эти поля не декоративные — они автоматически создают дедлайны в «Контроле сроков». Система сама напомнит за 5 дней до срока поставки и за 3 дня до приёмки.',
     result: 'Условия поставки зафиксированы. Дедлайны добавятся в Контроль сроков автоматически после создания.',
     law: 'ч.13 ст.34, ч.13 ст.94 44-ФЗ — существенные условия контракта',
@@ -463,7 +463,6 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
     if (s.newStatus) changeStatus('p001', s.newStatus, 'u_shv', 'Швецов К.Е.');
     setStep(target);
     setShowToc(false);
-    setShowWelcome(false);
     navigate(s.route);
   }, [changeStatus, navigate]);
 
@@ -479,7 +478,6 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
     const next = cur + 1;
     if (STEPS[cur].newStatus) changeStatus('p001', STEPS[cur].newStatus!, 'u_shv', 'Швецов К.Е.');
     setStep(next);
-    setShowWelcome(false);
     navigate(STEPS[next].route);
   }, [changeStatus, navigate]);
 
@@ -514,7 +512,6 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
     sessionStorage.removeItem(SESS_STEP);
     sessionStorage.removeItem(SESS_PLAYING);
     sessionStorage.removeItem(SESS_OPEN);
-    setShowWelcome(true);
     onClose();
   };
 

@@ -137,7 +137,7 @@ export default function LoginPage() {
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', padding: '10px 24px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: 'space-between' }}>
           <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>ЕПП v3.0 · © Росреестр 2026</span>
-          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>г. Воронеж, ул. Средне-Московская, д. 14</span>
+          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>г. Воронеж, ул. Донбасская, д. 2</span>
         </div>
       </div>
 
