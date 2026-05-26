@@ -12,7 +12,7 @@ const DOCS = [
   { id:'d3', name:'Счёт-фактура № 112 от 18.04.2026', file:'СФ_112_ТехноОфис.pdf', cat:'schet', status:'proverka_doc', size:'98 КБ', date:'2026-05-02', author:'Пикинер О.В.', proc:'РЗ-2026-00142' },
   { id:'d4', name:'Договор РЗ-2026-00098/Д с ООО МоскваСофт', file:'Договор_РЗ-2026-00098.pdf', cat:'dogovor', status:'approved', size:'845 КБ', date:'2026-02-10', author:'Болдина А.В.', proc:'РЗ-2026-00098' },
   { id:'d5', name:'Акт приёмки — Microsoft 365 (50 лицензий)', file:'Акт_Microsoft365.pdf', cat:'acceptance_act', status:'approved', size:'220 КБ', date:'2026-04-28', author:'Митусов С.А.', proc:'РЗ-2026-00098' },
-  { id:'d6', name:'ТЗ — СМЭВ-адаптер для ГИС ЕГРН (черновик)', file:'ТЗ_СМЭВ_адаптер_v1.docx', cat:'tz', status:'draft', size:'92 КБ', date:'2026-05-16', author:'Митусов С.А.', proc:'РЗ-2026-00203' },
+  { id:'d6', name:'ТЗ — интеграционный модуль (черновик)', file:'ТЗ_ЕИС_модуль_v1.docx', cat:'tz', status:'draft', size:'92 КБ', date:'2026-05-16', author:'Митусов С.А.', proc:'РЗ-2026-00203' },
   { id:'d7', name:'Служебная записка — запрос на уборку', file:'СЗ_уборка_3кв2026.docx', cat:'service_note', status:'approved', size:'58 КБ', date:'2026-05-15', author:'Давыдова Ф.А.', proc:'РЗ-2026-00178' },
   { id:'d8', name:'Обоснование НМЦК — серверное оборудование', file:'НМЦК_серверы_2026.docx', cat:'obosnovanie', status:'approved', size:'175 КБ', date:'2026-02-20', author:'Митусов С.А.', proc:'РЗ-2026-00089' },
   { id:'d9', name:'Договор РЗ-2026-00056/Д с ЗАО КанцЛайф', file:'Договор_РЗ-2026-00056.pdf', cat:'dogovor', status:'approved', size:'678 КБ', date:'2026-01-28', author:'Болдина А.В.', proc:'РЗ-2026-00056' },

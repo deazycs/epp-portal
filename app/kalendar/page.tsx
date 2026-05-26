@@ -36,7 +36,7 @@ const EVENTS = [
     .filter(p => p.contractDate)
     .map(p => ({ date: p.contractDate!, label: `Договор: ${p.registryNumber}`, type: 'contract', href: `/zakupki/${p.id}` })),
   { date: '2026-05-22', label: 'Срок оплаты: бумага А4', type: 'payment', href: '/platezhi' },
-  { date: '2026-05-28', label: 'Срок ТЗ: СМЭВ-адаптер', type: 'task', href: '/zadachi' },
+  { date: '2026-05-28', label: 'Срок ТЗ: интеграционный модуль', type: 'task', href: '/zadachi' },
   { date: '2026-06-01', label: 'Согласование: уборка', type: 'approval', href: '/soglasovaniya' },
   { date: '2026-06-13', label: 'Подписание дог.: мебель', type: 'contract', href: '/zakupki/p008' },
 ];

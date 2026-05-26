@@ -439,6 +439,7 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
   );
   const [done, setDone]       = useState(false);
   const [showToc, setShowToc] = useState(false);
+  const [spotlightEl, setSpotlightEl] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stepRef  = useRef(step);
   stepRef.current = step;
@@ -524,6 +525,24 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
 
   return (
     <>
+      <style>{`
+        @keyframes timerShrink {
+          from { width: 100%; }
+          to   { width: 0%; }
+        }
+        @keyframes spotlightPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(77,159,255,0.7); }
+          50%       { box-shadow: 0 0 0 8px rgba(77,159,255,0); }
+        }
+        .epp-spotlight {
+          position: relative;
+          z-index: 9000 !important;
+          animation: spotlightPulse 1.5s ease infinite;
+          outline: 3px solid #4d9fff !important;
+          outline-offset: 3px;
+          border-radius: 8px;
+        }
+      `}</style>
       {/* Оглавление */}
       {showToc && (
         <div className="fixed inset-0 z-[9985]" onClick={() => setShowToc(false)}>
@@ -601,12 +620,31 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '7px 16px', gap: 12,
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flex: 1 }}>
+              {/* Мини прогресс-блоки */}
+              <div style={{ display: 'flex', gap: 2, flexShrink: 0 }}>
+                {BLOCKS.slice(0, 14).map((b, i) => {
+                  const bFirst = STEPS.findIndex(s => s.block === b);
+                  const bLast  = bFirst + STEPS.filter(s => s.block === b).length - 1;
+                  const isDone = step > bLast;
+                  const isCur  = step >= bFirst && step <= bLast;
+                  const bNum   = STEPS[bFirst]?.blockNum ?? i + 1;
+                  const bColor = BLOCK_COLORS[bNum] ?? '#003087';
+                  return (
+                    <div key={b}
+                      style={{ width: isCur ? 14 : 6, height: 14, borderRadius: 3, transition: 'all 0.2s',
+                        background: isDone ? '#4ade80' : isCur ? bColor : 'rgba(255,255,255,0.2)',
+                      }}
+                      title={b}
+                    />
+                  );
+                })}
+              </div>
               <span style={{ background: blockColor, color: '#fff', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 20, flexShrink: 0 }}>
                 {step + 1}/{STEPS.length}
               </span>
-              <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{cur.block}</span>
-              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>· {cur.title}</span>
+              <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{cur.block}</span>
+              <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>· {cur.title}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
               <button onClick={goPrev} disabled={step === 0}
@@ -636,7 +674,10 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
 
         {/* ПОЛНАЯ панель */}
         {!collapsed && (
-          <div style={{ background: '#fff', borderTop: `2px solid ${blockColor}`, boxShadow: '0 -4px 20px rgba(0,48,135,0.12)' }}>
+          <div
+            style={{ background: '#fff', borderTop: `2px solid ${blockColor}`, boxShadow: '0 -4px 20px rgba(0,48,135,0.12)' }}
+            onMouseEnter={() => { if (playing) { setPlaying(false); } }}
+            onMouseLeave={() => { }}>
             <div style={{ maxWidth: 1200, margin: '0 auto' }}>
               {done ? (
                 <div className="px-5 py-3 flex items-center justify-between gap-4">
@@ -662,7 +703,37 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, padding: '10px 16px', alignItems: 'start' }}>
                   {/* Контент */}
                   <div style={{ minWidth: 0 }}>
-                    {/* Мета */}
+                    {/* Прогресс по блокам */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5, flexWrap: 'wrap' }}>
+                      {BLOCKS.map((b, i) => {
+                        const bSteps = STEPS.filter(s => s.block === b);
+                        const bFirst = STEPS.findIndex(s => s.block === b);
+                        const bLast  = bFirst + bSteps.length - 1;
+                        const isDone = step > bLast;
+                        const isCur  = step >= bFirst && step <= bLast;
+                        const bNum   = bSteps[0]?.blockNum ?? i + 1;
+                        const bColor = BLOCK_COLORS[bNum] ?? '#003087';
+                        return (
+                          <button key={b} onClick={() => goTo(bFirst)}
+                            title={b}
+                            style={{
+                              height: 6, borderRadius: 3, border: 'none', cursor: 'pointer',
+                              transition: 'all 0.25s',
+                              background: isDone ? '#4ade80' : isCur ? bColor : '#e5e7eb',
+                              flex: isCur ? '2 0 auto' : '1 0 auto',
+                              maxWidth: isCur ? 80 : 20,
+                              minWidth: 6,
+                              position: 'relative',
+                            }}
+                          />
+                        );
+                      })}
+                      <span style={{ fontSize: 10, color: '#9ca3af', flexShrink: 0 }}>
+                        Блок {cur.blockNum}/14
+                      </span>
+                    </div>
+
+                  {/* Мета */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                       <span style={{ fontSize: 10, fontWeight: 800, color: '#fff', background: blockColor, padding: '2px 8px', borderRadius: 20 }}>
                         {step + 1} / {STEPS.length}
@@ -677,13 +748,26 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
                         </>
                       )}
                       {playing && (
-                        <span style={{ fontSize: 10, color: '#f97316', marginLeft: 'auto' }}>⏱ авто</span>
+                        <span style={{ fontSize: 10, color: '#f97316', marginLeft: 'auto', animation: 'pulse 1.5s infinite' }}>⏱ авто</span>
                       )}
                     </div>
-                    {/* Заголовок */}
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#111827', marginBottom: 6, lineHeight: 1.3 }}>
+                    {/* Заголовок + таймер */}
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#111827', marginBottom: 4, lineHeight: 1.3 }}>
                       {cur.title}
                     </div>
+                    {/* Таймер-полоска — показывает сколько времени на шаге */}
+                    {playing && (
+                      <div style={{ height: 2, background: '#f3f4f6', borderRadius: 1, marginBottom: 5, overflow: 'hidden' }}>
+                        <div
+                          key={`timer-${step}`}
+                          style={{
+                            height: 2, background: `linear-gradient(90deg, ${blockColor}, #4d9fff)`,
+                            borderRadius: 1,
+                            animation: `timerShrink ${cur.duration}ms linear forwards`,
+                          }}
+                        />
+                      </div>
+                    )}
                     {/* Что / Зачем / Результат */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '0 16px' }}>
                       <div style={{ fontSize: 11, color: '#374151', lineHeight: 1.5 }}>
@@ -707,7 +791,36 @@ export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: 
                     )}
                   </div>
                   {/* Управление */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, flexShrink: 0 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, flexShrink: 0 }}>
+                    {/* Быстрые переходы к ключевым блокам */}
+                    <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                      {[
+                        { label: '📋 СЗ', block: '3. Согласование и ЛБО' },
+                        { label: '🌲 ЕАТ', block: '6. Размещение ЕАТ' },
+                        { label: '✍ Договор', block: '7. Договор' },
+                        { label: '📦 Приёмка', block: '10. Приёмка' },
+                        { label: '💰 Оплата', block: '11. Оплата ФЭО' },
+                        { label: '📊 Итог', block: '14. Аналитика' },
+                      ].map(({ label, block }) => {
+                        const idx = STEPS.findIndex(s => s.block === block);
+                        const bNum = STEPS[idx]?.blockNum ?? 1;
+                        const bColor = BLOCK_COLORS[bNum] ?? '#003087';
+                        const isActive = cur.block === block;
+                        return (
+                          <button key={label} onClick={() => goTo(idx)}
+                            style={{
+                              padding: '2px 8px', borderRadius: 12, border: `1px solid ${isActive ? bColor : '#e5e7eb'}`,
+                              background: isActive ? bColor : '#fff',
+                              color: isActive ? '#fff' : '#6b7280',
+                              fontSize: 10, fontWeight: isActive ? 800 : 600,
+                              cursor: 'pointer', transition: 'all 0.15s',
+                              whiteSpace: 'nowrap',
+                            }}>
+                            {label}
+                          </button>
+                        );
+                      })}
+                    </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                       <button onClick={goPrev} disabled={step === 0}
                         style={{ padding: 6, borderRadius: 6, border: 'none', background: 'none', cursor: step === 0 ? 'not-allowed' : 'pointer', opacity: step === 0 ? 0.3 : 1, color: '#6b7280' }}>

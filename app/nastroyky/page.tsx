@@ -59,7 +59,7 @@ export default function NastroykiPage() {
           <div className="gov-card">
             <div className="gov-section-title">ℹ О системе</div>
             <div className="p-4 space-y-1.5">
-              {[['Система','Портал закупок Росреестра'],['Версия','3.0.0 (demo)'],['Платформы','ЕИС · ЕАТ «Берёзка» · СМЭВ'],['Среда','Демонстрационный режим'],['Дата сборки','20.05.2026']].map(r=>(
+              {[['Система','Портал закупок Росреестра'],['Версия','3.0.0 (demo)'],['Платформы','ЕИС · ЕАТ «Берёзка» · ЕИС'],['Среда','Демонстрационный режим'],['Дата сборки','20.05.2026']].map(r=>(
                 <div key={r[0]} className="flex justify-between border-b border-gray-100 pb-1.5">
                   <span className="text-xs text-gray-500">{r[0]}</span>
                   <span className="text-xs font-bold text-gray-700">{r[1]}</span>
