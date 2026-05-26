@@ -72,7 +72,7 @@ export default function DokumentyPage() {
 
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Документы'}]} />
         <div className="flex items-center justify-between mb-3">
           <div>

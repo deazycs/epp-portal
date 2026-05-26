@@ -7,7 +7,7 @@ export default function NastroykiPage() {
   const [saved,setSaved]=useState(false);
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Настройки'}]}/>
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-base font-bold">Настройки системы</h1>

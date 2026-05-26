@@ -18,7 +18,7 @@ export default function PolzovateliPage() {
 
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{ label: 'Рабочий стол', href: '/dashboard' }, { label: 'Пользователи' }]} />
         <div className="flex items-center justify-between mb-3">
           <div>
@@ -70,12 +70,12 @@ export default function PolzovateliPage() {
                     </div>
                   </td>
                   <td>
-                    <span className={`gov-badge ${
-                      u.role === 'mto_head' ? 'bg-green-50 text-green-700 border-green-300' :
-                      u.role === 'deputy_head' ? 'bg-purple-50 text-purple-700 border-purple-300' :
-                      u.role === 'feo' ? 'bg-yellow-50 text-yellow-700 border-yellow-300' :
-                      'bg-gray-100 text-gray-600 border-gray-300'
-                    }`}>
+                    <span className="gov-badge" style={
+                      u.role === 'mto_head' ? {background:'#f0fdf4',color:'#15803d',borderColor:'#86efac'} :
+                      u.role === 'deputy_head' ? {background:'#faf5ff',color:'#7e22ce',borderColor:'#d8b4fe'} :
+                      u.role === 'feo' ? {background:'#fffbeb',color:'#b45309',borderColor:'#fcd34d'} :
+                      {background:'#f3f4f6',color:'#6b7280',borderColor:'#d1d5db'}
+                    }>
                       {ROLE_LABELS[u.role]}
                     </span>
                   </td>

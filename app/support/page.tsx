@@ -16,7 +16,7 @@ export default function SupportPage() {
   const [sent,setSent]=useState(false);
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Техническая поддержка'}]}/>
         <h1 className="text-base font-bold mb-4">Техническая поддержка</h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

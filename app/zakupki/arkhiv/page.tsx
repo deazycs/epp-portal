@@ -20,7 +20,7 @@ export default function ArkhivPage() {
 
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[
           { label: 'Рабочий стол', href: '/dashboard' },
           { label: 'Реестр закупок', href: '/zakupki' },

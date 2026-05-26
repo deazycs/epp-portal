@@ -54,7 +54,7 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="p-3 space-y-3">
+      <div className="p-3 space-y-3 fade-in">
 
         {/* Шапка */}
         <div className="flex flex-wrap items-center justify-between gap-2">

@@ -39,7 +39,7 @@ function EditContent() {
 
   if (!proc) {
     return (
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <div className="gov-alert gov-alert-danger">
           <span>⚠</span><span>Закупка с ID «{id}» не найдена.</span>
         </div>

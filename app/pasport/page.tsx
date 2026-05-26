@@ -49,7 +49,7 @@ export default function PasportPage() {
 
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[
           {label:'Рабочий стол',href:'/dashboard'},
           {label:'Паспорт системы'},
@@ -140,7 +140,7 @@ export default function PasportPage() {
                       {role:'Начальник МТО',dept:'Отдел МТО',access:'Полный'},
                       {role:'Контрактный управляющий',dept:'МТО',access:'Полный'},
                       {role:'Зам. руководителя',dept:'Руководство',access:'Просмотр + согласование'},
-                      {role:'Бухгалтер / ФЭО',dept:'ФЭО',access:'Финансовые модули'},
+                      {role:'Начальник ФЭО',dept:'ФЭО',access:'Финансовые модули'},
                       {role:'Правовой отдел',dept:'Юридический',access:'Документы + согласование'},
                     ].map(u=>(
                       <tr key={u.role}>

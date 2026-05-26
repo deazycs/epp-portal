@@ -15,7 +15,7 @@ const STL: Record<string,string>={active:'✓ Активна',pending:'⏳ На�
 export default function IntegraciPage() {
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Интеграции'}]}/>
         <h1 className="text-base font-bold mb-1">Интеграции</h1>
         <p className="text-xs text-gray-500 mb-4">Подключения к внешним государственным системам и сервисам</p>

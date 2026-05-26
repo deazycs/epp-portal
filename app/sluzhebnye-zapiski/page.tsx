@@ -193,7 +193,7 @@ export default function SluzhebnyeZapiskiPage() {
 
   return (
     <AppLayout>
-      <div className="p-3 sm:p-4">
+      <div className="p-3 sm:p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Служебные записки'}]}/>
 
         <div className="flex items-center justify-between mb-3">
@@ -247,7 +247,7 @@ export default function SluzhebnyeZapiskiPage() {
             { k:'approved',label:'Готовы к закупке',val:counts.approved, color:'#059669' },
           ].map(s=>(
             <button key={s.k} onClick={()=>setSf(s.k)}
-              className={`gov-card p-3 text-left transition-all ${sf===s.k?'ring-2 ring-blue-500':''}`}>
+              className="gov-card p-3 text-left" style={sf===s.k?{boxShadow:'0 0 0 2px #3b82f6'}:{}}>
               <div style={{ fontSize: 22, fontWeight: 800, color: s.color, lineHeight: 1 }}>{s.val}</div>
               <div className="text-xs text-gray-500 mt-0.5">{s.label}</div>
             </button>
@@ -279,7 +279,7 @@ export default function SluzhebnyeZapiskiPage() {
               return (
                 <div key={n.id}
                   onClick={()=>setSelected(n.id===selected?null:n.id)}
-                  className={`gov-card gov-card-hover p-3 cursor-pointer ${selected===n.id?'border-blue-400 border-2':''}`}>
+                  className="gov-card gov-card-hover p-3 cursor-pointer" style={selected===n.id?{borderColor:'#60a5fa',borderWidth:2}:{}}>
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">

@@ -22,7 +22,7 @@ export default function MonitoringPage() {
 
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{ label: 'Рабочий стол', href: '/dashboard' }, { label: 'Мониторинг просрочек' }]} />
         <h1 className="text-base font-bold mb-1">Мониторинг просрочек</h1>
         <p className="text-xs text-gray-500 mb-4">Все просроченные сроки и нарушения</p>

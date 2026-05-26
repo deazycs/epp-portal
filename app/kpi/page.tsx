@@ -33,7 +33,7 @@ export default function KpiPage() {
   const tasksTotal = tasks.length;
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Центр KPI'}]}/>
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-base font-bold">Центр KPI</h1>

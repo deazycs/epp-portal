@@ -43,7 +43,7 @@ export default function RiskiPage() {
 
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{ label: 'Рабочий стол', href: '/dashboard' }, { label: 'Центр рисков' }]} />
 
         <div className="flex items-center justify-between mb-3">
@@ -64,9 +64,9 @@ export default function RiskiPage() {
             { label: 'Средние', val: counts.medium, border: 'border-yellow-300', text: 'text-yellow-700', bg: 'bg-yellow-50' },
             { label: 'Низкие', val: counts.low, border: 'border-green-300', text: 'text-green-700', bg: 'bg-green-50' },
           ].map(s => (
-            <div key={s.label} className={`p-2 text-center border rounded ${s.bg} ${s.border}`}>
-              <div className={`text-xl font-bold ${s.text}`}>{s.val}</div>
-              <div className={`text-xs ${s.text} opacity-70`}>{s.label}</div>
+            <div key={s.label} className="p-2 text-center border rounded" style={{background:s.bg, borderColor:s.border}}>
+              <div className="text-xl font-bold" style={{color:s.text}}>{s.val}</div>
+              <div className="text-xs opacity-70" style={{color:s.text}}>{s.label}</div>
             </div>
           ))}
         </div>

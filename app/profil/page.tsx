@@ -17,7 +17,7 @@ export default function ProfilPage() {
   const totalSum = myProc.reduce((s,p)=>s+p.plannedSum,0);
   return (
     <AppLayout>
-      <div className="p-4">
+      <div className="p-4 fade-in">
         <Breadcrumbs items={[{label:'Рабочий стол',href:'/dashboard'},{label:'Профиль сотрудника'}]}/>
         <h1 className="text-base font-bold mb-4">Профиль сотрудника</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
