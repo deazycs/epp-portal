@@ -427,7 +427,7 @@ const SESS_OPEN    = 'epp_demo_open';
 
 const BLOCKS = Array.from(new Map(STEPS.map(s => [s.block, true])).keys());
 
-export function DemoRunner({ onClose }: { onClose: () => void }) {
+export function DemoRunner({ onClose, collapsed, onToggleCollapse }: { onClose: () => void; collapsed: boolean; onToggleCollapse: () => void }) {
   const router = useRouter();
   const { changeStatus } = useAppStore();
 
@@ -576,7 +576,7 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
               })}
             </div>
             <div className="p-3 border-t border-gray-100 text-xs text-gray-400 text-center">
-              ← → клавиши · Пробел = пауза/старт · Esc = закрыть
+              ← → клавиши · Пробел = пауза · Esc = закрыть
             </div>
           </div>
         </div>
@@ -584,7 +584,7 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
 
       {/* Нижняя панель */}
       <div className="fixed inset-x-0 bottom-0 z-[9990]">
-        {/* Прогресс */}
+        {/* Прогресс-бар */}
         <div style={{ height: 3, background: '#1e3a6e' }}>
           <div style={{
             height: 3, width: `${pct}%`,
@@ -593,148 +593,169 @@ export function DemoRunner({ onClose }: { onClose: () => void }) {
           }}/>
         </div>
 
-        <div style={{ background: '#fff', borderTop: `2px solid ${blockColor}`, boxShadow: '0 -4px 20px rgba(0,48,135,0.12)' }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-            {done ? (
-              <div className="px-5 py-3 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">🏆</span>
-                  <div>
-                    <div className="text-sm font-bold text-gray-800">Демо-тур завершён!</div>
-                    <div className="text-xs text-gray-500">{STEPS.length} шагов · 14 блоков · полный цикл 44-ФЗ</div>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => { goTo(0); setDone(false); setPlaying(false); }}
-                    className="gov-btn gov-btn-ghost gov-btn-sm">
-                    <RotateCcw size={12}/> Сначала
-                  </button>
-                  <button onClick={handleClose} className="gov-btn gov-btn-sm text-white"
-                    style={{ background: '#003087' }}>
-                    <CheckCircle size={13}/> Завершить
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, padding: '10px 16px', alignItems: 'start' }}>
+        {/* СВЁРНУТАЯ панель — минимальный бар */}
+        {collapsed && !done && (
+          <div style={{
+            background: '#003087',
+            borderTop: `2px solid ${blockColor}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '7px 16px', gap: 12,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+              <span style={{ background: blockColor, color: '#fff', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 20, flexShrink: 0 }}>
+                {step + 1}/{STEPS.length}
+              </span>
+              <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{cur.block}</span>
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>· {cur.title}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+              <button onClick={goPrev} disabled={step === 0}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.7)', padding: 4, opacity: step === 0 ? 0.3 : 1 }}>
+                <ChevronLeft size={14}/>
+              </button>
+              <button onClick={() => setPlaying(p => !p)}
+                style={{ background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: '#fff', padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                {playing ? <><Pause size={11}/> Пауза</> : <><Play size={11}/> Авто</>}
+              </button>
+              <button onClick={goNext}
+                style={{ background: blockColor, border: 'none', cursor: 'pointer', color: '#fff', padding: '3px 14px', borderRadius: 6, fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', gap: 4 }}>
+                {isLast ? 'Готово' : <>Далее <ChevronRight size={11}/></>}
+              </button>
+              <button onClick={onToggleCollapse}
+                style={{ background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: '#fff', padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600 }}
+                title="Развернуть панель демо">
+                ↑ Подробнее
+              </button>
+              <button onClick={handleClose}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 4 }}>
+                <X size={13}/>
+              </button>
+            </div>
+          </div>
+        )}
 
-                {/* Контент */}
-                <div style={{ minWidth: 0 }}>
-                  {/* Мета */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
-                    <span style={{
-                      fontSize: 10, fontWeight: 800, color: '#fff',
-                      background: blockColor, padding: '2px 8px', borderRadius: 20,
-                    }}>
-                      {step + 1} / {STEPS.length}
-                    </span>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: blockColor }}>{cur.block}</span>
-                    <span style={{ fontSize: 11, color: '#9ca3af' }}>·</span>
-                    <span style={{ fontSize: 11, color: '#6b7280' }}>{cur.role}</span>
-                    {cur.law && (
-                      <>
-                        <span style={{ fontSize: 11, color: '#9ca3af' }}>·</span>
-                        <span style={{ fontSize: 11, color: '#6366f1', fontWeight: 600 }}>{cur.law}</span>
-                      </>
-                    )}
-                    {playing && (
-                      <span style={{ fontSize: 10, color: '#f97316', marginLeft: 'auto', animation: 'pulse 1s infinite' }}>
-                        ⏱ авто
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Заголовок */}
-                  <div style={{ fontSize: 13, fontWeight: 800, color: '#111827', marginBottom: 6, lineHeight: 1.3 }}>
-                    {cur.title}
-                  </div>
-
-                  {/* Что / Зачем / Результат */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '0 16px' }}>
-                    <div style={{ fontSize: 11, color: '#374151', lineHeight: 1.5 }}>
-                      <span style={{ fontWeight: 700, color: '#111827' }}>Что: </span>{cur.what}
+        {/* ПОЛНАЯ панель */}
+        {!collapsed && (
+          <div style={{ background: '#fff', borderTop: `2px solid ${blockColor}`, boxShadow: '0 -4px 20px rgba(0,48,135,0.12)' }}>
+            <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+              {done ? (
+                <div className="px-5 py-3 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🏆</span>
+                    <div>
+                      <div className="text-sm font-bold text-gray-800">Демо-тур завершён!</div>
+                      <div className="text-xs text-gray-500">{STEPS.length} шагов · 14 блоков · полный цикл 44-ФЗ</div>
                     </div>
-                    {cur.why && (
-                      <div style={{ fontSize: 11, color: '#1e40af', lineHeight: 1.5 }}>
-                        <span style={{ fontWeight: 700 }}>Зачем: </span>{cur.why}
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => { goTo(0); setDone(false); setPlaying(false); }}
+                      className="gov-btn gov-btn-ghost gov-btn-sm">
+                      <RotateCcw size={12}/> Сначала
+                    </button>
+                    <button onClick={handleClose} className="gov-btn gov-btn-sm text-white"
+                      style={{ background: '#003087' }}>
+                      <CheckCircle size={13}/> Завершить
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, padding: '10px 16px', alignItems: 'start' }}>
+                  {/* Контент */}
+                  <div style={{ minWidth: 0 }}>
+                    {/* Мета */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
+                      <span style={{ fontSize: 10, fontWeight: 800, color: '#fff', background: blockColor, padding: '2px 8px', borderRadius: 20 }}>
+                        {step + 1} / {STEPS.length}
+                      </span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: blockColor }}>{cur.block}</span>
+                      <span style={{ fontSize: 11, color: '#9ca3af' }}>·</span>
+                      <span style={{ fontSize: 11, color: '#6b7280' }}>{cur.role}</span>
+                      {cur.law && (
+                        <>
+                          <span style={{ fontSize: 11, color: '#9ca3af' }}>·</span>
+                          <span style={{ fontSize: 11, color: '#6366f1', fontWeight: 600 }}>{cur.law}</span>
+                        </>
+                      )}
+                      {playing && (
+                        <span style={{ fontSize: 10, color: '#f97316', marginLeft: 'auto' }}>⏱ авто</span>
+                      )}
+                    </div>
+                    {/* Заголовок */}
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#111827', marginBottom: 6, lineHeight: 1.3 }}>
+                      {cur.title}
+                    </div>
+                    {/* Что / Зачем / Результат */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '0 16px' }}>
+                      <div style={{ fontSize: 11, color: '#374151', lineHeight: 1.5 }}>
+                        <span style={{ fontWeight: 700, color: '#111827' }}>Что: </span>{cur.what}
+                      </div>
+                      {cur.why && (
+                        <div style={{ fontSize: 11, color: '#1e40af', lineHeight: 1.5 }}>
+                          <span style={{ fontWeight: 700 }}>Зачем: </span>{cur.why}
+                        </div>
+                      )}
+                      <div style={{ fontSize: 11, color: '#15803d', lineHeight: 1.5 }}>
+                        <span style={{ fontWeight: 700 }}>Результат: </span>{cur.result}
+                      </div>
+                    </div>
+                    {/* Совет */}
+                    {cur.tip && (
+                      <div style={{ marginTop: 4, fontSize: 11, color: '#b45309', display: 'flex', alignItems: 'flex-start', gap: 4 }}>
+                        <Zap size={10} style={{ flexShrink: 0, marginTop: 1 }}/>
+                        <span>{cur.tip}</span>
                       </div>
                     )}
-                    <div style={{ fontSize: 11, color: '#15803d', lineHeight: 1.5 }}>
-                      <span style={{ fontWeight: 700 }}>Результат: </span>{cur.result}
+                  </div>
+                  {/* Управление */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <button onClick={goPrev} disabled={step === 0}
+                        style={{ padding: 6, borderRadius: 6, border: 'none', background: 'none', cursor: step === 0 ? 'not-allowed' : 'pointer', opacity: step === 0 ? 0.3 : 1, color: '#6b7280' }}>
+                        <ChevronLeft size={16}/>
+                      </button>
+                      <button onClick={() => setPlaying(p => !p)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700, background: playing ? '#f97316' : '#f3f4f6', color: playing ? '#fff' : '#374151' }}>
+                        {playing ? <><Pause size={12}/> Пауза</> : <><Play size={12}/> Авто</>}
+                      </button>
+                      <button onClick={goNext}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 800, background: blockColor, color: '#fff', boxShadow: `0 2px 8px ${blockColor}60` }}>
+                        {isLast ? <><CheckCircle size={13}/> Готово</> : <>Далее <ChevronRight size={13}/></>}
+                      </button>
+                      <button onClick={() => setShowToc(t => !t)}
+                        style={{ padding: 6, borderRadius: 6, border: 'none', background: showToc ? '#eff6ff' : 'none', cursor: 'pointer', color: showToc ? '#1d4ed8' : '#9ca3af' }}
+                        title="Содержание">
+                        <BookOpen size={15}/>
+                      </button>
+                      <button onClick={onToggleCollapse}
+                        style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #e5e7eb', background: '#f9fafb', cursor: 'pointer', color: '#6b7280', fontSize: 11, fontWeight: 600 }}
+                        title="Свернуть панель">
+                        ↓ Свернуть
+                      </button>
+                      <button onClick={handleClose}
+                        style={{ padding: 6, borderRadius: 6, border: 'none', background: 'none', cursor: 'pointer', color: '#d1d5db' }}>
+                        <X size={14}/>
+                      </button>
+                    </div>
+                    {/* Прогресс-точки */}
+                    <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'flex-end', maxWidth: 220 }}>
+                      {STEPS.map((s, i) => (
+                        <button key={i} onClick={() => goTo(i)}
+                          style={{ height: 5, borderRadius: 3, border: 'none', cursor: 'pointer', transition: 'all 0.2s', width: i === step ? 18 : 6, background: i === step ? blockColor : i < step ? '#4ade80' : '#e5e7eb' }}
+                          title={STEPS[i].title}
+                        />
+                      ))}
                     </div>
                   </div>
-
-                  {/* Подсказка */}
-                  {cur.tip && (
-                    <div style={{ marginTop: 4, fontSize: 11, color: '#b45309', display: 'flex', alignItems: 'flex-start', gap: 4 }}>
-                      <Zap size={10} style={{ flexShrink: 0, marginTop: 1 }}/>
-                      <span>{cur.tip}</span>
-                    </div>
-                  )}
                 </div>
-
-                {/* Управление */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, flexShrink: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <button onClick={goPrev} disabled={step === 0}
-                      style={{ padding: 6, borderRadius: 6, border: 'none', background: 'none', cursor: step === 0 ? 'not-allowed' : 'pointer', opacity: step === 0 ? 0.3 : 1, color: '#6b7280' }}>
-                      <ChevronLeft size={16}/>
-                    </button>
-
-                    <button onClick={() => setPlaying(p => !p)}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px',
-                        borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
-                        background: playing ? '#f97316' : '#f3f4f6', color: playing ? '#fff' : '#374151',
-                      }}>
-                      {playing ? <><Pause size={12}/> Пауза</> : <><Play size={12}/> Авто</>}
-                    </button>
-
-                    <button onClick={goNext}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 6, padding: '7px 20px',
-                        borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 800,
-                        background: blockColor, color: '#fff', boxShadow: `0 2px 8px ${blockColor}60`,
-                      }}>
-                      {isLast ? <><CheckCircle size={13}/> Готово</> : <>Далее <ChevronRight size={13}/></>}
-                    </button>
-
-                    <button onClick={() => setShowToc(t => !t)}
-                      style={{ padding: 6, borderRadius: 6, border: 'none', background: showToc ? '#eff6ff' : 'none', cursor: 'pointer', color: showToc ? '#1d4ed8' : '#9ca3af' }}
-                      title="Содержание (оглавление)">
-                      <BookOpen size={15}/>
-                    </button>
-
-                    <button onClick={handleClose}
-                      style={{ padding: 6, borderRadius: 6, border: 'none', background: 'none', cursor: 'pointer', color: '#d1d5db' }}
-                      title="Закрыть демо">
-                      <X size={14}/>
-                    </button>
-                  </div>
-
-                  {/* Прогресс-точки */}
-                  <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', justifyContent: 'flex-end', maxWidth: 220 }}>
-                    {STEPS.map((s, i) => (
-                      <button key={i} onClick={() => goTo(i)}
-                        style={{
-                          height: 5, borderRadius: 3, border: 'none', cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          width: i === step ? 18 : 6,
-                          background: i === step ? blockColor : i < step ? '#4ade80' : '#e5e7eb',
-                        }}
-                        title={STEPS[i].title}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
 }
+
 
 export function DemoButton({ variant = 'ghost' }: { variant?: 'primary' | 'ghost' | 'floating' }) {
   const start = () => window.dispatchEvent(new Event('epp:demo:run'));

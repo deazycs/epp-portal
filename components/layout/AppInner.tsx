@@ -1,85 +1,113 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
-import { ToastBridge } from '@/components/ui/ToastBridge';
-import { useDeadlineChecker } from '@/lib/useDeadlineChecker';
 import { DemoRunner, DemoButton } from '@/components/ui/DemoRunner';
-import { cn } from '@/lib/utils';
+import { ToastProvider } from '@/components/ui/Toast';
+import { Menu, X } from 'lucide-react';
 
-const SESS_STEP = 'epp_demo_step';
-const SESS_OPEN = 'epp_demo_open';
+const SESS_OPEN    = 'epp_demo_open';
+const SESS_STEP    = 'epp_demo_step';
+const SESS_PLAYING = 'epp_demo_playing';
+
+function ToastBridge() {
+  return null;
+}
 
 export function AppInner({ children }: { children: React.ReactNode }) {
-  useDeadlineChecker();
-  const [sidebarCollapsed, setSidebarCollapsed]   = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
-  // Читаем начальное состояние из sessionStorage синхронно
-  const [demoOpen, setDemoOpen] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return sessionStorage.getItem(SESS_OPEN) === 'true';
-  });
-
-  // Синхронизируем demoOpen с sessionStorage при каждом изменении
-  useEffect(() => {
-    sessionStorage.setItem(SESS_OPEN, String(demoOpen));
-  }, [demoOpen]);
+  const [demoOpen, setDemoOpen] = useState(() =>
+    typeof window !== 'undefined'
+      ? sessionStorage.getItem(SESS_OPEN) === 'true'
+      : false
+  );
+  const [demoPanelCollapsed, setDemoPanelCollapsed] = useState(false);
 
   useEffect(() => {
-    // Слушаем запуск демо
     const handler = () => {
-      sessionStorage.removeItem(SESS_STEP);
       sessionStorage.setItem(SESS_OPEN, 'true');
       setDemoOpen(true);
+      setDemoPanelCollapsed(false);
     };
     window.addEventListener('epp:demo:run', handler);
     return () => window.removeEventListener('epp:demo:run', handler);
   }, []);
 
-  const handleClose = () => {
+  const handleDemoClose = useCallback(() => {
     sessionStorage.removeItem(SESS_STEP);
+    sessionStorage.removeItem(SESS_PLAYING);
     sessionStorage.removeItem(SESS_OPEN);
-    sessionStorage.removeItem('epp_demo_playing');
     setDemoOpen(false);
-  };
+  }, []);
 
   return (
-    <>
-      <ToastBridge />
+    <ToastProvider>
+      {/* Overlay мобильного сайдбара */}
+      {mobileSidebarOpen && (
+        <div
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 40 }}
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+
       <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-        {mobileSidebarOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-            onClick={() => setMobileSidebarOpen(false)} />
-        )}
-        <div className={cn(
-          'hidden md:flex flex-col flex-shrink-0 transition-all duration-200',
-          sidebarCollapsed ? 'w-12' : 'w-56'
-        )} style={{ height: '100%' }}>
+
+        {/* Сайдбар — только на desktop (md+) */}
+        <div
+          className="hidden md:flex flex-col flex-shrink-0"
+          style={{ width: sidebarCollapsed ? 48 : 220, height: '100%', transition: 'width 0.2s' }}>
           <Sidebar collapsed={sidebarCollapsed} />
         </div>
-        <div className={cn(
-          'fixed left-0 top-0 bottom-0 z-40 md:hidden transition-transform duration-200',
-          mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        )} style={{ width: '224px' }}>
+
+        {/* Сайдбар — мобильный (slide-in) */}
+        <div
+          style={{
+            position: 'fixed', left: 0, top: 0, bottom: 0, zIndex: 50,
+            width: 220, transform: mobileSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+            transition: 'transform 0.2s ease',
+          }}>
           <Sidebar collapsed={false} />
         </div>
-        <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+
+        {/* Основной контент */}
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, overflow: 'hidden' }}>
           <Header
             onMenuToggle={() => {
-              setSidebarCollapsed(s => !s);
-              setMobileSidebarOpen(m => !m);
+              if (window.innerWidth < 768) {
+                setMobileSidebarOpen(o => !o);
+              } else {
+                setSidebarCollapsed(c => !c);
+              }
             }}
             sidebarCollapsed={sidebarCollapsed}
           />
-          <main className={`flex-1 overflow-y-auto ${demoOpen ? 'pb-44' : ''}`} style={{ background: '#f4f6f9', minHeight: 0, paddingBottom: demoOpen ? 180 : 0 }}>
+
+          {/* Главная область — padding снизу только если демо открыто И не свёрнуто */}
+          <main
+            style={{
+              flex: 1, overflowY: 'auto', background: '#f4f6f9',
+              paddingBottom: demoOpen && !demoPanelCollapsed ? 160 : 0,
+              minHeight: 0,
+            }}>
             {children}
           </main>
         </div>
       </div>
-      {demoOpen && <DemoRunner onClose={handleClose} />}
+
+      {/* Кнопка Демо — только когда демо закрыто */}
       {!demoOpen && <DemoButton variant="floating" />}
-    </>
+
+      {/* Демо-панель */}
+      {demoOpen && (
+        <DemoRunner
+          onClose={handleDemoClose}
+          collapsed={demoPanelCollapsed}
+          onToggleCollapse={() => setDemoPanelCollapsed(c => !c)}
+        />
+      )}
+    </ToastProvider>
   );
 }

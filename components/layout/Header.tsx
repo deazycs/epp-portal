@@ -30,7 +30,7 @@ export function Header({ onMenuToggle, sidebarCollapsed }: HeaderProps) {
       style={{ background: '#003087' }}>
 
       <button onClick={onMenuToggle} className="text-white  hover:opacity-100 p-1 rounded">
-        {sidebarCollapsed ? <Menu size={16} /> : <X size={16} />}
+        <Menu size={16} />
       </button>
 
       {/* Логотип ЕПП */}
